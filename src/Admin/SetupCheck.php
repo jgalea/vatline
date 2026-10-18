@@ -1,0 +1,230 @@
+<?php
+
+namespace Levy\EuVat\Admin;
+
+use Levy\EuVat\Checkout\TaxLocation;
+use Levy\EuVat\Domain\Territory;
+use Levy\EuVat\Domain\VatNumber;
+use Levy\EuVat\Settings;
+use WC_Tax;
+
+class SetupCheck {
+
+	const ERROR = 'error';
+
+	const WARNING = 'warning';
+
+	const INFO = 'info';
+
+	const VIES_TRANSIENT = 'levy_eu_vat_vies_status';
+
+	/** @var callable|null */
+	private $vies_status;
+
+	/**
+	 * @param callable|null $vies_status Returns country code => availability, as Vies::status() does.
+	 */
+	public function __construct( ?callable $vies_status = null ) {
+		$this->vies_status = $vies_status;
+	}
+
+	/**
+	 * @return array<int,array{id:string,severity:string,message:string,fix_url:string}>
+	 */
+	public function issues( bool $include_registry_status = true ): array {
+		$issues = array();
+		$tax    = admin_url( 'admin.php?page=wc-settings&tab=tax' );
+
+		if ( ! wc_tax_enabled() ) {
+			$issues[] = $this->issue( 'taxes_disabled', self::ERROR, __( 'Taxes are turned off in WooCommerce, so no VAT is calculated.', 'levy-eu-vat' ), admin_url( 'admin.php?page=wc-settings&tab=general#woocommerce_calc_taxes' ) );
+		}
+
+		if ( 'base' === get_option( 'woocommerce_tax_based_on' ) ) {
+			$issues[] = $this->issue( 'tax_based_on_shop_base', self::ERROR, __( 'Tax is calculated on the shop base address. Cross-border VAT needs "Customer shipping address" or "Customer billing address".', 'levy-eu-vat' ), $tax );
+		}
+
+		if ( ! Territory::is_eu_member( WC()->countries->get_base_country() ) ) {
+			$issues[] = $this->issue( 'base_country_outside_eu', self::WARNING, __( 'The store base country is outside the EU. This version is built for EU-established stores.', 'levy-eu-vat' ), admin_url( 'admin.php?page=wc-settings&tab=general' ) );
+		}
+
+		$elsewhere = $this->store_number_country_elsewhere();
+		if ( null !== $elsewhere && ! Settings::get()->oss_registered() ) {
+			$issues[] = $this->issue(
+				'threshold_may_not_apply',
+				self::WARNING,
+				sprintf(
+					/* translators: 1: country code of the store VAT number, 2: store base country code. */
+					__( 'Your store VAT number is from %1$s but the store is based in %2$s. If your business is established in more than one member state, or ships goods from one other than %2$s, the EUR 10,000 threshold does not apply to you (VAT Directive Art. 59c) and every cross-border sale to consumers is taxed where the customer is. Turn on the OSS setting.', 'levy-eu-vat' ),
+					$elsewhere,
+					WC()->countries->get_base_country()
+				),
+				SettingsSection::url()
+			);
+		}
+
+		if ( wc_prices_include_tax() && ! $this->fixed_prices_chosen() ) {
+			$issues[] = $this->issue( 'fixed_prices_undecided', self::WARNING, __( 'Prices are entered with tax, but you have not chosen whether customers pay the same price in every EU country.', 'levy-eu-vat' ), SettingsSection::url() );
+		}
+
+		$missing = $this->countries_without_standard_rate();
+		if ( $missing ) {
+			$issues[] = $this->issue(
+				'standard_rates_missing',
+				self::WARNING,
+				sprintf(
+					/* translators: %s: comma-separated country codes. */
+					__( 'No standard-rate tax row for: %s.', 'levy-eu-vat' ),
+					implode( ', ', $missing )
+				),
+				SettingsSection::url()
+			);
+		}
+
+		$fallen_back = $this->rates_charged_at_origin();
+		if ( $fallen_back ) {
+			$issues[] = $this->issue(
+				'destination_rates_missing',
+				self::ERROR,
+				sprintf(
+					/* translators: %s: comma-separated country codes, with the tax class in brackets when not standard. */
+					__( 'Orders needed a VAT rate your tax tables do not have, so your own country\'s rate was charged instead: %s. Add the missing rates.', 'levy-eu-vat' ),
+					implode( ', ', $fallen_back )
+				),
+				admin_url( 'admin.php?page=wc-settings&tab=tax' )
+			);
+		}
+
+		if ( $this->has_wildcard_rate() ) {
+			$issues[] = $this->issue( 'wildcard_rate_taxes_exports', self::ERROR, __( 'A tax rate applies to every country (*). It would charge VAT on sales outside the EU.', 'levy-eu-vat' ), admin_url( 'admin.php?page=wc-settings&tab=tax&section=standard' ) );
+		}
+
+		if ( '' === Settings::get()->store_vat_number() ) {
+			$issues[] = $this->issue( 'store_vat_number_missing', self::WARNING, __( 'Your store VAT number is not set, so VIES cannot give you consultation numbers as proof of validation.', 'levy-eu-vat' ), SettingsSection::url() );
+		}
+
+		if ( ! in_array( get_option( 'woocommerce_default_customer_address' ), array( 'geolocation', 'geolocation_ajax' ), true ) ) {
+			$issues[] = $this->issue( 'geolocation_disabled', self::WARNING, __( 'Geolocation is off, so digital sales have one piece of location evidence fewer.', 'levy-eu-vat' ), admin_url( 'admin.php?page=wc-settings&tab=general' ) );
+		}
+
+		$down = $include_registry_status ? $this->vies_unavailable_countries() : array();
+		if ( $down ) {
+			$issues[] = $this->issue(
+				'vies_outage',
+				self::WARNING,
+				sprintf(
+					/* translators: %s: comma-separated country codes. */
+					__( 'VIES reports these member states as unavailable right now: %s.', 'levy-eu-vat' ),
+					implode( ', ', $down )
+				),
+				SettingsSection::url()
+			);
+		}
+
+		if ( '' === Settings::get()->hmrc_client_id() || '' === Settings::get()->hmrc_client_secret() ) {
+			$issues[] = $this->issue( 'hmrc_credentials_missing', self::INFO, __( 'No HMRC credentials, so GB VAT numbers are format-checked only. This never changes the VAT charged.', 'levy-eu-vat' ), SettingsSection::url() );
+		}
+
+		return $issues;
+	}
+
+	/**
+	 * @return array{id:string,severity:string,message:string,fix_url:string}
+	 */
+	private function issue( string $id, string $severity, string $message, string $fix_url ): array {
+		return array(
+			'id'       => $id,
+			'severity' => $severity,
+			'message'  => $message,
+			'fix_url'  => $fix_url,
+		);
+	}
+
+	/**
+	 * The member state of the store VAT number when it isn't the base country:
+	 * a sign the business may be established in more than one member state,
+	 * which Art. 59c(1)(a) and (c) of the VAT Directive require for the
+	 * threshold to apply.
+	 */
+	private function store_number_country_elsewhere(): ?string {
+		$base   = WC()->countries->get_base_country();
+		$number = VatNumber::parse( Settings::get()->store_vat_number(), $base );
+		if ( null === $number || 'XI' === $number->prefix() || ! $number->is_eu() || ! Territory::is_eu_member( $base ) ) {
+			return null;
+		}
+		return $number->country() === $base ? null : $number->country();
+	}
+
+	private function fixed_prices_chosen(): bool {
+		$stored = get_option( Settings::OPTION );
+		return is_array( $stored ) && array_key_exists( 'fixed_prices', $stored );
+	}
+
+	/**
+	 * @return array<int,string>
+	 */
+	private function countries_without_standard_rate(): array {
+		$covered = array();
+		foreach ( (array) WC_Tax::get_rates_for_tax_class( '' ) as $rate ) {
+			if ( '' === $rate->tax_rate_state && ! $rate->postcode_count && ! $rate->city_count ) {
+				$covered[ $rate->tax_rate_country ] = true;
+			}
+		}
+		return array_values( array_filter( Territory::EU, static fn( $iso ) => ! isset( $covered[ $iso ] ) ) );
+	}
+
+	/**
+	 * Countries (and tax classes) checkout had to tax at the store's own rate,
+	 * still without any rate row of their own.
+	 *
+	 * @return array<int,string>
+	 */
+	private function rates_charged_at_origin(): array {
+		$seen   = get_option( TaxLocation::MISSING_OPTION, array() );
+		$labels = array();
+		foreach ( is_array( $seen ) ? array_keys( $seen ) : array() as $key ) {
+			list( $country, $class ) = array_pad( explode( '|', (string) $key, 2 ), 2, '' );
+			$has_row                 = false;
+			foreach ( (array) WC_Tax::get_rates_for_tax_class( $class ) as $rate ) {
+				$has_row = $has_row || $country === $rate->tax_rate_country;
+			}
+			if ( ! $has_row ) {
+				$labels[] = '' === $class ? $country : $country . ' (' . $class . ')';
+			}
+		}
+		return $labels;
+	}
+
+	private function has_wildcard_rate(): bool {
+		foreach ( array_merge( array( '' ), WC_Tax::get_tax_class_slugs() ) as $class ) {
+			foreach ( (array) WC_Tax::get_rates_for_tax_class( $class ) as $rate ) {
+				if ( '' === $rate->tax_rate_country && (float) $rate->tax_rate > 0 ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @return array<int,string>
+	 */
+	private function vies_unavailable_countries(): array {
+		if ( null === $this->vies_status ) {
+			return array();
+		}
+		$status = get_transient( self::VIES_TRANSIENT );
+		if ( ! is_array( $status ) ) {
+			$status = ( $this->vies_status )();
+			if ( $status ) {
+				set_transient( self::VIES_TRANSIENT, $status, 5 * MINUTE_IN_SECONDS );
+			}
+		}
+		$down = array();
+		foreach ( $status as $country => $availability ) {
+			if ( 'available' !== strtolower( (string) $availability ) ) {
+				$down[] = (string) $country;
+			}
+		}
+		return $down;
+	}
+}

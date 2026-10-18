@@ -1,0 +1,282 @@
+<?php
+
+namespace Levy\EuVat\Orders;
+
+use Levy\EuVat\Domain\Rule;
+use Levy\EuVat\Domain\ValidationResult;
+use WP_Post;
+use WC_Order;
+
+/**
+ * Everything is escaped on output: the registry's name and address, the
+ * customer's VAT number and the free-text company name are third-party data.
+ */
+class MetaBox {
+
+	const ACTION = 'levy_eu_vat_recheck';
+
+	/** @var Revalidation */
+	private $revalidation;
+
+	public function __construct( Revalidation $revalidation ) {
+		$this->revalidation = $revalidation;
+	}
+
+	public function register(): void {
+		add_action( 'add_meta_boxes', array( $this, 'add' ) );
+		add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_recheck' ) );
+	}
+
+	public function add(): void {
+		add_meta_box( 'levy-eu-vat-decision', __( 'EU VAT', 'levy-eu-vat' ), array( $this, 'render' ), wc_get_page_screen_id( 'shop-order' ), 'normal', 'default' );
+	}
+
+	/**
+	 * @param WP_Post|WC_Order $post_or_order The post under CPT storage, the order under HPOS.
+	 */
+	public function render( $post_or_order ): void {
+		$order = $post_or_order instanceof WP_Post ? wc_get_order( $post_or_order->ID ) : $post_or_order;
+		if ( ! $order instanceof WC_Order ) {
+			return;
+		}
+		$decision = DecisionStore::get( $order );
+		if ( null === $decision ) {
+			echo '<p>' . esc_html__( 'No VAT decision is recorded for this order.', 'levy-eu-vat' ) . '</p>';
+			return;
+		}
+		$record = $decision->to_array();
+
+		$this->render_summary( $order, $record );
+		$this->render_flags( $record['flags'] );
+		$this->render_inputs( $order, $record );
+		$this->render_log( DecisionStore::log( $order ) );
+
+		if ( '' !== (string) ( $record['vat_number']['canonical'] ?? '' ) ) {
+			$url = wp_nonce_url(
+				add_query_arg(
+					array(
+						'action'   => self::ACTION,
+						'order_id' => $order->get_id(),
+					),
+					admin_url( 'admin-post.php' )
+				),
+				self::ACTION . $order->get_id()
+			);
+			echo '<p><a class="button" href="' . esc_url( $url ) . '">' . esc_html__( 'Re-check VAT number now', 'levy-eu-vat' ) . '</a></p>';
+		}
+	}
+
+	public function handle_recheck(): void {
+		$order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
+		check_admin_referer( self::ACTION . $order_id );
+		if ( ! current_user_can( 'edit_shop_orders' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown
+			wp_die( esc_html__( 'You are not allowed to do this.', 'levy-eu-vat' ), '', array( 'response' => 403 ) );
+		}
+
+		$order = wc_get_order( $order_id );
+		if ( ! $order instanceof WC_Order ) {
+			wp_die( esc_html__( 'Order not found.', 'levy-eu-vat' ), '', array( 'response' => 404 ) );
+		}
+		$this->revalidation->recheck( $order, 'admin', get_current_user_id() );
+
+		wp_safe_redirect( $order->get_edit_order_url() );
+		exit;
+	}
+
+	/**
+	 * @param array<string,mixed> $record
+	 */
+	private function render_summary( WC_Order $order, array $record ): void {
+		echo '<p><strong>' . esc_html( self::headline( $record ) ) . '</strong></p>';
+
+		$recorded = (string) ( $record['vat_number']['canonical'] ?? '' );
+		$current  = (string) $order->get_meta( DecisionStore::NUMBER_META );
+		$billing  = strtoupper( $order->get_billing_country() );
+		if ( $recorded !== $current || ( '' !== $billing && $billing !== (string) $record['customer']['billing']['country'] ) ) {
+			echo '<p class="notice notice-warning inline"><span>' . esc_html__( 'The VAT number or billing country changed since this decision was recorded. Recalculate taxes to update it.', 'levy-eu-vat' ) . '</span></p>';
+		}
+	}
+
+	/**
+	 * @param string[] $flags
+	 */
+	private function render_flags( array $flags ): void {
+		if ( array() === $flags ) {
+			return;
+		}
+		echo '<ul>';
+		foreach ( $flags as $flag ) {
+			$class = in_array( $flag, array( 'invalid_after_exemption', 'validated_after_outage' ), true ) ? 'notice notice-warning inline' : '';
+			echo '<li class="' . esc_attr( $class ) . '"><span>' . esc_html( self::flag_text( $flag ) ) . '</span></li>';
+		}
+		echo '</ul>';
+	}
+
+	/**
+	 * @param array<string,mixed> $record
+	 */
+	private function render_inputs( WC_Order $order, array $record ): void {
+		$validation = (array) ( $record['validation'] ?? array() );
+		$evidence   = (array) $record['evidence'];
+		$customer   = (array) $record['customer'];
+
+		$rows = array(
+			__( 'Billing country', 'levy-eu-vat' )        => trim( $customer['billing']['country'] . ' ' . $customer['billing']['postcode'] ),
+			__( 'Shipping country', 'levy-eu-vat' )       => trim( $customer['shipping']['country'] . ' ' . $customer['shipping']['postcode'] ),
+			__( 'Local pickup', 'levy-eu-vat' )           => $customer['local_pickup'] ? __( 'Yes', 'levy-eu-vat' ) : __( 'No', 'levy-eu-vat' ),
+			__( 'Billing company', 'levy-eu-vat' )        => $order->get_billing_company(),
+			__( 'VAT number as typed', 'levy-eu-vat' )    => (string) ( $record['vat_number']['raw'] ?? '' ),
+			__( 'VAT number', 'levy-eu-vat' )             => (string) ( $record['vat_number']['canonical'] ?? '' ),
+			__( 'Registry answer', 'levy-eu-vat' )        => (string) ( $validation['status'] ?? '' ),
+			__( 'Registry', 'levy-eu-vat' )               => (string) ( $validation['registry'] ?? '' ),
+			__( 'Registered name', 'levy-eu-vat' )        => (string) ( $validation['name'] ?? '' ),
+			__( 'Registered address', 'levy-eu-vat' )     => (string) ( $validation['address'] ?? '' ),
+			__( 'Consultation reference', 'levy-eu-vat' ) => (string) ( $validation['consultation'] ?? '' ),
+			__( 'Checked at', 'levy-eu-vat' )             => (string) ( $validation['checked_at'] ?? '' ),
+			__( 'Location evidence', 'levy-eu-vat' )      => implode(
+				', ',
+				array_filter(
+					array(
+						'' !== (string) ( $evidence['billing'] ?? '' ) ? 'billing ' . $evidence['billing'] : '',
+						'' !== (string) ( $evidence['shipping'] ?? '' ) ? 'shipping ' . $evidence['shipping'] : '',
+						'' !== (string) ( $evidence['ip'] ?? '' ) ? 'IP ' . $evidence['ip'] : '',
+						'' !== (string) ( $evidence['self_certified'] ?? '' ) ? 'self-certified ' . $evidence['self_certified'] : '',
+					)
+				)
+			),
+			__( 'Decided at', 'levy-eu-vat' )             => (string) $record['at'],
+		);
+
+		echo '<table class="widefat striped"><tbody>';
+		foreach ( $rows as $label => $value ) {
+			if ( '' !== trim( (string) $value ) ) {
+				echo '<tr><th scope="row">' . esc_html( $label ) . '</th><td>' . nl2br( esc_html( (string) $value ) ) . '</td></tr>';
+			}
+		}
+		foreach ( (array) $record['lines'] as $line ) {
+			echo '<tr><th scope="row">' . esc_html__( 'Line', 'levy-eu-vat' ) . '</th><td>' . esc_html(
+				sprintf(
+					/* translators: 1: supply type, 2: place of supply country, 3: country whose VAT rate applies, 4: scheme */
+					__( '%1$s, supplied in %2$s, VAT of %3$s, %4$s', 'levy-eu-vat' ),
+					$line['supply_type'],
+					$line['place_of_supply'],
+					$line['tax_country'],
+					$line['scheme']
+				)
+			) . '</td></tr>';
+		}
+		echo '</tbody></table>';
+	}
+
+	/**
+	 * @param array<int,array<string,mixed>> $log
+	 */
+	private function render_log( array $log ): void {
+		if ( array() === $log ) {
+			return;
+		}
+		echo '<h4>' . esc_html__( 'Decision log', 'levy-eu-vat' ) . '</h4>';
+		echo '<table class="widefat striped"><thead><tr>';
+		foreach ( array( __( 'When (UTC)', 'levy-eu-vat' ), __( 'Trigger', 'levy-eu-vat' ), __( 'User', 'levy-eu-vat' ), __( 'Rule', 'levy-eu-vat' ), __( 'Flags', 'levy-eu-vat' ) ) as $heading ) {
+			echo '<th>' . esc_html( $heading ) . '</th>';
+		}
+		echo '</tr></thead><tbody>';
+		foreach ( $log as $entry ) {
+			$user = ! empty( $entry['actor_user_id'] ) ? get_userdata( (int) $entry['actor_user_id'] ) : false;
+			echo '<tr><td>' . esc_html( (string) ( $entry['at'] ?? '' ) ) . '</td><td>' . esc_html( (string) ( $entry['trigger'] ?? '' ) ) . '</td><td>' . esc_html( $user ? $user->display_name : '' ) . '</td><td>' . esc_html( self::rule_text( (string) ( $entry['rule'] ?? '' ) ) ) . '</td><td>' . esc_html( implode( ', ', (array) ( $entry['flags'] ?? array() ) ) ) . '</td></tr>';
+		}
+		echo '</tbody></table>';
+	}
+
+	public static function rule_text( string $rule ): string {
+		switch ( $rule ) {
+			case Rule::EXPORT_NON_EU:
+				return __( 'Customer outside the EU: no EU VAT.', 'levy-eu-vat' );
+			case Rule::OUTSIDE_TERRITORY:
+				return __( 'Delivery to a territory outside the EU VAT area: no EU VAT.', 'levy-eu-vat' );
+			case Rule::DOMESTIC:
+				return __( 'Domestic sale: VAT of the store country.', 'levy-eu-vat' );
+			case Rule::DOMESTIC_B2B_GUARD:
+				return __( 'Domestic business customer: VAT charged, a number from the store country never exempts.', 'levy-eu-vat' );
+			case Rule::DOMESTIC_B2B_ALLOWED:
+				return __( 'Domestic business customer with a valid VAT number: exempt, as allowed in the settings.', 'levy-eu-vat' );
+			case Rule::RC_GOODS_ART138:
+				return __( 'Goods to a business in another EU country with a valid VAT number: exempt intra-Community supply (Article 138).', 'levy-eu-vat' );
+			case Rule::RC_SERVICES_ART196:
+				return __( 'Services to a business in another EU country with a valid VAT number: reverse charge (Article 196).', 'levy-eu-vat' );
+			case Rule::B2C_ORIGIN_BELOW_THRESHOLD:
+				return __( 'Consumer in another EU country, below the distance-selling threshold: VAT of the store country.', 'levy-eu-vat' );
+			case Rule::B2C_DESTINATION:
+				return __( 'Consumer in another EU country: VAT of the destination country.', 'levy-eu-vat' );
+			case Rule::B2C_SERVICE_ORIGIN:
+				return __( 'Service to a consumer: VAT of the store country.', 'levy-eu-vat' );
+			case Rule::PREFIX_MISMATCH_CHARGED:
+				return __( 'The VAT number belongs to a different country than the billing address: VAT charged.', 'levy-eu-vat' );
+			case Rule::LOCAL_PICKUP_DOMESTIC:
+				return __( 'Collected in store: VAT of the store country.', 'levy-eu-vat' );
+			case Rule::PENDING_CHARGED:
+				return __( 'The VAT number could not be checked: VAT charged until it is.', 'levy-eu-vat' );
+			case Rule::PENDING_EXEMPT:
+				return __( 'The VAT number could not be checked: exempt until it is.', 'levy-eu-vat' );
+			case Rule::PENDING_REJECTED:
+				return __( 'The VAT number could not be checked: the order was refused.', 'levy-eu-vat' );
+			case Rule::INVALID_NUMBER:
+				return __( 'The VAT number is not valid: VAT charged.', 'levy-eu-vat' );
+			case Rule::NON_EU_NUMBER_RECORDED:
+				return __( 'Non-EU VAT number recorded: no EU VAT.', 'levy-eu-vat' );
+			default:
+				return $rule;
+		}
+	}
+
+	/**
+	 * A re-check keeps the pending rule, because the tax charged doesn't
+	 * change, but records the registry's answer, which the headline reports.
+	 *
+	 * @param array<string,mixed> $record
+	 */
+	public static function headline( array $record ): string {
+		$rule   = (string) $record['rule'];
+		$status = (string) ( $record['validation']['status'] ?? '' );
+		if ( ! in_array( $rule, array( Rule::PENDING_CHARGED, Rule::PENDING_EXEMPT ), true ) ) {
+			return self::rule_text( $rule );
+		}
+		$charged = Rule::PENDING_CHARGED === $rule;
+		if ( ValidationResult::VALID === $status ) {
+			return $charged
+				? __( 'The VAT number was checked later and is valid. VAT was charged at checkout.', 'levy-eu-vat' )
+				: __( 'The VAT number was checked later and is valid: exempt.', 'levy-eu-vat' );
+		}
+		if ( ValidationResult::INVALID === $status || ValidationResult::FORMAT_INVALID === $status ) {
+			return $charged
+				? __( 'The VAT number was checked later and is not valid: VAT charged.', 'levy-eu-vat' )
+				: __( 'The VAT number was checked later and is not valid, but no VAT was charged.', 'levy-eu-vat' );
+		}
+		return self::rule_text( $rule );
+	}
+
+	public static function flag_text( string $flag ): string {
+		switch ( $flag ) {
+			case 'validation_pending':
+				return __( 'Validation pending: the VAT number is checked again in the background.', 'levy-eu-vat' );
+			case 'validated_after_outage':
+				return __( 'The number was valid when checked later, but VAT was charged. The customer may be due a VAT refund.', 'levy-eu-vat' );
+			case 'invalid_after_exemption':
+				return __( 'VAT was not charged, but the number turned out to be invalid. VAT may be due.', 'levy-eu-vat' );
+			case 'evidence_conflict_self_certified':
+				return __( 'The location evidence conflicted and the customer self-certified their country.', 'levy-eu-vat' );
+			case 'single_evidence':
+				return __( 'Only one piece of location evidence was available.', 'levy-eu-vat' );
+			case 'name_mismatch':
+				return __( 'The company name does not match the registry.', 'levy-eu-vat' );
+			case 'prefix_mismatch':
+				return __( 'The VAT number prefix does not match the billing country.', 'levy-eu-vat' );
+			case 'backfilled':
+				return __( 'Decided after the fact for an order placed before the plugin was active.', 'levy-eu-vat' );
+			case 'rate_missing':
+				return __( 'No tax rate was set for the destination, the store rate was charged.', 'levy-eu-vat' );
+			default:
+				return $flag;
+		}
+	}
+}

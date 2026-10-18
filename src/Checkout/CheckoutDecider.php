@@ -1,0 +1,73 @@
+<?php
+
+namespace Levy\EuVat\Checkout;
+
+use Automattic\WooCommerce\StoreApi\Exceptions\RouteException;
+use Levy\EuVat\Orders\DecisionStore;
+use WC_Order;
+use WP_Error;
+
+/**
+ * Classic checkout calculates totals before its validation hook, so the
+ * checkout is armed on woocommerce_checkout_process (before that
+ * calculation) and the validation hook only reports the decision's error.
+ */
+class CheckoutDecider {
+
+	/** @var CartSteering */
+	private $steering;
+
+	public function __construct( CartSteering $steering ) {
+		$this->steering = $steering;
+	}
+
+	public function register(): void {
+		add_action( 'woocommerce_checkout_process', array( $this->steering, 'arm_checkout' ) );
+		add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_classic' ), 10, 2 );
+		add_action( 'woocommerce_store_api_checkout_update_customer_from_request', array( $this, 'decide_block' ), 10, 0 );
+		add_action( 'woocommerce_checkout_create_order', array( $this, 'record' ) );
+		add_action( 'woocommerce_store_api_checkout_update_order_from_request', array( $this, 'record' ) );
+	}
+
+	/**
+	 * @param array<string,mixed> $data
+	 */
+	public function validate_classic( $data, WP_Error $errors ): void {
+		$decision = $this->steering->current();
+		$code     = null === $decision ? null : $decision->blocking_error();
+		if ( null !== $code ) {
+			$errors->add( 'levy_eu_vat_' . $code, self::message( $code ) );
+		}
+	}
+
+	/**
+	 * Store API turns the RouteException into a 400 response with our code.
+	 */
+	public function decide_block(): void {
+		$this->steering->arm_checkout();
+		$decision = $this->steering->decide( WC()->cart );
+		$code     = null === $decision ? null : $decision->blocking_error();
+		if ( null !== $code ) {
+			// @phpstan-ignore class.notFound, class.notFound (Store API classes are not in the WooCommerce stubs.)
+			throw new RouteException( 'levy_eu_vat_' . esc_html( $code ), esc_html( self::message( $code ) ), 400 );
+		}
+	}
+
+	public function record( WC_Order $order ): void {
+		$decision = $this->steering->current();
+		if ( null !== $decision ) {
+			DecisionStore::apply( $order, $decision, 'checkout' );
+		}
+	}
+
+	public static function message( string $code ): string {
+		switch ( $code ) {
+			case 'invalid_vat_number':
+				return __( 'This VAT number is not valid. Correct it, or leave the field empty to pay with VAT.', 'levy-eu-vat' );
+			case 'registry_unavailable':
+				return __( 'We could not check your VAT number with the tax authority just now. Try again in a few minutes, or leave the field empty to pay with VAT.', 'levy-eu-vat' );
+			default:
+				return __( 'Your VAT details could not be accepted.', 'levy-eu-vat' );
+		}
+	}
+}

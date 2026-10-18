@@ -1,0 +1,14 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	level: 8
+	paths:
+		- src
+		- templates
+		- levy-eu-vat.php
+		- uninstall.php
+	bootstrapFiles:
+		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+	scanDirectories:
+		- vendor/php-stubs/woocommerce-stubs

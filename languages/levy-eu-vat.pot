@@ -1,0 +1,1044 @@
+# Copyright (C) 2026 Jean Galea
+# This file is distributed under the GPL-3.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Levy – EU VAT for WooCommerce 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/levy-eu-vat\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-18T03:53:23+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: levy-eu-vat\n"
+
+#. Plugin Name of the plugin
+#: levy-eu-vat.php
+msgid "Levy – EU VAT for WooCommerce"
+msgstr ""
+
+#. Description of the plugin
+#: levy-eu-vat.php
+msgid "Decides, applies and records EU VAT treatment on every WooCommerce order."
+msgstr ""
+
+#. Author of the plugin
+#: levy-eu-vat.php
+msgid "Jean Galea"
+msgstr ""
+
+#: levy-eu-vat.php:27
+msgid "Levy - EU VAT is missing its autoloader. Run \"composer install\" in the plugin folder."
+msgstr ""
+
+#: src/Admin/ProductSupplyField.php:19
+msgid "EU VAT supply type"
+msgstr ""
+
+#: src/Admin/ProductSupplyField.php:20
+msgid "How VAT place of supply is decided. Physical products default to goods, virtual products to digital service."
+msgstr ""
+
+#: src/Admin/ProductSupplyField.php:23
+msgid "Automatic"
+msgstr ""
+
+#: src/Admin/ProductSupplyField.php:24
+msgid "Goods"
+msgstr ""
+
+#: src/Admin/ProductSupplyField.php:25
+msgid "Digital service"
+msgstr ""
+
+#: src/Admin/ProductSupplyField.php:26
+msgid "Other service"
+msgstr ""
+
+#: src/Admin/RateMappingEditor.php:80
+#: src/Admin/RateMappingEditor.php:125
+msgid "Not mapped"
+msgstr ""
+
+#: src/Admin/RateMappingEditor.php:81
+msgid "Standard rate"
+msgstr ""
+
+#: src/Admin/RateMappingEditor.php:82
+msgid "Reduced rate"
+msgstr ""
+
+#: src/Admin/RateMappingEditor.php:83
+msgid "Zero rate"
+msgstr ""
+
+#: src/Admin/RateMappingEditor.php:156
+msgid "(super reduced)"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:77
+#: src/Orders/MetaBox.php:31
+msgid "EU VAT"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:101
+msgid "Tax class mapping"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:102
+msgid "Choose which EU rate each tax class follows. For reduced rates, pick the rate for each country from the EU list. Rates are only applied when you review and apply them in the rates table below."
+msgstr ""
+
+#: src/Admin/SettingsSection.php:135
+msgid "Store"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:142
+msgid "Store VAT number"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:144
+msgid "Sent to VIES as the requester, which returns a consultation number as proof of each check."
+msgstr ""
+
+#: src/Admin/SettingsSection.php:149
+msgid "Report currency"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:158
+msgid "VAT number validation"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:165
+msgid "When a registry is unavailable"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:169
+msgid "Accept the order, charge VAT and flag it"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:170
+msgid "Accept the order, exempt VAT and re-check later"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:171
+msgid "Do not accept the order"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:173
+msgid "Charging VAT and flagging the order is the safe choice: you can refund the VAT once the number validates."
+msgstr ""
+
+#: src/Admin/SettingsSection.php:179
+msgid "Keep valid results for (days)"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:189
+msgid "Self-certification"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:189
+msgid "Ask digital customers to confirm their country when the evidence conflicts"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:190
+msgid "Domestic B2B"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:190
+msgid "Allow VAT exemption for valid numbers from the store country"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:191
+msgid "Revalidation emails"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:191
+msgid "Email the admin when a number validates after the order was placed"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:197
+msgid "Tax treatment"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:201
+msgid "OSS"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:201
+msgid "I am registered for the One Stop Shop (always charge destination VAT)"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:202
+msgid "Fixed prices"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:202
+msgid "Keep gross prices the same in every EU country (prices entered with tax)"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:216
+msgid "HMRC (optional)"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:217
+msgid "Credentials from your own HMRC Developer Hub application. Without them GB numbers are format-checked only."
+msgstr ""
+
+#: src/Admin/SettingsSection.php:221
+msgid "Client ID"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:225
+msgid "Client secret"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:228
+msgid "Saved. Leave empty to keep it."
+msgstr ""
+
+#: src/Admin/SettingsSection.php:229
+msgid "The saved secret is never shown. Clear the client ID to remove it."
+msgstr ""
+
+#: src/Admin/SettingsSection.php:238
+msgid "Data"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:245
+msgid "Keep VAT records for (years)"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:255
+msgid "Uninstall"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:255
+msgid "Delete all plugin data when the plugin is deleted"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:296
+msgid "Setup check"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:298
+msgid "Nothing to fix."
+msgstr ""
+
+#: src/Admin/SettingsSection.php:307
+msgid "Fix"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:354
+msgid "Turn on \"Enable tax rates and calculations\""
+msgstr ""
+
+#: src/Admin/SettingsSection.php:354
+msgid "Open the EU VAT setup check"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:414
+msgid "The store VAT number does not look valid, so it was not saved."
+msgstr ""
+
+#. translators: 1: canonical VAT number, 2: registry result.
+#: src/Admin/SettingsSection.php:423
+#, php-format
+msgid "Store VAT number saved as %1$s. %2$s"
+msgstr ""
+
+#: src/Admin/SettingsSection.php:451
+msgid "VIES confirms the number is registered."
+msgstr ""
+
+#: src/Admin/SettingsSection.php:453
+msgid "VIES does not know this number. Check it before you rely on it."
+msgstr ""
+
+#: src/Admin/SettingsSection.php:455
+msgid "VIES could not be reached, so the number was not checked."
+msgstr ""
+
+#: src/Admin/SetupCheck.php:39
+msgid "Taxes are turned off in WooCommerce, so no VAT is calculated."
+msgstr ""
+
+#: src/Admin/SetupCheck.php:43
+msgid "Tax is calculated on the shop base address. Cross-border VAT needs \"Customer shipping address\" or \"Customer billing address\"."
+msgstr ""
+
+#: src/Admin/SetupCheck.php:47
+msgid "The store base country is outside the EU. This version is built for EU-established stores."
+msgstr ""
+
+#. translators: 1: country code of the store VAT number, 2: store base country code.
+#: src/Admin/SetupCheck.php:57
+#, php-format
+msgid "Your store VAT number is from %1$s but the store is based in %2$s. If your business is established in more than one member state, or ships goods from one other than %2$s, the EUR 10,000 threshold does not apply to you (VAT Directive Art. 59c) and every cross-border sale to consumers is taxed where the customer is. Turn on the OSS setting."
+msgstr ""
+
+#: src/Admin/SetupCheck.php:66
+msgid "Prices are entered with tax, but you have not chosen whether customers pay the same price in every EU country."
+msgstr ""
+
+#. translators: %s: comma-separated country codes.
+#: src/Admin/SetupCheck.php:76
+#, php-format
+msgid "No standard-rate tax row for: %s."
+msgstr ""
+
+#. translators: %s: comma-separated country codes, with the tax class in brackets when not standard.
+#: src/Admin/SetupCheck.php:90
+#, php-format
+msgid "Orders needed a VAT rate your tax tables do not have, so your own country's rate was charged instead: %s. Add the missing rates."
+msgstr ""
+
+#: src/Admin/SetupCheck.php:98
+msgid "A tax rate applies to every country (*). It would charge VAT on sales outside the EU."
+msgstr ""
+
+#: src/Admin/SetupCheck.php:102
+msgid "Your store VAT number is not set, so VIES cannot give you consultation numbers as proof of validation."
+msgstr ""
+
+#: src/Admin/SetupCheck.php:106
+msgid "Geolocation is off, so digital sales have one piece of location evidence fewer."
+msgstr ""
+
+#. translators: %s: comma-separated country codes.
+#: src/Admin/SetupCheck.php:116
+#, php-format
+msgid "VIES reports these member states as unavailable right now: %s."
+msgstr ""
+
+#: src/Admin/SetupCheck.php:124
+msgid "No HMRC credentials, so GB VAT numbers are format-checked only. This never changes the VAT charged."
+msgstr ""
+
+#: src/Checkout/CheckoutDecider.php:66
+msgid "This VAT number is not valid. Correct it, or leave the field empty to pay with VAT."
+msgstr ""
+
+#: src/Checkout/CheckoutDecider.php:68
+msgid "We could not check your VAT number with the tax authority just now. Try again in a few minutes, or leave the field empty to pay with VAT."
+msgstr ""
+
+#: src/Checkout/CheckoutDecider.php:70
+msgid "Your VAT details could not be accepted."
+msgstr ""
+
+#. translators: %s: country name
+#: src/Checkout/StoreApiExtension.php:174
+#, php-format
+msgid "I confirm I am located in %s."
+msgstr ""
+
+#: src/Checkout/StoreApiExtension.php:187
+msgid "VAT number verified. Reverse charge applies."
+msgstr ""
+
+#: src/Checkout/StoreApiExtension.php:189
+msgid "Your VAT number could not be checked just now. No VAT is charged for now and the number will be checked again."
+msgstr ""
+
+#: src/Checkout/StoreApiExtension.php:192
+msgid "VAT is charged on sales to businesses in the shop's own country."
+msgstr ""
+
+#: src/Checkout/StoreApiExtension.php:195
+msgid "This VAT number does not match your billing country, so VAT is charged."
+msgstr ""
+
+#: src/Checkout/StoreApiExtension.php:200
+msgid "VAT number verified. Reverse charge applies to part of this order."
+msgstr ""
+
+#: src/Checkout/StoreApiExtension.php:203
+msgid "VAT number verified. VAT is charged on this order."
+msgstr ""
+
+#: src/Checkout/StoreApiExtension.php:209
+msgid "Your VAT number could not be checked just now, so VAT is charged on this order."
+msgstr ""
+
+#: src/Checkout/StoreApiExtension.php:212
+msgid "Your VAT number has not been checked yet. VAT is charged until it is."
+msgstr ""
+
+#: src/Checkout/StoreApiExtension.php:214
+msgid "This VAT number cannot be checked automatically, so VAT is charged."
+msgstr ""
+
+#: src/Checkout/VatField.php:100
+#: src/Checkout/VatField.php:192
+#: src/Checkout/VatField.php:286
+#: src/Checkout/VatField.php:301
+#: src/Orders/MetaBox.php:129
+#: src/Privacy/Privacy.php:95
+#: src/Privacy/Privacy.php:148
+#: src/Reports/EcSalesList.php:66
+#: src/Reports/ReportsScreen.php:85
+msgid "VAT number"
+msgstr ""
+
+#: src/Checkout/VatField.php:159
+msgid "This does not look like a VAT number. Check it, or leave the field empty to pay with VAT."
+msgstr ""
+
+#: src/Orders/InvoiceText.php:34
+msgid "Customer VAT number"
+msgstr ""
+
+#: src/Orders/InvoiceText.php:43
+msgid "VAT note"
+msgstr ""
+
+#: src/Orders/InvoiceText.php:52
+msgid "VAT number consultation reference"
+msgstr ""
+
+#: src/Orders/InvoiceText.php:62
+msgid "Reverse charge: VAT to be accounted for by the recipient, Article 196 Council Directive 2006/112/EC"
+msgstr ""
+
+#: src/Orders/InvoiceText.php:65
+msgid "Exempt intra-Community supply of goods, Article 138 Council Directive 2006/112/EC"
+msgstr ""
+
+#: src/Orders/MetaBox.php:44
+msgid "No VAT decision is recorded for this order."
+msgstr ""
+
+#: src/Orders/MetaBox.php:65
+msgid "Re-check VAT number now"
+msgstr ""
+
+#: src/Orders/MetaBox.php:73
+msgid "You are not allowed to do this."
+msgstr ""
+
+#: src/Orders/MetaBox.php:78
+#: src/Reports/RestController.php:146
+msgid "Order not found."
+msgstr ""
+
+#: src/Orders/MetaBox.php:96
+msgid "The VAT number or billing country changed since this decision was recorded. Recalculate taxes to update it."
+msgstr ""
+
+#: src/Orders/MetaBox.php:124
+msgid "Billing country"
+msgstr ""
+
+#: src/Orders/MetaBox.php:125
+msgid "Shipping country"
+msgstr ""
+
+#: src/Orders/MetaBox.php:126
+msgid "Local pickup"
+msgstr ""
+
+#: src/Orders/MetaBox.php:126
+msgid "Yes"
+msgstr ""
+
+#: src/Orders/MetaBox.php:126
+msgid "No"
+msgstr ""
+
+#: src/Orders/MetaBox.php:127
+msgid "Billing company"
+msgstr ""
+
+#: src/Orders/MetaBox.php:128
+msgid "VAT number as typed"
+msgstr ""
+
+#: src/Orders/MetaBox.php:130
+msgid "Registry answer"
+msgstr ""
+
+#: src/Orders/MetaBox.php:131
+msgid "Registry"
+msgstr ""
+
+#: src/Orders/MetaBox.php:132
+#: src/Privacy/Privacy.php:99
+msgid "Registered name"
+msgstr ""
+
+#: src/Orders/MetaBox.php:133
+#: src/Privacy/Privacy.php:103
+msgid "Registered address"
+msgstr ""
+
+#: src/Orders/MetaBox.php:134
+msgid "Consultation reference"
+msgstr ""
+
+#: src/Orders/MetaBox.php:135
+msgid "Checked at"
+msgstr ""
+
+#: src/Orders/MetaBox.php:136
+msgid "Location evidence"
+msgstr ""
+
+#: src/Orders/MetaBox.php:147
+msgid "Decided at"
+msgstr ""
+
+#: src/Orders/MetaBox.php:157
+msgid "Line"
+msgstr ""
+
+#. translators: 1: supply type, 2: place of supply country, 3: country whose VAT rate applies, 4: scheme
+#: src/Orders/MetaBox.php:160
+#, php-format
+msgid "%1$s, supplied in %2$s, VAT of %3$s, %4$s"
+msgstr ""
+
+#: src/Orders/MetaBox.php:178
+msgid "Decision log"
+msgstr ""
+
+#: src/Orders/MetaBox.php:180
+msgid "When (UTC)"
+msgstr ""
+
+#: src/Orders/MetaBox.php:180
+msgid "Trigger"
+msgstr ""
+
+#: src/Orders/MetaBox.php:180
+msgid "User"
+msgstr ""
+
+#: src/Orders/MetaBox.php:180
+msgid "Rule"
+msgstr ""
+
+#: src/Orders/MetaBox.php:180
+msgid "Flags"
+msgstr ""
+
+#: src/Orders/MetaBox.php:194
+msgid "Customer outside the EU: no EU VAT."
+msgstr ""
+
+#: src/Orders/MetaBox.php:196
+msgid "Delivery to a territory outside the EU VAT area: no EU VAT."
+msgstr ""
+
+#: src/Orders/MetaBox.php:198
+msgid "Domestic sale: VAT of the store country."
+msgstr ""
+
+#: src/Orders/MetaBox.php:200
+msgid "Domestic business customer: VAT charged, a number from the store country never exempts."
+msgstr ""
+
+#: src/Orders/MetaBox.php:202
+msgid "Domestic business customer with a valid VAT number: exempt, as allowed in the settings."
+msgstr ""
+
+#: src/Orders/MetaBox.php:204
+msgid "Goods to a business in another EU country with a valid VAT number: exempt intra-Community supply (Article 138)."
+msgstr ""
+
+#: src/Orders/MetaBox.php:206
+msgid "Services to a business in another EU country with a valid VAT number: reverse charge (Article 196)."
+msgstr ""
+
+#: src/Orders/MetaBox.php:208
+msgid "Consumer in another EU country, below the distance-selling threshold: VAT of the store country."
+msgstr ""
+
+#: src/Orders/MetaBox.php:210
+msgid "Consumer in another EU country: VAT of the destination country."
+msgstr ""
+
+#: src/Orders/MetaBox.php:212
+msgid "Service to a consumer: VAT of the store country."
+msgstr ""
+
+#: src/Orders/MetaBox.php:214
+msgid "The VAT number belongs to a different country than the billing address: VAT charged."
+msgstr ""
+
+#: src/Orders/MetaBox.php:216
+msgid "Collected in store: VAT of the store country."
+msgstr ""
+
+#: src/Orders/MetaBox.php:218
+msgid "The VAT number could not be checked: VAT charged until it is."
+msgstr ""
+
+#: src/Orders/MetaBox.php:220
+msgid "The VAT number could not be checked: exempt until it is."
+msgstr ""
+
+#: src/Orders/MetaBox.php:222
+msgid "The VAT number could not be checked: the order was refused."
+msgstr ""
+
+#: src/Orders/MetaBox.php:224
+msgid "The VAT number is not valid: VAT charged."
+msgstr ""
+
+#: src/Orders/MetaBox.php:226
+msgid "Non-EU VAT number recorded: no EU VAT."
+msgstr ""
+
+#: src/Orders/MetaBox.php:247
+msgid "The VAT number was checked later and is valid. VAT was charged at checkout."
+msgstr ""
+
+#: src/Orders/MetaBox.php:248
+msgid "The VAT number was checked later and is valid: exempt."
+msgstr ""
+
+#: src/Orders/MetaBox.php:252
+msgid "The VAT number was checked later and is not valid: VAT charged."
+msgstr ""
+
+#: src/Orders/MetaBox.php:253
+msgid "The VAT number was checked later and is not valid, but no VAT was charged."
+msgstr ""
+
+#: src/Orders/MetaBox.php:261
+msgid "Validation pending: the VAT number is checked again in the background."
+msgstr ""
+
+#: src/Orders/MetaBox.php:263
+msgid "The number was valid when checked later, but VAT was charged. The customer may be due a VAT refund."
+msgstr ""
+
+#: src/Orders/MetaBox.php:265
+msgid "VAT was not charged, but the number turned out to be invalid. VAT may be due."
+msgstr ""
+
+#: src/Orders/MetaBox.php:267
+msgid "The location evidence conflicted and the customer self-certified their country."
+msgstr ""
+
+#: src/Orders/MetaBox.php:269
+msgid "Only one piece of location evidence was available."
+msgstr ""
+
+#: src/Orders/MetaBox.php:271
+msgid "The company name does not match the registry."
+msgstr ""
+
+#: src/Orders/MetaBox.php:273
+msgid "The VAT number prefix does not match the billing country."
+msgstr ""
+
+#: src/Orders/MetaBox.php:275
+msgid "Decided after the fact for an order placed before the plugin was active."
+msgstr ""
+
+#: src/Orders/MetaBox.php:277
+msgid "No tax rate was set for the destination, the store rate was charged."
+msgstr ""
+
+#: src/Orders/RevalidatedEmail.php:22
+msgid "VAT number re-checked"
+msgstr ""
+
+#: src/Orders/RevalidatedEmail.php:23
+msgid "Sent to the store admin when a VAT number that could not be checked at checkout is checked later and the answer changes what is owed."
+msgstr ""
+
+#: src/Orders/RevalidatedEmail.php:39
+msgid "[{site_title}]: VAT not charged on order {order_number}, number invalid"
+msgstr ""
+
+#: src/Orders/RevalidatedEmail.php:41
+msgid "[{site_title}]: VAT refund may be due on order {order_number}"
+msgstr ""
+
+#: src/Orders/RevalidatedEmail.php:46
+msgid "VAT number reported invalid"
+msgstr ""
+
+#: src/Orders/RevalidatedEmail.php:48
+msgid "VAT number confirmed valid"
+msgstr ""
+
+#: src/Orders/Revalidation.php:114
+msgid "The VAT number could not be checked after repeated attempts. Check it by hand from the EU VAT box."
+msgstr ""
+
+#: src/Orders/Revalidation.php:149
+msgid "VAT number re-check: the registry is still unavailable."
+msgstr ""
+
+#: src/Orders/Revalidation.php:159
+msgid "VAT number re-check: the registry confirms the number is valid."
+msgstr ""
+
+#: src/Orders/Revalidation.php:162
+msgid "VAT was charged because the registry was unavailable. The number is valid, so the customer may be due a refund of the VAT."
+msgstr ""
+
+#: src/Orders/Revalidation.php:172
+msgid "VAT number re-check: the registry reports the number as invalid. VAT stays charged."
+msgstr ""
+
+#: src/Orders/Revalidation.php:175
+msgid "VAT was not charged on this order, but the registry reports the VAT number as invalid. VAT may be due."
+msgstr ""
+
+#: src/Plugin.php:85
+msgid "Levy - EU VAT requires WooCommerce to be active."
+msgstr ""
+
+#: src/Privacy/Privacy.php:44
+#: src/Privacy/Privacy.php:56
+#: src/Privacy/Privacy.php:75
+#: src/Privacy/Privacy.php:117
+msgid "EU VAT records"
+msgstr ""
+
+#: src/Privacy/Privacy.php:79
+msgid "Saved VAT number"
+msgstr ""
+
+#: src/Privacy/Privacy.php:91
+#: src/Privacy/Privacy.php:136
+#: src/Reports/OssReport.php:97
+#: src/Reports/ReportsScreen.php:224
+msgid "Order"
+msgstr ""
+
+#: src/Privacy/Privacy.php:107
+msgid "Consultation number"
+msgstr ""
+
+#: src/Privacy/Privacy.php:111
+msgid "Country of IP address"
+msgstr ""
+
+#: src/Privacy/Privacy.php:132
+msgid "EU VAT ledger"
+msgstr ""
+
+#: src/Privacy/Privacy.php:140
+#: src/Reports/OssReport.php:108
+msgid "Period"
+msgstr ""
+
+#: src/Privacy/Privacy.php:144
+msgid "Scheme"
+msgstr ""
+
+#: src/Privacy/Privacy.php:152
+msgid "Net"
+msgstr ""
+
+#: src/Privacy/Privacy.php:156
+msgid "VAT"
+msgstr ""
+
+#. translators: 1: order number, 2: date
+#: src/Privacy/Privacy.php:209
+#, php-format
+msgid "The VAT number and registry check for order %1$s are kept until %2$s because tax law requires VAT records to be kept."
+msgstr ""
+
+#. translators: %d: number of years
+#: src/Privacy/Privacy.php:237
+#, php-format
+msgid ""
+"When a customer enters a VAT number at checkout, we check it with the official registry for its country: VIES (European Commission) for EU numbers, and HMRC (UK), the Swiss UID register or the Brønnøysund Register (Norway) for those countries. The registry receives the VAT number and, for VIES, our own VAT number as the requester. The registry returns whether the number is valid and, where it publishes them, the registered name and address.\n"
+"\n"
+"We store the VAT number, the registry result including that name and address and the consultation number, and the country of the customer's IP address with the order. We use the IP country, together with the billing and shipping country, as evidence of where the sale takes place. Registry results are also cached for a short period.\n"
+"\n"
+"EU VAT rules require us to keep these records for %d years after the end of the year of the sale. Within that period a request to erase them cannot be met, and we keep only what the VAT records need. After that period the VAT number, registered name and address, consultation number and IP country are removed from the order and the VAT ledger automatically."
+msgstr ""
+
+#: src/Rates/RatesScreen.php:32
+msgid "EU VAT rates"
+msgstr ""
+
+#. translators: 1: rate source, 2: date the rates apply on.
+#: src/Rates/RatesScreen.php:38
+#, php-format
+msgid "Rates from %1$s, valid on %2$s. Nothing changes until you apply it."
+msgstr ""
+
+#: src/Rates/RatesScreen.php:52
+#: src/Reports/EcSalesList.php:67
+#: src/Reports/ReportsScreen.php:86
+msgid "Country"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:53
+msgid "Tax class"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:54
+msgid "Current"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:55
+#: src/Rates/RatesScreen.php:163
+msgid "New"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:56
+msgid "Status"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:68
+msgid "Standard"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:79
+msgid "Also overwrite rates I edited (tick the rows first)"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:83
+msgid "Apply selected rates"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:84
+msgid "Fetch latest from EU TEDB"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:117
+msgid "No VAT rates were changed. Tick the rows you want to apply."
+msgstr ""
+
+#. translators: %d: number of tax rates written.
+#: src/Rates/RatesScreen.php:119
+#, php-format
+msgid "%d VAT rate applied."
+msgid_plural "%d VAT rates applied."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Rates/RatesScreen.php:124
+msgid "Fetched the latest rates from EU TEDB."
+msgstr ""
+
+#: src/Rates/RatesScreen.php:126
+msgid "EU TEDB could not be reached, so the rates below haven't changed."
+msgstr ""
+
+#. translators: %d: number of rate changes.
+#: src/Rates/RatesScreen.php:145
+#, php-format
+msgid "%d VAT rate change available."
+msgid_plural "%d VAT rate changes available."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Rates/RatesScreen.php:150
+msgid "Review"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:157
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: src/Rates/RatesScreen.php:164
+msgid "Rate changed"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:165
+msgid "Edited by you"
+msgstr ""
+
+#: src/Rates/RatesScreen.php:166
+msgid "Up to date"
+msgstr ""
+
+#: src/Reports/EcSalesList.php:68
+#: src/Reports/ReportsScreen.php:87
+msgid "Goods or services"
+msgstr ""
+
+#: src/Reports/EcSalesList.php:69
+#: src/Reports/ReportsScreen.php:88
+msgid "Net amount (EUR)"
+msgstr ""
+
+#: src/Reports/OssReport.php:73
+msgid "Member state of consumption"
+msgstr ""
+
+#: src/Reports/OssReport.php:74
+#: src/Reports/OssReport.php:89
+#: src/Reports/ReportsScreen.php:179
+msgid "VAT rate %"
+msgstr ""
+
+#: src/Reports/OssReport.php:75
+#: src/Reports/OssReport.php:89
+#: src/Reports/OssReport.php:97
+#: src/Reports/ReportsScreen.php:180
+#: src/Reports/ReportsScreen.php:227
+msgid "Supply type"
+msgstr ""
+
+#. translators: %s: currency code.
+#: src/Reports/OssReport.php:77
+#: src/Reports/ReportsScreen.php:181
+#: src/Reports/ReportsScreen.php:228
+#, php-format
+msgid "Taxable amount (%s)"
+msgstr ""
+
+#. translators: %s: currency code.
+#: src/Reports/OssReport.php:79
+#: src/Reports/ReportsScreen.php:182
+#, php-format
+msgid "VAT amount (%s)"
+msgstr ""
+
+#: src/Reports/OssReport.php:89
+msgid "Corrections to earlier periods"
+msgstr ""
+
+#: src/Reports/OssReport.php:89
+#: src/Reports/OssReport.php:97
+msgid "Taxable amount"
+msgstr ""
+
+#: src/Reports/OssReport.php:89
+msgid "VAT amount"
+msgstr ""
+
+#: src/Reports/OssReport.php:89
+msgid "Period corrected"
+msgstr ""
+
+#: src/Reports/OssReport.php:97
+#: src/Reports/ReportsScreen.php:226
+msgid "Rate charged %"
+msgstr ""
+
+#: src/Reports/OssReport.php:97
+msgid "VAT charged"
+msgstr ""
+
+#. translators: %s: conversion rule.
+#: src/Reports/OssReport.php:107
+#, php-format
+msgid "Exchange rates used: %s"
+msgstr ""
+
+#: src/Reports/OssReport.php:109
+msgid "Rate date"
+msgstr ""
+
+#: src/Reports/OssReport.php:110
+msgid "Units per EUR"
+msgstr ""
+
+#: src/Reports/OssReport.php:121
+msgid "Charged at your own rate, needs correction (not included above)"
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:31
+#: src/Reports/ReportsScreen.php:32
+#: src/Reports/ReportsScreen.php:47
+msgid "EU VAT reports"
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:60
+msgid "Show"
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:63
+msgid "OSS return"
+msgstr ""
+
+#. translators: %s: conversion rule.
+#: src/Reports/ReportsScreen.php:64
+#, php-format
+msgid "Non-euro orders are converted at the %s."
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:66
+msgid "Download OSS CSV"
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:68
+msgid "EC Sales List"
+msgstr ""
+
+#. translators: %s: order numbers.
+#: src/Reports/ReportsScreen.php:75
+#, php-format
+msgid "No ECB rate was available for these orders, so the list is not shown: %s"
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:101
+msgid "No intra-EU B2B sales in this period."
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:105
+msgid "Download EC Sales List CSV"
+msgstr ""
+
+#. translators: %s: order numbers.
+#: src/Reports/ReportsScreen.php:126
+#, php-format
+msgid "The EC Sales List cannot be exported: no ECB rate was available for orders %s."
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:154
+msgid "You do not have permission to export these reports."
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:178
+#: src/Reports/ReportsScreen.php:225
+msgid "Member state"
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:196
+msgid "No OSS sales in this period."
+msgstr ""
+
+#. translators: 1: currency, 2: rate, 3: date, 4: period.
+#: src/Reports/ReportsScreen.php:207
+#, php-format
+msgid "%1$s: %2$s per EUR on %3$s (%4$s)."
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:220
+msgid "Your tax tables had no rate for these destinations, so checkout charged your own country's rate. That VAT is not the destination VAT these sales owe, so they are left out of the figures above. Decide with your adviser how to declare each one, then add the missing rates."
+msgstr ""
+
+#. translators: %s: currency code.
+#: src/Reports/ReportsScreen.php:229
+#, php-format
+msgid "VAT charged (%s)"
+msgstr ""
+
+#: src/Reports/ReportsScreen.php:254
+msgid "Refunds booked in this period against earlier periods are listed in the CSV so those returns can be amended."
+msgstr ""
+
+#. translators: 1: order number, 2: VAT number
+#: templates/emails/levy-eu-vat-revalidated.php:28
+#: templates/emails/plain/levy-eu-vat-revalidated.php:26
+#, php-format
+msgid "VAT was not charged on order %1$s, but the VAT registry now reports the VAT number %2$s as invalid. Check the order and decide whether VAT is due."
+msgstr ""
+
+#. translators: 1: order number, 2: VAT number
+#: templates/emails/levy-eu-vat-revalidated.php:35
+#: templates/emails/plain/levy-eu-vat-revalidated.php:29
+#, php-format
+msgid "VAT was charged on order %1$s because the VAT registry was unavailable when it was placed. The registry now confirms the VAT number %2$s is valid, so the customer may be due a refund of the VAT."
+msgstr ""
+
+#: templates/emails/levy-eu-vat-revalidated.php:41
+msgid "Open the order"
+msgstr ""

@@ -1,0 +1,16 @@
+{
+  "name": "levy-eu-vat-dev",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.62.0",
+    "@wordpress/env": "^11.5.0",
+    "@wordpress/scripts": "^36.1.0"
+  },
+  "scripts": {
+    "env:start": "wp-env start",
+    "test:e2e": "playwright test",
+    "build": "wp-scripts build assets/checkout-block/index.js --output-path=build --output-filename=checkout-block.js --no-output-clean",
+    "start": "wp-scripts start assets/checkout-block/index.js --output-path=build --output-filename=checkout-block.js --no-output-clean",
+    "pretest:e2e": "npm run build"
+  }
+}

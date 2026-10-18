@@ -1,0 +1,33 @@
+.levy-eu-vat-notice {
+	margin-block: 1em;
+}
+
+.levy-eu-vat-notice__message {
+	margin: 0;
+	padding-inline-start: 0.75em;
+	border-inline-start: 3px solid color-mix(in oklch, currentColor 35%, transparent);
+}
+
+/* Block checkout sizes its labels and help text in rem; the theme's body size, which the notice would inherit, is fluid and larger. */
+.wc-block-checkout .levy-eu-vat-notice__message {
+	font-size: 0.875rem;
+	line-height: 1.5;
+}
+
+.levy-eu-vat-notice__message--verified {
+	border-inline-start-color: oklch(0.55 0.13 150);
+}
+
+.levy-eu-vat-notice__message--invalid {
+	border-inline-start-color: oklch(0.55 0.2 27);
+}
+
+.levy-eu-vat-notice .wc-block-components-checkbox label {
+	display: flex;
+	align-items: center;
+	min-block-size: 2.75rem;
+}
+
+.woocommerce-checkout-review-order-table .levy-eu-vat-notice td {
+	padding-block: 1em;
+}
