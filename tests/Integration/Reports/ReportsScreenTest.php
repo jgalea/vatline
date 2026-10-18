@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Reports;
+namespace Vatline\Tests\Integration\Reports;
 
-use Levy\EuVat\Ledger\Fx;
-use Levy\EuVat\Ledger\Schema;
-use Levy\EuVat\Reports\EcSalesList;
-use Levy\EuVat\Reports\OssReport;
-use Levy\EuVat\Reports\ReportsScreen;
+use Vatline\Ledger\Fx;
+use Vatline\Ledger\Schema;
+use Vatline\Reports\EcSalesList;
+use Vatline\Reports\OssReport;
+use Vatline\Reports\ReportsScreen;
 use RuntimeException;
 use WC_Order;
 
@@ -51,7 +51,7 @@ class ReportsScreenTest extends ReportsTestCase {
 		$html = $this->render();
 
 		$this->assertStringContainsString( 'DE123456789', $html );
-		$this->assertStringContainsString( 'levy_eu_vat_export_esl', $html );
+		$this->assertStringContainsString( 'vatline_export_esl', $html );
 		$this->assertStringNotContainsString( 'notice-error', $html );
 	}
 
@@ -65,8 +65,8 @@ class ReportsScreenTest extends ReportsTestCase {
 		$this->assertStringContainsString( 'notice-error', $html );
 		$this->assertStringContainsString( 'No ECB rate was available for these orders, so the list is not shown: ' . $incomplete->get_id(), $html );
 		$this->assertStringNotContainsString( 'DE123456789', $html );
-		$this->assertStringNotContainsString( 'levy_eu_vat_export_esl', $html );
-		$this->assertStringContainsString( 'levy_eu_vat_export_oss', $html );
+		$this->assertStringNotContainsString( 'vatline_export_esl', $html );
+		$this->assertStringContainsString( 'vatline_export_oss', $html );
 	}
 
 	public function test_esl_export_dies_naming_the_orders_when_the_report_is_incomplete(): void {

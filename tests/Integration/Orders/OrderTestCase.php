@@ -1,17 +1,17 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Orders;
+namespace Vatline\Tests\Integration\Orders;
 
-use Levy\EuVat\Checkout\InputGatherer;
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\DecisionInput;
-use Levy\EuVat\Domain\Evidence;
-use Levy\EuVat\Domain\Line;
-use Levy\EuVat\Domain\Rules;
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Checkout\InputGatherer;
+use Vatline\Domain\Decision;
+use Vatline\Domain\DecisionInput;
+use Vatline\Domain\Evidence;
+use Vatline\Domain\Line;
+use Vatline\Domain\Rules;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Settings;
+use Vatline\Tests\Support\IntegrationTestCase;
 use WC_Order;
 use WC_Order_Item_Product;
 use WC_Order_Item_Shipping;

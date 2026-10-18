@@ -9,7 +9,7 @@ import { NUMBERS, PRODUCTS, resetState, visitorIpIn } from './helpers';
 
 test.skip( ! process.env.VISUAL_QA, 'Set VISUAL_QA=1 to render every VAT checkout state at 390, 768 and 1440 wide.' );
 
-const OUT = process.env.VISUAL_QA_OUT || path.join( os.homedir(), 'code/artifacts/levy-eu-vat/qa' );
+const OUT = process.env.VISUAL_QA_OUT || path.join( os.homedir(), 'code/artifacts/vatline/qa' );
 const WIDTHS = [ { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 } ];
 
 interface Flow {
@@ -25,7 +25,7 @@ interface Flow {
 const flows: Flow[] = [
 	{
 		name: 'block',
-		scope: '.levy-eu-vat-notice, .wc-block-checkout__contact-fields',
+		scope: '.vatline-notice, .wc-block-checkout__contact-fields',
 		open: block.openCheckout,
 		fill: block.fillCustomer,
 		notice: block.notice,
@@ -38,7 +38,7 @@ const flows: Flow[] = [
 	},
 	{
 		name: 'classic',
-		scope: '.levy-eu-vat-notice, #billing_levy_eu_vat_number_field',
+		scope: '.vatline-notice, #billing_vatline_number_field',
 		open: classic.openCheckout,
 		fill: classic.fillCustomer,
 		notice: classic.notice,
@@ -131,7 +131,7 @@ test( 'the layout checks fail on a known-bad page', async ( { page } ) => {
 	await page.setViewportSize( WIDTHS[ 0 ] );
 	resetState();
 	await states.verified( flows[ 0 ], page, page.context() );
-	await page.addStyleTag( { content: '.levy-eu-vat-notice{width:1400px!important}.levy-eu-vat-notice__message{color:#ddd!important}' } );
+	await page.addStyleTag( { content: '.vatline-notice{width:1400px!important}.vatline-notice__message{color:#ddd!important}' } );
 
 	const { problems } = await layoutProblems( page, flows[ 0 ].scope );
 

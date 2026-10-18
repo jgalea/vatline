@@ -1,13 +1,13 @@
 <?php
 
-namespace Levy\EuVat\Orders;
+namespace Vatline\Orders;
 
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Registry\Validator;
-use Levy\EuVat\Settings;
+use Vatline\Domain\Decision;
+use Vatline\Domain\Scheme;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Registry\Validator;
+use Vatline\Settings;
 use Throwable;
 use WC_Order;
 
@@ -18,9 +18,9 @@ use WC_Order;
  */
 class Revalidation {
 
-	const HOOK = 'levy_eu_vat_revalidate';
+	const HOOK = 'vatline_revalidate';
 
-	const GROUP = 'levy-eu-vat';
+	const GROUP = 'vatline';
 
 	const PENDING_FLAG = 'validation_pending';
 
@@ -111,7 +111,7 @@ class Revalidation {
 			as_schedule_single_action( time() + self::DELAYS[ $attempt ], self::HOOK, array( $order_id, $attempt + 1 ), self::GROUP );
 			return;
 		}
-		$order->add_order_note( __( 'The VAT number could not be checked after repeated attempts. Check it by hand from the EU VAT box.', 'levy-eu-vat' ) );
+		$order->add_order_note( __( 'The VAT number could not be checked after repeated attempts. Check it by hand from the EU VAT box.', 'vatline' ) );
 	}
 
 	/**
@@ -132,7 +132,7 @@ class Revalidation {
 		try {
 			$result = $this->validator->validate( $number, true, true );
 		} catch ( Throwable $e ) {
-			wc_get_logger()->error( 'VAT revalidation failed: ' . $e->getMessage(), array( 'source' => 'levy-eu-vat' ) );
+			wc_get_logger()->error( 'VAT revalidation failed: ' . $e->getMessage(), array( 'source' => 'vatline' ) );
 			return self::UNAVAILABLE;
 		}
 
@@ -146,7 +146,7 @@ class Revalidation {
 			return self::INVALID;
 		}
 
-		$order->add_order_note( __( 'VAT number re-check: the registry is still unavailable.', 'levy-eu-vat' ) );
+		$order->add_order_note( __( 'VAT number re-check: the registry is still unavailable.', 'vatline' ) );
 		return self::UNAVAILABLE;
 	}
 
@@ -156,10 +156,10 @@ class Revalidation {
 		$order->save();
 
 		if ( ! $refund_due ) {
-			$order->add_order_note( __( 'VAT number re-check: the registry confirms the number is valid.', 'levy-eu-vat' ) );
+			$order->add_order_note( __( 'VAT number re-check: the registry confirms the number is valid.', 'vatline' ) );
 			return;
 		}
-		$order->add_order_note( __( 'VAT was charged because the registry was unavailable. The number is valid, so the customer may be due a refund of the VAT.', 'levy-eu-vat' ) );
+		$order->add_order_note( __( 'VAT was charged because the registry was unavailable. The number is valid, so the customer may be due a refund of the VAT.', 'vatline' ) );
 		$this->notify( $order, RevalidatedEmail::REFUND );
 	}
 
@@ -169,10 +169,10 @@ class Revalidation {
 		$order->save();
 
 		if ( ! $unfounded ) {
-			$order->add_order_note( __( 'VAT number re-check: the registry reports the number as invalid. VAT stays charged.', 'levy-eu-vat' ) );
+			$order->add_order_note( __( 'VAT number re-check: the registry reports the number as invalid. VAT stays charged.', 'vatline' ) );
 			return;
 		}
-		$order->add_order_note( __( 'VAT was not charged on this order, but the registry reports the VAT number as invalid. VAT may be due.', 'levy-eu-vat' ) );
+		$order->add_order_note( __( 'VAT was not charged on this order, but the registry reports the VAT number as invalid. VAT may be due.', 'vatline' ) );
 		$this->notify( $order, RevalidatedEmail::INVALID );
 	}
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Levy\EuVat\Tests\Support;
+namespace Vatline\Tests\Support;
 
 use RuntimeException;
 

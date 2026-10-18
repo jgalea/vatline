@@ -1,10 +1,10 @@
 <?php
 
-namespace Levy\EuVat\Rates;
+namespace Vatline\Rates;
 
 class RateMapping {
 
-	const OPTION = 'levy_eu_vat_rate_mapping';
+	const OPTION = 'vatline_rate_mapping';
 
 	/**
 	 * Goods to Northern Ireland follow EU VAT rules but carry UK VAT

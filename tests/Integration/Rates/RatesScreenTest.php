@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Rates;
+namespace Vatline\Tests\Integration\Rates;
 
-use Levy\EuVat\Rates\RatesScreen;
-use Levy\EuVat\Rates\RateSync;
-use Levy\EuVat\Rates\Tedb;
-use Levy\EuVat\Tests\Support\FixtureTransport;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Rates\RatesScreen;
+use Vatline\Rates\RateSync;
+use Vatline\Rates\Tedb;
+use Vatline\Tests\Support\FixtureTransport;
+use Vatline\Tests\Support\IntegrationTestCase;
 use ReflectionProperty;
 use WC_Admin_Settings;
 
@@ -28,7 +28,7 @@ class RatesScreenTest extends IntegrationTestCase {
 	}
 
 	public function tear_down() {
-		unset( $_GET['levy_eu_vat_applied'], $_GET['levy_eu_vat_refreshed'] );
+		unset( $_GET['vatline_applied'], $_GET['vatline_refreshed'] );
 		parent::tear_down();
 	}
 
@@ -39,7 +39,7 @@ class RatesScreenTest extends IntegrationTestCase {
 	}
 
 	public function test_applying_rates_confirms_how_many_were_written(): void {
-		$_GET['levy_eu_vat_applied'] = '28';
+		$_GET['vatline_applied'] = '28';
 		$this->screen->register();
 
 		do_action( 'woocommerce_before_settings_tax' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
@@ -50,14 +50,14 @@ class RatesScreenTest extends IntegrationTestCase {
 	}
 
 	public function test_applying_nothing_says_so(): void {
-		$_GET['levy_eu_vat_applied'] = '0';
+		$_GET['vatline_applied'] = '0';
 		$this->screen->result_message();
 
 		$this->assertStringContainsString( 'No VAT rates were changed.', $this->messages() );
 	}
 
 	public function test_a_failed_refresh_shows_an_error(): void {
-		$_GET['levy_eu_vat_refreshed'] = '0';
+		$_GET['vatline_refreshed'] = '0';
 		$this->screen->result_message();
 
 		$this->assertStringContainsString( 'class="error inline"', $this->messages() );

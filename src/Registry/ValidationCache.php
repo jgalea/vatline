@@ -1,14 +1,14 @@
 <?php
 
-namespace Levy\EuVat\Registry;
+namespace Vatline\Registry;
 
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Settings;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Settings;
 
 class ValidationCache {
 
-	const PREFIX = 'levy_eu_vat_v_';
+	const PREFIX = 'vatline_v_';
 
 	/** @var Settings */
 	private $settings;

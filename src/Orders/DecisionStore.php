@@ -1,18 +1,18 @@
 <?php
 
-namespace Levy\EuVat\Orders;
+namespace Vatline\Orders;
 
-use Levy\EuVat\Domain\Decision;
+use Vatline\Domain\Decision;
 use WC_Meta_Data;
 use WC_Order;
 
 final class DecisionStore {
 
-	const META = '_levy_eu_vat_decision';
+	const META = '_vatline_decision';
 
-	const LOG_META = '_levy_eu_vat_log';
+	const LOG_META = '_vatline_log';
 
-	const NUMBER_META = '_levy_eu_vat_number';
+	const NUMBER_META = '_vatline_number';
 
 	public static function get( WC_Order $order ): ?Decision {
 		$data = json_decode( (string) $order->get_meta( self::META ), true );

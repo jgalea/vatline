@@ -1,10 +1,10 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Reports;
+namespace Vatline\Tests\Integration\Reports;
 
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Ledger\Fx;
-use Levy\EuVat\Reports\OssReport;
+use Vatline\Domain\Scheme;
+use Vatline\Ledger\Fx;
+use Vatline\Reports\OssReport;
 use RuntimeException;
 
 require_once __DIR__ . '/ReportsTestCase.php';

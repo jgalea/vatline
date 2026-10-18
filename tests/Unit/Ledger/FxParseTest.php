@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Ledger;
+namespace Vatline\Tests\Unit\Ledger;
 
-use Levy\EuVat\Ledger\Fx;
+use Vatline\Ledger\Fx;
 use PHPUnit\Framework\TestCase;
 
 class FxParseTest extends TestCase {

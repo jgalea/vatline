@@ -91,7 +91,7 @@ export async function layoutProblems( page: Page, scope: string ): Promise< { pr
 			}
 		}
 
-		for ( const box of [ ...document.querySelectorAll( '.levy-eu-vat-notice input[type="checkbox"]' ) ].filter( visible ) ) {
+		for ( const box of [ ...document.querySelectorAll( '.vatline-notice input[type="checkbox"]' ) ].filter( visible ) ) {
 			const target = ( box.closest( 'label' ) || box ).getBoundingClientRect();
 			if ( target.height < 24 ) {
 				problems.push( `small tap target ${ Math.round( target.height ) }px: ${ name( box ) }` );

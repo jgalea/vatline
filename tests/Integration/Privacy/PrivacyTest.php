@@ -1,13 +1,13 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Privacy;
+namespace Vatline\Tests\Integration\Privacy;
 
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Privacy\Privacy;
-use Levy\EuVat\Registry\ValidationCache;
-use Levy\EuVat\Settings;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Orders\DecisionStore;
+use Vatline\Privacy\Privacy;
+use Vatline\Registry\ValidationCache;
+use Vatline\Settings;
 
 require_once __DIR__ . '/PrivacyTestCase.php';
 
@@ -29,10 +29,10 @@ class PrivacyTest extends PrivacyTestCase {
 		$exporters = apply_filters( 'wp_privacy_personal_data_exporters', array() ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$erasers   = apply_filters( 'wp_privacy_personal_data_erasers', array() ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
-		$this->assertArrayHasKey( 'levy-eu-vat', $exporters );
-		$this->assertArrayHasKey( 'levy-eu-vat', $erasers );
-		$this->assertIsCallable( $exporters['levy-eu-vat']['callback'] );
-		$this->assertIsCallable( $erasers['levy-eu-vat']['callback'] );
+		$this->assertArrayHasKey( 'vatline', $exporters );
+		$this->assertArrayHasKey( 'vatline', $erasers );
+		$this->assertIsCallable( $exporters['vatline']['callback'] );
+		$this->assertIsCallable( $erasers['vatline']['callback'] );
 	}
 
 	public function test_export_shape(): void {
@@ -45,8 +45,8 @@ class PrivacyTest extends PrivacyTestCase {
 		$this->assertCount( 2, $result['data'] );
 
 		$record = $result['data'][0];
-		$this->assertSame( 'levy-eu-vat', $record['group_id'] );
-		$this->assertSame( 'levy-eu-vat-order-' . $order->get_id(), $record['item_id'] );
+		$this->assertSame( 'vatline', $record['group_id'] );
+		$this->assertSame( 'vatline-order-' . $order->get_id(), $record['item_id'] );
 		$values = array_column( $record['data'], 'value', 'name' );
 		$this->assertSame( 'DE123456789', $values['VAT number'] );
 		$this->assertSame( 'Acme GmbH', $values['Registered name'] );
@@ -55,7 +55,7 @@ class PrivacyTest extends PrivacyTestCase {
 		$this->assertStringContainsString( 'Line 1', $values['Registered address'] );
 
 		$ledger = $result['data'][1];
-		$this->assertSame( 'levy-eu-vat-ledger', $ledger['group_id'] );
+		$this->assertSame( 'vatline-ledger', $ledger['group_id'] );
 		$this->assertSame( 'DE123456789', array_column( $ledger['data'], 'value', 'name' )['VAT number'] );
 	}
 
@@ -68,7 +68,7 @@ class PrivacyTest extends PrivacyTestCase {
 		$this->assertCount( 2, $this->privacy->export( 'account@example.com' )['data'] );
 	}
 
-	public function test_export_pages_and_ignores_orders_without_levy_data(): void {
+	public function test_export_pages_and_ignores_orders_without_vatline_data(): void {
 		$this->assertSame(
 			array(
 				'data' => array(),
@@ -170,7 +170,7 @@ class PrivacyTest extends PrivacyTestCase {
 		$result = $this->privacy->export( 'saved@example.com' );
 
 		$this->assertCount( 1, $result['data'] );
-		$this->assertSame( 'levy-eu-vat-account-' . $user_id, $result['data'][0]['item_id'] );
+		$this->assertSame( 'vatline-account-' . $user_id, $result['data'][0]['item_id'] );
 		$this->assertSame( 'DE123456789', array_column( $result['data'][0]['data'], 'value', 'name' )['Saved VAT number'] );
 		$this->assertSame( array(), $this->privacy->export( 'saved@example.com', 2 )['data'], 'The account item is exported once, on the first page' );
 	}
@@ -190,16 +190,16 @@ class PrivacyTest extends PrivacyTestCase {
 
 		$this->assertTrue( $result['items_removed'] );
 		$this->assertTrue( $result['items_retained'] );
-		$this->assertSame( '', get_user_meta( $user_id, '_levy_eu_vat_number', true ) );
-		$this->assertSame( '', get_user_meta( $user_id, '_wc_other/levy-eu-vat/vat-number', true ) );
+		$this->assertSame( '', get_user_meta( $user_id, '_vatline_number', true ) );
+		$this->assertSame( '', get_user_meta( $user_id, '_wc_other/vatline/vat-number', true ) );
 		$this->assertSame( 'DE123456789', wc_get_order( $order->get_id() )->get_meta( DecisionStore::NUMBER_META ), 'The order keeps its VAT record' );
 		$this->assertNull( $this->cache->get( $number, null ) );
 	}
 
 	private function account_with_saved_number(): int {
 		$user_id = self::factory()->user->create( array( 'user_email' => 'saved@example.com' ) );
-		update_user_meta( $user_id, '_levy_eu_vat_number', 'DE123456789' );
-		update_user_meta( $user_id, '_wc_other/levy-eu-vat/vat-number', 'DE123456789' );
+		update_user_meta( $user_id, '_vatline_number', 'DE123456789' );
+		update_user_meta( $user_id, '_wc_other/vatline/vat-number', 'DE123456789' );
 		return $user_id;
 	}
 

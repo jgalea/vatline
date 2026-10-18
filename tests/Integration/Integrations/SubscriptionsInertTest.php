@@ -1,13 +1,13 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Integrations;
+namespace Vatline\Tests\Integration\Integrations;
 
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Tests\Support\IntegrationTestCase;
 
 class SubscriptionsInertTest extends IntegrationTestCase {
 
 	public function test_nothing_is_hooked_without_subscriptions() {
-		if ( class_exists( 'WC_Subscriptions' ) && ! defined( 'LEVY_EU_VAT_TEST_WCS_STAND_IN' ) ) {
+		if ( class_exists( 'WC_Subscriptions' ) && ! defined( 'VATLINE_TEST_WCS_STAND_IN' ) ) {
 			$this->markTestSkipped( 'WooCommerce Subscriptions is active, so the plugin legitimately hooks into it.' );
 		}
 

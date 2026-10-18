@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Reports;
+namespace Vatline\Tests\Integration\Reports;
 
-use Levy\EuVat\Checkout\TaxLocation;
-use Levy\EuVat\Domain\Rule;
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Ledger\LedgerWriter;
-use Levy\EuVat\Tests\Integration\Ledger\LedgerTestCase;
+use Vatline\Checkout\TaxLocation;
+use Vatline\Domain\Rule;
+use Vatline\Domain\Scheme;
+use Vatline\Ledger\LedgerWriter;
+use Vatline\Tests\Integration\Ledger\LedgerTestCase;
 use WC_Order;
 
 require_once dirname( __DIR__ ) . '/Ledger/LedgerTestCase.php';

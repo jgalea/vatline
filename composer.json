@@ -1,5 +1,5 @@
 {
-    "name": "jgalea/levy-eu-vat",
+    "name": "jgalea/vatline",
     "description": "Decides, applies and records EU VAT treatment on every WooCommerce order.",
     "type": "wordpress-plugin",
     "license": "GPL-3.0-or-later",
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Levy\\EuVat\\": "src/"
+            "Vatline\\": "src/"
         }
     },
     "scripts": {

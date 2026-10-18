@@ -1,11 +1,11 @@
 <?php
 
-namespace Levy\EuVat\Checkout;
+namespace Vatline\Checkout;
 
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\Line;
-use Levy\EuVat\Domain\LineDecision;
-use Levy\EuVat\Domain\Scheme;
+use Vatline\Domain\Decision;
+use Vatline\Domain\Line;
+use Vatline\Domain\LineDecision;
+use Vatline\Domain\Scheme;
 use WC_Tax;
 
 /**
@@ -23,7 +23,7 @@ final class TaxLocation {
 
 	const MISSING_FLAG = 'rate_missing';
 
-	const MISSING_OPTION = 'levy_eu_vat_rate_missing';
+	const MISSING_OPTION = 'vatline_rate_missing';
 
 	const UNTAXED_SCHEMES = array(
 		Scheme::EXPORT,

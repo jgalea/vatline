@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Ledger;
+namespace Vatline\Tests\Integration\Ledger;
 
-use Levy\EuVat\Registry\HttpTransport;
+use Vatline\Registry\HttpTransport;
 
 /**
  * Serves the recorded USD series, cut to the requested period the way the ECB

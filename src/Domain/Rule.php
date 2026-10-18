@@ -1,6 +1,6 @@
 <?php
 
-namespace Levy\EuVat\Domain;
+namespace Vatline\Domain;
 
 final class Rule {
 

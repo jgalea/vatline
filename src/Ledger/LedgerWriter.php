@@ -1,13 +1,13 @@
 <?php
 
-namespace Levy\EuVat\Ledger;
+namespace Vatline\Ledger;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Levy\EuVat\Checkout\TaxLocation;
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\Line;
-use Levy\EuVat\Domain\Scheme;
+use Vatline\Checkout\TaxLocation;
+use Vatline\Domain\Decision;
+use Vatline\Domain\Line;
+use Vatline\Domain\Scheme;
 use WC_Abstract_Order;
 use WC_Order;
 use WC_Order_Refund;
@@ -15,10 +15,10 @@ use WC_Tax;
 
 class LedgerWriter {
 
-	const DECISION_META = '_levy_eu_vat_decision';
-	const FX_META       = '_levy_eu_vat_fx';
-	const FX_RETRY_HOOK = 'levy_eu_vat_ledger_fx_retry';
-	const AS_GROUP      = 'levy-eu-vat';
+	const DECISION_META = '_vatline_decision';
+	const FX_META       = '_vatline_fx';
+	const FX_RETRY_HOOK = 'vatline_ledger_fx_retry';
+	const AS_GROUP      = 'vatline';
 
 	/** @var Fx */
 	private $fx;
@@ -120,7 +120,7 @@ class LedgerWriter {
 	 * and line decision. An item's net sits on its first rate; every rate gets
 	 * its own tax amount.
 	 *
-	 * @return array<string,array{rate_id:int,rate_percent:float,net:float,vat:float,line:\Levy\EuVat\Domain\LineDecision|null}>
+	 * @return array<string,array{rate_id:int,rate_percent:float,net:float,vat:float,line:\Vatline\Domain\LineDecision|null}>
 	 */
 	private function buckets( WC_Abstract_Order $source, WC_Order $order, Decision $decision ): array {
 		$percents = array();
@@ -172,7 +172,7 @@ class LedgerWriter {
 	 * A refund entered as an amount carries no items, so it is spread over the
 	 * order's sale rows by its share of the order total.
 	 *
-	 * @return array<string,array{rate_id:int,rate_percent:float,net:float,vat:float,line:\Levy\EuVat\Domain\LineDecision|null}>
+	 * @return array<string,array{rate_id:int,rate_percent:float,net:float,vat:float,line:\Vatline\Domain\LineDecision|null}>
 	 */
 	private function proportional_buckets( WC_Order $order, WC_Order_Refund $refund, Decision $decision ): array {
 		$total = (float) $order->get_total();
@@ -189,7 +189,7 @@ class LedgerWriter {
 	}
 
 	/**
-	 * @param array<string,array{rate_id:int,rate_percent:float,net:float,vat:float,line:\Levy\EuVat\Domain\LineDecision|null}> $buckets
+	 * @param array<string,array{rate_id:int,rate_percent:float,net:float,vat:float,line:\Vatline\Domain\LineDecision|null}> $buckets
 	 */
 	private function insert_rows( WC_Order $order, Decision $decision, array $buckets, string $entry_type, ?int $refund_id, DateTimeImmutable $at, string $period, string $relates_to ): void {
 		global $wpdb;

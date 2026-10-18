@@ -1,27 +1,27 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Orders;
+namespace Vatline\Tests\Integration\Orders;
 
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\DecisionInput;
-use Levy\EuVat\Domain\Evidence;
-use Levy\EuVat\Domain\Line;
-use Levy\EuVat\Domain\Rules;
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Ledger\ThresholdTracker;
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Orders\Revalidation;
-use Levy\EuVat\Registry\Brreg;
-use Levy\EuVat\Registry\Hmrc;
-use Levy\EuVat\Registry\Router;
-use Levy\EuVat\Registry\SwissUid;
-use Levy\EuVat\Registry\ValidationCache;
-use Levy\EuVat\Registry\Validator;
-use Levy\EuVat\Registry\Vies;
-use Levy\EuVat\Registry\WpHttpTransport;
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Support\HttpGuard;
+use Vatline\Domain\Decision;
+use Vatline\Domain\DecisionInput;
+use Vatline\Domain\Evidence;
+use Vatline\Domain\Line;
+use Vatline\Domain\Rules;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Ledger\ThresholdTracker;
+use Vatline\Orders\DecisionStore;
+use Vatline\Orders\Revalidation;
+use Vatline\Registry\Brreg;
+use Vatline\Registry\Hmrc;
+use Vatline\Registry\Router;
+use Vatline\Registry\SwissUid;
+use Vatline\Registry\ValidationCache;
+use Vatline\Registry\Validator;
+use Vatline\Registry\Vies;
+use Vatline\Registry\WpHttpTransport;
+use Vatline\Settings;
+use Vatline\Tests\Support\HttpGuard;
 use RuntimeException;
 use WC_Order;
 

@@ -1,17 +1,17 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Domain;
+namespace Vatline\Tests\Unit\Domain;
 
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\DecisionInput;
-use Levy\EuVat\Domain\Evidence;
-use Levy\EuVat\Domain\Line;
-use Levy\EuVat\Domain\Rule;
-use Levy\EuVat\Domain\Rules;
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Domain\Territory;
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
+use Vatline\Domain\Decision;
+use Vatline\Domain\DecisionInput;
+use Vatline\Domain\Evidence;
+use Vatline\Domain\Line;
+use Vatline\Domain\Rule;
+use Vatline\Domain\Rules;
+use Vatline\Domain\Scheme;
+use Vatline\Domain\Territory;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
 use PHPUnit\Framework\TestCase;
 
 /**

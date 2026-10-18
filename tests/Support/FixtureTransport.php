@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Support;
+namespace Vatline\Tests\Support;
 
-use Levy\EuVat\Registry\HttpTransport;
+use Vatline\Registry\HttpTransport;
 use RuntimeException;
 
 class FixtureTransport implements HttpTransport {

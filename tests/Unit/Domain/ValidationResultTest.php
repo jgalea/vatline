@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Domain;
+namespace Vatline\Tests\Unit\Domain;
 
-use Levy\EuVat\Domain\ValidationResult;
+use Vatline\Domain\ValidationResult;
 use PHPUnit\Framework\TestCase;
 
 class ValidationResultTest extends TestCase {

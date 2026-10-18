@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Registry;
+namespace Vatline\Tests\Unit\Registry;
 
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Registry\Hmrc;
-use Levy\EuVat\Registry\HttpTransport;
-use Levy\EuVat\Tests\Support\FixtureTransport;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Registry\Hmrc;
+use Vatline\Registry\HttpTransport;
+use Vatline\Tests\Support\FixtureTransport;
 use PHPUnit\Framework\TestCase;
 
 require_once dirname( __DIR__, 2 ) . '/Support/FixtureTransport.php';
@@ -15,7 +15,7 @@ require_once dirname( __DIR__, 2 ) . '/Support/TransientStub.php';
 class HmrcTest extends TestCase {
 
 	protected function setUp(): void {
-		levy_eu_vat_test_reset_transients();
+		vatline_test_reset_transients();
 	}
 
 	private function hmrc( ?HttpTransport $transport = null, string $id = 'test-id' ): Hmrc {

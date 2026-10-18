@@ -1,4 +1,4 @@
-=== Levy – EU VAT for WooCommerce ===
+=== Vatline – EU VAT & OSS for WooCommerce ===
 Contributors: jeangalea
 Tags: vat, woocommerce, eu vat, oss, reverse charge
 Requires at least: 6.6
@@ -13,16 +13,16 @@ Validates EU VAT numbers, applies reverse charge or destination VAT, tracks the 
 
 == Description ==
 
-Levy decides which VAT treatment each WooCommerce order gets, applies it through WooCommerce's own tax calculation, and records the decision with its inputs on the order. It's free, has no Pro version, and shows no branding in your store.
+The plugin decides which VAT treatment each WooCommerce order gets, applies it through WooCommerce's own tax calculation, and records the decision with its inputs on the order. It's free, has no Pro version, and shows no branding in your store.
 
-Settings live under WooCommerce > Settings > Tax > EU VAT.
+Settings live under WooCommerce > Settings > Tax > Vatline.
 
 **What it does**
 
 * Adds a VAT number field to the block checkout, the classic checkout, My Account and the admin order screen. Numbers are checked for format first, then against the official registry.
 * Registries: VIES for EU numbers, HMRC for GB numbers (needs your own free HMRC developer credentials, see the FAQ), the Swiss UID register for CHE numbers and the Brønnøysund register for Norwegian numbers.
 * Applies reverse charge to B2B sales with a valid number, with the wording required on the order, emails and invoice text (filterable and translatable). A valid number from your own country never exempts unless you switch that on.
-* Charges B2C customers your country's VAT below the EUR 10,000 OSS threshold and the destination country's VAT above it, switching automatically. You can also tell Levy you're OSS-registered to always charge destination VAT.
+* Charges B2C customers your country's VAT below the EUR 10,000 OSS threshold and the destination country's VAT above it, switching automatically. You can also tell the plugin you're OSS-registered to always charge destination VAT.
 * Digital products use location evidence (billing country, shipping country and geolocation). When the evidence conflicts, the customer can be asked to confirm their country.
 * Imports standard and reduced rates from the EU's TEDB into your WooCommerce tax classes. It shows a diff first and never changes a rate until you apply it. A tax class mapping screen sets which EU rate each class follows, per country.
 * Optional fixed gross prices across EU countries for stores that enter prices with tax.
@@ -36,9 +36,9 @@ Settings live under WooCommerce > Settings > Tax > EU VAT.
 
 == Installation ==
 
-1. Make sure WooCommerce is active, then install and activate Levy.
+1. Make sure WooCommerce is active, then install and activate Vatline.
 2. Go to WooCommerce > Settings > General and tick "Enable tax rates and calculations". WooCommerce hides the Tax tab until you do.
-3. Go to WooCommerce > Settings > Tax > EU VAT and read the setup check.
+3. Go to WooCommerce > Settings > Tax > Vatline and read the setup check.
 4. Enter your store VAT number so VIES can return a consultation number for each check.
 5. Apply the EU rates in the rates table at the bottom of the screen, or map your tax classes first.
 
@@ -46,7 +46,7 @@ Settings live under WooCommerce > Settings > Tax > EU VAT.
 
 = What happens when VIES is down? =
 
-Checkout still works. By default the order is accepted, VAT is charged and the order is flagged as pending validation. Levy checks the number again later and, if it validates, marks the order and can email you so you can refund the VAT. The setting "When a registry is unavailable" offers two alternatives: accept the order, exempt the VAT and re-check later, or don't accept the order. Registry requests time out after a few seconds.
+Checkout still works. By default the order is accepted, VAT is charged and the order is flagged as pending validation. The plugin checks the number again later and, if it validates, marks the order and can email you so you can refund the VAT. The setting "When a registry is unavailable" offers two alternatives: accept the order, exempt the VAT and re-check later, or don't accept the order. Registry requests time out after a few seconds.
 
 = How do I validate UK VAT numbers? =
 
@@ -55,19 +55,19 @@ HMRC only answers requests that carry credentials from a registered application,
 1. Create an account at the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/).
 2. Register an application and subscribe it to the VAT Registered Companies API (check a UK VAT number).
 3. Copy the client ID and client secret from the application.
-4. Paste them into WooCommerce > Settings > Tax > EU VAT > HMRC.
+4. Paste them into WooCommerce > Settings > Tax > Vatline > HMRC.
 
 Without credentials, GB numbers are only format-checked and a business customer in the UK is treated as a consumer.
 
 = Does it work with WooCommerce Subscriptions? =
 
-Levy hooks into the WooCommerce Subscriptions renewal and switch hooks. A renewal is decided as a new sale: the subscription's stored registry answer is reused while it's fresh, otherwise the number is checked again, and the decision is stored on the renewal order. If a renewal can't be decided, VAT is charged. This has been tested against a stand-in for the Subscriptions hooks, not against the WooCommerce Subscriptions plugin itself.
+The plugin hooks into the WooCommerce Subscriptions renewal and switch hooks. A renewal is decided as a new sale: the subscription's stored registry answer is reused while it's fresh, otherwise the number is checked again, and the decision is stored on the renewal order. If a renewal can't be decided, VAT is charged. This has been tested against a stand-in for the Subscriptions hooks, not against the WooCommerce Subscriptions plugin itself.
 
-= What personal data does Levy store, and for how long? =
+= What personal data does the plugin store, and for how long? =
 
-It stores the customer's VAT number, the registry's name, address and consultation number for it, and the IP country evidence used for digital sales, on the order, in the Levy ledger table and, for logged-in customers, in their account. After the retention period (10 years by default, counted from the end of the year of the sale, which matches the OSS record-keeping period) Levy removes the personal data from the decision record and ledger rows and keeps the scheme, rule, amounts and country evidence. Exporters and erasers are registered with the WordPress privacy tools. All plugin data is kept when you delete the plugin, unless you tick "Delete all plugin data when the plugin is deleted".
+It stores the customer's VAT number, the registry's name, address and consultation number for it, and the IP country evidence used for digital sales, on the order, in the plugin's ledger table and, for logged-in customers, in their account. After the retention period (10 years by default, counted from the end of the year of the sale, which matches the OSS record-keeping period) the plugin removes the personal data from the decision record and ledger rows and keeps the scheme, rule, amounts and country evidence. Exporters and erasers are registered with the WordPress privacy tools. All plugin data is kept when you delete the plugin, unless you tick "Delete all plugin data when the plugin is deleted".
 
-= Which services does Levy call? =
+= Which services does the plugin call? =
 
 See "External services" below. Nothing else is contacted, and the plugin makes no request unless a VAT number, a rate update or a currency conversion needs it.
 
@@ -82,7 +82,7 @@ Each of these errs on the side of charging VAT.
 
 == External services ==
 
-Levy contacts the services below. It never sends them an order's contents, amounts or the customer's name.
+The plugin contacts the services below. It never sends them an order's contents, amounts or the customer's name.
 
 **VIES (European Commission).** Checks EU VAT numbers. Sent when a customer enters a number: the VAT number and, if you've set one, your store VAT number as requester. Used on the checkout, My Account, the admin order screen and in scheduled re-checks. [VIES](https://ec.europa.eu/taxation_customs/vies/), [legal notice](https://commission.europa.eu/legal-notice_en), [privacy policy](https://commission.europa.eu/privacy-policy-websites-managed-european-commission_en).
 
@@ -98,13 +98,13 @@ Levy contacts the services below. It never sends them an order's contents, amoun
 
 == Disclaimer ==
 
-Levy is a tool, not tax advice. You, the store owner, are responsible for your VAT treatment and your filings. VAT rates and registry results come from third parties and can be wrong or out of date, so check them with an accountant. Levy is provided without warranty and without liability, under the GPL.
+Vatline is a tool, not tax advice. You, the store owner, are responsible for your VAT treatment and your filings. VAT rates and registry results come from third parties and can be wrong or out of date, so check them with an accountant. The plugin is provided without warranty and without liability, under the GPL.
 
 == Screenshots ==
 
 1. Block checkout with a valid VAT number and the reverse charge notice.
 2. Classic checkout with the VAT number field and the notice in the order review.
-3. The EU VAT section under WooCommerce > Settings > Tax.
+3. The Vatline section under WooCommerce > Settings > Tax.
 4. The EU VAT box on an order, with the decision and its inputs.
 5. The EU VAT reports: OSS return and EC Sales List.
 

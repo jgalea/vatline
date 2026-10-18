@@ -2,27 +2,27 @@
 /**
  * Records VIES fixtures from the live public service. Dev-only.
  *
- * LEVY_RECORD=1 LEVY_STORE_VAT=MT12345678 php bin/record-fixtures.php [output-dir]
+ * VATLINE_RECORD=1 VATLINE_STORE_VAT=MT12345678 php bin/record-fixtures.php [output-dir]
  *
- * LEVY_STORE_VAT is a real, valid Maltese number used as the store and the
+ * VATLINE_STORE_VAT is a real, valid Maltese number used as the store and the
  * requester. Its digits, name and address are replaced with placeholders
  * before the fixtures are written.
  */
 
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Registry\HttpTransport;
-use Levy\EuVat\Registry\Vies;
+use Vatline\Domain\VatNumber;
+use Vatline\Registry\HttpTransport;
+use Vatline\Registry\Vies;
 
-if ( '1' !== getenv( 'LEVY_RECORD' ) ) {
-	fwrite( STDERR, "Set LEVY_RECORD=1 to call the live VIES service.\n" );
+if ( '1' !== getenv( 'VATLINE_RECORD' ) ) {
+	fwrite( STDERR, "Set VATLINE_RECORD=1 to call the live VIES service.\n" );
 	exit( 1 );
 }
 
 require dirname( __DIR__ ) . '/vendor/autoload.php';
 
-$store_vat = (string) getenv( 'LEVY_STORE_VAT' );
+$store_vat = (string) getenv( 'VATLINE_STORE_VAT' );
 if ( 0 !== strpos( $store_vat, 'MT' ) ) {
-	fwrite( STDERR, "Set LEVY_STORE_VAT to a valid Maltese VAT number, e.g. MT12345678.\n" );
+	fwrite( STDERR, "Set VATLINE_STORE_VAT to a valid Maltese VAT number, e.g. MT12345678.\n" );
 	exit( 1 );
 }
 
@@ -70,7 +70,7 @@ class RecordingTransport implements HttpTransport {
 	}
 }
 
-function levy_save_fixture( string $dir, string $name, string $body_contains, array $exchange, array $extra = array() ): void {
+function vatline_save_fixture( string $dir, string $name, string $body_contains, array $exchange, array $extra = array() ): void {
 	$fixture = array_merge(
 		array(
 			'_recorded_at' => gmdate( 'c' ),
@@ -92,7 +92,7 @@ $vies      = new Vies( $transport );
 
 $store = VatNumber::parse( $store_vat, 'MT' );
 
-function levy_anonymise_store( array $exchange, string $digits ): array {
+function vatline_anonymise_store( array $exchange, string $digits ): array {
 	$body = json_decode( $exchange['response']['body'], true );
 	if ( isset( $body['name'] ) ) {
 		$body['name']    = 'Example Ltd';
@@ -108,22 +108,22 @@ $digits = substr( $store->canonical(), 2 );
 
 // The store's own company, also the requester for consultation numbers.
 $vies->check( $store, $store );
-levy_save_fixture( $out_dir, 'valid_with_consultation', '"requesterNumber":"20000010"', levy_anonymise_store( $transport->last, $digits ) );
+vatline_save_fixture( $out_dir, 'valid_with_consultation', '"requesterNumber":"20000010"', vatline_anonymise_store( $transport->last, $digits ) );
 
 $vies->check( $store, null );
-levy_save_fixture( $out_dir, 'valid_mt', '{"countryCode":"MT","vatNumber":"20000010"}', levy_anonymise_store( $transport->last, $digits ) );
+vatline_save_fixture( $out_dir, 'valid_mt', '{"countryCode":"MT","vatNumber":"20000010"}', vatline_anonymise_store( $transport->last, $digits ) );
 
 $vies->check( VatNumber::parse( 'BE0417497106', 'BE' ), null );
-levy_save_fixture( $out_dir, 'valid', '"vatNumber":"0417497106"', $transport->last );
+vatline_save_fixture( $out_dir, 'valid', '"vatNumber":"0417497106"', $transport->last );
 
 $vies->check( VatNumber::parse( 'MT12345678', 'MT' ), null );
-levy_save_fixture( $out_dir, 'invalid', '"vatNumber":"12345678"', $transport->last );
+vatline_save_fixture( $out_dir, 'invalid', '"vatNumber":"12345678"', $transport->last );
 
 $vies->check( $store, VatNumber::parse( 'MT99999999', 'MT' ) );
-levy_save_fixture( $out_dir, 'invalid_requester', '"requesterNumber":"99999999"', levy_anonymise_store( $transport->last, $digits ) );
+vatline_save_fixture( $out_dir, 'invalid_requester', '"requesterNumber":"99999999"', vatline_anonymise_store( $transport->last, $digits ) );
 
 $transport->request( 'POST', Vies::BASE_URL . '/check-vat-number', 'garbage', array( 'Content-Type' => 'application/json' ) );
-levy_save_fixture(
+vatline_save_fixture(
 	$out_dir,
 	'http_500',
 	'"vatNumber":"500"',
@@ -132,7 +132,7 @@ levy_save_fixture(
 );
 
 $vies->status();
-levy_save_fixture( $out_dir, 'check_status', '', $transport->last );
+vatline_save_fixture( $out_dir, 'check_status', '', $transport->last );
 
 // Numbers lifted from public imprints and filings; the Domain tests use them
 // as "real" numbers. Only EU and XI numbers exist in VIES.
@@ -162,5 +162,5 @@ $samples = array(
 foreach ( $samples as $canonical ) {
 	$number = VatNumber::parse( $canonical, substr( $canonical, 0, 2 ) );
 	$vies->check( $number, null );
-	levy_save_fixture( $out_dir, 'sample_' . $canonical, '"vatNumber":"' . $number->number() . '"', $transport->last );
+	vatline_save_fixture( $out_dir, 'sample_' . $canonical, '"vatNumber":"' . $number->number() . '"', $transport->last );
 }

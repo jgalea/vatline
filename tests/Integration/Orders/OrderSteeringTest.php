@@ -1,10 +1,10 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Orders;
+namespace Vatline\Tests\Integration\Orders;
 
-use Levy\EuVat\Checkout\InputGatherer;
-use Levy\EuVat\Checkout\TaxLocation;
-use Levy\EuVat\Orders\DecisionStore;
+use Vatline\Checkout\InputGatherer;
+use Vatline\Checkout\TaxLocation;
+use Vatline\Orders\DecisionStore;
 
 require_once __DIR__ . '/OrderTestCase.php';
 

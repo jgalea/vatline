@@ -1,6 +1,6 @@
 <?php
 
-namespace Levy\EuVat;
+namespace Vatline;
 
 class Plugin {
 
@@ -82,6 +82,6 @@ class Plugin {
 	}
 
 	public static function missing_woocommerce_notice(): void {
-		echo '<div class="notice notice-error"><p>' . esc_html__( 'Levy - EU VAT requires WooCommerce to be active.', 'levy-eu-vat' ) . '</p></div>';
+		echo '<div class="notice notice-error"><p>' . esc_html__( 'Vatline requires WooCommerce to be active.', 'vatline' ) . '</p></div>';
 	}
 }

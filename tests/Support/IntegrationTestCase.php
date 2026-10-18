@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Support;
+namespace Vatline\Tests\Support;
 
-use Levy\EuVat\Ledger\Schema;
+use Vatline\Ledger\Schema;
 use WP_UnitTestCase;
 
 abstract class IntegrationTestCase extends WP_UnitTestCase {

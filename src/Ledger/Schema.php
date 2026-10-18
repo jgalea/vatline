@@ -1,11 +1,11 @@
 <?php
 
-namespace Levy\EuVat\Ledger;
+namespace Vatline\Ledger;
 
 class Schema {
 
 	const DB_VERSION        = '2';
-	const DB_VERSION_OPTION = 'levy_eu_vat_db_version';
+	const DB_VERSION_OPTION = 'vatline_db_version';
 
 	public static function install(): void {
 		global $wpdb;
@@ -15,7 +15,7 @@ class Schema {
 		$charset = $wpdb->get_charset_collate();
 		$ledger  = self::ledger_table();
 		$fx      = self::fx_table();
-		$rates   = $wpdb->prefix . 'levy_eu_vat_rate_rows';
+		$rates   = $wpdb->prefix . 'vatline_rate_rows';
 
 		dbDelta(
 			"CREATE TABLE {$ledger} (
@@ -82,7 +82,7 @@ class Schema {
 	public static function drop(): void {
 		global $wpdb;
 
-		foreach ( array( self::ledger_table(), self::fx_table(), $wpdb->prefix . 'levy_eu_vat_rate_rows' ) as $table ) {
+		foreach ( array( self::ledger_table(), self::fx_table(), $wpdb->prefix . 'vatline_rate_rows' ) as $table ) {
 			$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		}
 		delete_option( self::DB_VERSION_OPTION );
@@ -90,11 +90,11 @@ class Schema {
 
 	public static function ledger_table(): string {
 		global $wpdb;
-		return $wpdb->prefix . 'levy_eu_vat_ledger';
+		return $wpdb->prefix . 'vatline_ledger';
 	}
 
 	public static function fx_table(): string {
 		global $wpdb;
-		return $wpdb->prefix . 'levy_eu_vat_fx_rates';
+		return $wpdb->prefix . 'vatline_fx_rates';
 	}
 }

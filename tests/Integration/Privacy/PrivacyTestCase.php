@@ -1,10 +1,10 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Privacy;
+namespace Vatline\Tests\Integration\Privacy;
 
-use Levy\EuVat\Ledger\Schema;
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Tests\Integration\Orders\OrderTestCase;
+use Vatline\Ledger\Schema;
+use Vatline\Orders\DecisionStore;
+use Vatline\Tests\Integration\Orders\OrderTestCase;
 use WC_Order;
 
 require_once dirname( __DIR__ ) . '/Orders/OrderTestCase.php';

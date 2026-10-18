@@ -1,11 +1,11 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Checkout;
+namespace Vatline\Tests\Integration\Checkout;
 
-use Levy\EuVat\Admin\SetupCheck;
-use Levy\EuVat\Checkout\TaxLocation;
-use Levy\EuVat\Domain\LineDecision;
-use Levy\EuVat\Domain\Rule;
+use Vatline\Admin\SetupCheck;
+use Vatline\Checkout\TaxLocation;
+use Vatline\Domain\LineDecision;
+use Vatline\Domain\Rule;
 
 require_once __DIR__ . '/CheckoutTestCase.php';
 

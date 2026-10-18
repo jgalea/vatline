@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Admin;
+namespace Vatline\Admin;
 
-use Levy\EuVat\Checkout\SupplyType;
-use Levy\EuVat\Domain\Line;
+use Vatline\Checkout\SupplyType;
+use Vatline\Domain\Line;
 
 class ProductSupplyField {
 
@@ -16,14 +16,14 @@ class ProductSupplyField {
 		woocommerce_wp_select(
 			array(
 				'id'          => SupplyType::META,
-				'label'       => __( 'EU VAT supply type', 'levy-eu-vat' ),
-				'description' => __( 'How VAT place of supply is decided. Physical products default to goods, virtual products to digital service.', 'levy-eu-vat' ),
+				'label'       => __( 'EU VAT supply type', 'vatline' ),
+				'description' => __( 'How VAT place of supply is decided. Physical products default to goods, virtual products to digital service.', 'vatline' ),
 				'desc_tip'    => true,
 				'options'     => array(
-					''            => __( 'Automatic', 'levy-eu-vat' ),
-					Line::GOODS   => __( 'Goods', 'levy-eu-vat' ),
-					Line::DIGITAL => __( 'Digital service', 'levy-eu-vat' ),
-					Line::SERVICE => __( 'Other service', 'levy-eu-vat' ),
+					''            => __( 'Automatic', 'vatline' ),
+					Line::GOODS   => __( 'Goods', 'vatline' ),
+					Line::DIGITAL => __( 'Digital service', 'vatline' ),
+					Line::SERVICE => __( 'Other service', 'vatline' ),
 				),
 			)
 		);

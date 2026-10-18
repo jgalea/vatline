@@ -1,14 +1,14 @@
 import { test, expect, type Page } from '@playwright/test';
 import { NUMBERS, resetState, wpEval } from './helpers';
 
-const vatInputs = ( page: Page ) => page.locator( 'input[name*="levy-eu-vat"], input[name*="levy_eu_vat"]' );
+const vatInputs = ( page: Page ) => page.locator( 'input[name*="vatline"], input[name*="vatline"]' );
 
 test.beforeEach( async ( { page } ) => {
 	resetState();
-	wpEval( 'update_user_meta( get_user_by( "login", "levy-customer" )->ID, "_levy_eu_vat_number", "" ); echo "@@1@@";' );
+	wpEval( 'update_user_meta( get_user_by( "login", "vatline-customer" )->ID, "_vatline_number", "" ); echo "@@1@@";' );
 	await page.goto( '/my-account/' );
-	await page.locator( '#username' ).fill( 'levy-customer' );
-	await page.locator( '#password' ).fill( 'levy-pass' );
+	await page.locator( '#username' ).fill( 'vatline-customer' );
+	await page.locator( '#password' ).fill( 'vatline-pass' );
 	await page.getByRole( 'button', { name: 'Log in' } ).click();
 	await expect( page.locator( '.woocommerce-MyAccount-navigation' ) ).toBeVisible();
 } );
@@ -30,7 +30,7 @@ test( 'the saved number reaches the customer record and clearing it clears the r
 	await page.getByRole( 'button', { name: 'Save changes' } ).click();
 	await expect( page.getByText( 'Account details changed successfully.' ) ).toBeVisible();
 
-	const saved = () => wpEval( 'echo "@@" . wp_json_encode( get_user_meta( get_user_by( "login", "levy-customer" )->ID, "_levy_eu_vat_number", true ) ) . "@@";' );
+	const saved = () => wpEval( 'echo "@@" . wp_json_encode( get_user_meta( get_user_by( "login", "vatline-customer" )->ID, "_vatline_number", true ) ) . "@@";' );
 	expect( saved() ).toBe( NUMBERS.validDe );
 
 	await page.goto( '/my-account/edit-account/' );

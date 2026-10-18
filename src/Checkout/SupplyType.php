@@ -1,13 +1,13 @@
 <?php
 
-namespace Levy\EuVat\Checkout;
+namespace Vatline\Checkout;
 
-use Levy\EuVat\Domain\Line;
+use Vatline\Domain\Line;
 use WC_Product;
 
 final class SupplyType {
 
-	const META = '_levy_eu_vat_supply_type';
+	const META = '_vatline_supply_type';
 
 	const TYPES = array( Line::GOODS, Line::DIGITAL, Line::SERVICE );
 
@@ -25,7 +25,7 @@ final class SupplyType {
 			$type = $product->needs_shipping() ? Line::GOODS : Line::DIGITAL;
 		}
 
-		$filtered = apply_filters( 'levy_eu_vat_supply_type', $type, $product );
+		$filtered = apply_filters( 'vatline_supply_type', $type, $product );
 		return in_array( $filtered, self::TYPES, true ) ? $filtered : $type;
 	}
 }

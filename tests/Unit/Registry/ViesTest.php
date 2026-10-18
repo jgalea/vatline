@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Registry;
+namespace Vatline\Tests\Unit\Registry;
 
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Registry\HttpTransport;
-use Levy\EuVat\Registry\Vies;
-use Levy\EuVat\Tests\Support\FixtureTransport;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Registry\HttpTransport;
+use Vatline\Registry\Vies;
+use Vatline\Tests\Support\FixtureTransport;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 

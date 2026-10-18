@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Checkout;
+namespace Vatline\Checkout;
 
-use Levy\EuVat\Domain\FormatCheck;
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Plugin;
-use Levy\EuVat\Registry\Validator;
+use Vatline\Domain\FormatCheck;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Plugin;
+use Vatline\Registry\Validator;
 use WC_Customer;
 use WC_Data;
 use WP_Error;
@@ -17,18 +17,18 @@ use WP_Error;
  * the admin order screen; only the classic checkout needs a field of ours.
  * It sits in the contact location, so there is one value per customer and
  * order instead of a billing and a shipping copy to keep in step.
- * Whichever input saved it, the number ends up in _levy_eu_vat_number on the
+ * Whichever input saved it, the number ends up in _vatline_number on the
  * customer and the order.
  */
 class VatField {
 
-	const FIELD_ID = 'levy-eu-vat/vat-number';
+	const FIELD_ID = 'vatline/vat-number';
 
-	const CLASSIC_FIELD = 'billing_levy_eu_vat_number';
+	const CLASSIC_FIELD = 'billing_vatline_number';
 
-	const SELF_CERTIFY_FIELD = 'levy_eu_vat_self_certify';
+	const SELF_CERTIFY_FIELD = 'vatline_self_certify';
 
-	const SELF_CERTIFY_MARKER = 'levy_eu_vat_self_certify_field';
+	const SELF_CERTIFY_MARKER = 'vatline_self_certify_field';
 
 	/**
 	 * Countries where a VAT number means something to us: the EU, Northern
@@ -97,7 +97,7 @@ class VatField {
 		woocommerce_register_additional_checkout_field(
 			array(
 				'id'                         => self::FIELD_ID,
-				'label'                      => __( 'VAT number', 'levy-eu-vat' ),
+				'label'                      => __( 'VAT number', 'vatline' ),
 				'location'                   => 'contact',
 				'type'                       => 'text',
 				'required'                   => false,
@@ -156,10 +156,10 @@ class VatField {
 		}
 		$number = VatNumber::parse( $raw, self::billing_country() );
 		if ( null === $number || ! FormatCheck::is_plausible( $number ) ) {
-			return new WP_Error( 'levy_eu_vat_format', __( 'This does not look like a VAT number. Check it, or leave the field empty to pay with VAT.', 'levy-eu-vat' ) );
+			return new WP_Error( 'vatline_format', __( 'This does not look like a VAT number. Check it, or leave the field empty to pay with VAT.', 'vatline' ) );
 		}
 		if ( ValidationResult::INVALID === $this->validator->validate( $number, false )->status() ) {
-			return new WP_Error( 'levy_eu_vat_invalid', CheckoutDecider::message( 'invalid_vat_number' ) );
+			return new WP_Error( 'vatline_invalid', CheckoutDecider::message( 'invalid_vat_number' ) );
 		}
 		return true;
 	}
@@ -189,7 +189,7 @@ class VatField {
 		}
 		$fields[ self::CLASSIC_FIELD ] = array(
 			'type'         => 'text',
-			'label'        => __( 'VAT number', 'levy-eu-vat' ),
+			'label'        => __( 'VAT number', 'vatline' ),
 			'required'     => false,
 			'class'        => array( 'form-row-wide' ),
 			'priority'     => 125,
@@ -247,9 +247,9 @@ class VatField {
 		if ( '' === $status['message'] && ! $status['needs_self_certification'] && ! $status['self_certified'] ) {
 			return;
 		}
-		echo '<tr class="levy-eu-vat-notice"><td colspan="2">';
+		echo '<tr class="vatline-notice"><td colspan="2">';
 		if ( '' !== $status['message'] ) {
-			echo '<p class="levy-eu-vat-notice__message levy-eu-vat-notice__message--' . esc_attr( $status['status'] ) . '" role="status">' . esc_html( $status['message'] ) . '</p>';
+			echo '<p class="vatline-notice__message vatline-notice__message--' . esc_attr( $status['status'] ) . '" role="status">' . esc_html( $status['message'] ) . '</p>';
 		}
 		if ( $status['needs_self_certification'] || $status['self_certified'] ) {
 			echo '<input type="hidden" name="' . esc_attr( self::SELF_CERTIFY_MARKER ) . '" value="1" />';
@@ -265,16 +265,16 @@ class VatField {
 			return;
 		}
 		$script = self::asset( 'assets/classic-checkout.js' );
-		wp_enqueue_script( 'levy-eu-vat-classic-checkout', $script['url'], array( 'jquery', 'wc-checkout' ), $script['version'], true );
+		wp_enqueue_script( 'vatline-classic-checkout', $script['url'], array( 'jquery', 'wc-checkout' ), $script['version'], true );
 		$style = self::asset( 'assets/checkout-block/style.css' );
-		wp_enqueue_style( 'levy-eu-vat-checkout', $style['url'], array(), $style['version'] );
+		wp_enqueue_style( 'vatline-checkout', $style['url'], array(), $style['version'] );
 	}
 
 	/**
 	 * WooCommerce lists its own copy of the block field here, but only for
 	 * orders placed through the Store API that have a value, so an admin could
 	 * not add a number to any other order. One input of ours replaces it; the
-	 * saved value is read from _billing_levy_eu_vat_number by AdminRecalc.
+	 * saved value is read from _billing_vatline_number by AdminRecalc.
 	 *
 	 * @param array<string,mixed> $fields
 	 * @param mixed               $order
@@ -282,8 +282,8 @@ class VatField {
 	 */
 	public function add_admin_field( $fields, $order = null ) {
 		unset( $fields[ self::FIELD_ID ], $fields[ '_wc_other/' . self::FIELD_ID ] );
-		$fields['levy_eu_vat_number'] = array(
-			'label'         => __( 'VAT number', 'levy-eu-vat' ),
+		$fields['vatline_number'] = array(
+			'label'         => __( 'VAT number', 'vatline' ),
 			'wrapper_class' => 'form-field-wide',
 			'show'          => true,
 			'value'         => $order instanceof \WC_Order ? (string) $order->get_meta( InputGatherer::NUMBER_META ) : '',
@@ -298,7 +298,7 @@ class VatField {
 	public function add_profile_field( $fields ) {
 		if ( isset( $fields['billing']['fields'] ) ) {
 			$fields['billing']['fields'][ InputGatherer::NUMBER_META ] = array(
-				'label'       => __( 'VAT number', 'levy-eu-vat' ),
+				'label'       => __( 'VAT number', 'vatline' ),
 				'description' => '',
 			);
 		}
@@ -343,7 +343,7 @@ class VatField {
 	 * @return array{url: string, version: string}
 	 */
 	public static function asset( string $path ): array {
-		$main = dirname( __DIR__, 2 ) . '/levy-eu-vat.php';
+		$main = dirname( __DIR__, 2 ) . '/vatline.php';
 		return array(
 			'url'     => plugins_url( $path, $main ),
 			'version' => (string) filemtime( dirname( __DIR__, 2 ) . '/' . $path ),

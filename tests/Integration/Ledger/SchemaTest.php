@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Ledger;
+namespace Vatline\Tests\Integration\Ledger;
 
-use Levy\EuVat\Ledger\Schema;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Ledger\Schema;
+use Vatline\Tests\Support\IntegrationTestCase;
 
 /**
  * Creates the tables for real: the WP test case turns CREATE TABLE into a
@@ -45,7 +45,7 @@ class SchemaTest extends IntegrationTestCase {
 		Schema::install();
 
 		$this->assertSame( array( 'currency', 'rate_date', 'rate' ), $this->columns( Schema::fx_table() ) );
-		$this->assertSame( array( 'woo_rate_id', 'country', 'tax_class', 'imported_rate', 'source', 'source_date' ), $this->columns( $wpdb->prefix . 'levy_eu_vat_rate_rows' ) );
+		$this->assertSame( array( 'woo_rate_id', 'country', 'tax_class', 'imported_rate', 'source', 'source_date' ), $this->columns( $wpdb->prefix . 'vatline_rate_rows' ) );
 	}
 
 	public function test_upgrade_adds_rate_missing_to_a_version_1_ledger(): void {

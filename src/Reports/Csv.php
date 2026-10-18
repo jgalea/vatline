@@ -1,6 +1,6 @@
 <?php
 
-namespace Levy\EuVat\Reports;
+namespace Vatline\Reports;
 
 class Csv {
 

@@ -1,15 +1,15 @@
 <?php
 
-namespace Levy\EuVat\Ledger;
+namespace Vatline\Ledger;
 
 use DateTimeImmutable;
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\Line;
-use Levy\EuVat\Domain\LineDecision;
-use Levy\EuVat\Domain\Rule;
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Domain\Territory;
-use Levy\EuVat\Settings;
+use Vatline\Domain\Decision;
+use Vatline\Domain\Line;
+use Vatline\Domain\LineDecision;
+use Vatline\Domain\Rule;
+use Vatline\Domain\Scheme;
+use Vatline\Domain\Territory;
+use Vatline\Settings;
 use WC_Order;
 use WC_Order_Item_Product;
 use WC_Product;
@@ -17,9 +17,9 @@ use WC_Tax;
 
 class Backfill {
 
-	const HOOK     = 'levy_eu_vat_backfill_batch';
+	const HOOK     = 'vatline_backfill_batch';
 	const BATCH    = 50;
-	const AS_GROUP = 'levy-eu-vat';
+	const AS_GROUP = 'vatline';
 
 	/** @var LedgerWriter */
 	private $writer;

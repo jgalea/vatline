@@ -1,6 +1,6 @@
 <?php
 
-namespace Levy\EuVat\Registry;
+namespace Vatline\Registry;
 
 use DOMDocument;
 use DOMXPath;

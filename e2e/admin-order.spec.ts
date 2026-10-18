@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { NUMBERS, resetState, wpEval } from './helpers';
 
-const vatInputs = ( page: Page ) => page.locator( '#order_data input[id*="levy-eu-vat"], #order_data input[id*="levy_eu_vat"]' );
+const vatInputs = ( page: Page ) => page.locator( '#order_data input[id*="vatline"], #order_data input[id*="vatline"]' );
 
 test.beforeEach( async ( { page } ) => {
 	resetState();
@@ -38,6 +38,6 @@ test( 'the order screen has exactly one VAT input and saves the number', async (
 	await page.getByRole( 'button', { name: 'Update' } ).click();
 	await expect( page.locator( '.notice-success, #message.updated' ).first() ).toBeVisible();
 
-	const number = wpEval( `echo "@@" . wp_json_encode( wc_get_order( ${ id } )->get_meta( '_levy_eu_vat_number' ) ) . "@@";` );
+	const number = wpEval( `echo "@@" . wp_json_encode( wc_get_order( ${ id } )->get_meta( '_vatline_number' ) ) . "@@";` );
 	expect( number ).toBe( NUMBERS.validDe );
 } );

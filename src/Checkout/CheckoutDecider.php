@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Checkout;
+namespace Vatline\Checkout;
 
 use Automattic\WooCommerce\StoreApi\Exceptions\RouteException;
-use Levy\EuVat\Orders\DecisionStore;
+use Vatline\Orders\DecisionStore;
 use WC_Order;
 use WP_Error;
 
@@ -36,7 +36,7 @@ class CheckoutDecider {
 		$decision = $this->steering->current();
 		$code     = null === $decision ? null : $decision->blocking_error();
 		if ( null !== $code ) {
-			$errors->add( 'levy_eu_vat_' . $code, self::message( $code ) );
+			$errors->add( 'vatline_' . $code, self::message( $code ) );
 		}
 	}
 
@@ -49,7 +49,7 @@ class CheckoutDecider {
 		$code     = null === $decision ? null : $decision->blocking_error();
 		if ( null !== $code ) {
 			// @phpstan-ignore class.notFound, class.notFound (Store API classes are not in the WooCommerce stubs.)
-			throw new RouteException( 'levy_eu_vat_' . esc_html( $code ), esc_html( self::message( $code ) ), 400 );
+			throw new RouteException( 'vatline_' . esc_html( $code ), esc_html( self::message( $code ) ), 400 );
 		}
 	}
 
@@ -63,11 +63,11 @@ class CheckoutDecider {
 	public static function message( string $code ): string {
 		switch ( $code ) {
 			case 'invalid_vat_number':
-				return __( 'This VAT number is not valid. Correct it, or leave the field empty to pay with VAT.', 'levy-eu-vat' );
+				return __( 'This VAT number is not valid. Correct it, or leave the field empty to pay with VAT.', 'vatline' );
 			case 'registry_unavailable':
-				return __( 'We could not check your VAT number with the tax authority just now. Try again in a few minutes, or leave the field empty to pay with VAT.', 'levy-eu-vat' );
+				return __( 'We could not check your VAT number with the tax authority just now. Try again in a few minutes, or leave the field empty to pay with VAT.', 'vatline' );
 			default:
-				return __( 'Your VAT details could not be accepted.', 'levy-eu-vat' );
+				return __( 'Your VAT details could not be accepted.', 'vatline' );
 		}
 	}
 }

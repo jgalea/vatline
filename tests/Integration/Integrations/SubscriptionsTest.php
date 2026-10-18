@@ -1,23 +1,23 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Integrations;
+namespace Vatline\Tests\Integration\Integrations;
 
-use Levy\EuVat\Checkout\InputGatherer;
-use Levy\EuVat\Domain\Rules;
-use Levy\EuVat\Integrations\Subscriptions;
-use Levy\EuVat\Ledger\Fx;
-use Levy\EuVat\Ledger\ThresholdTracker;
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Registry\Brreg;
-use Levy\EuVat\Registry\Hmrc;
-use Levy\EuVat\Registry\Router;
-use Levy\EuVat\Registry\SwissUid;
-use Levy\EuVat\Registry\ValidationCache;
-use Levy\EuVat\Registry\Validator;
-use Levy\EuVat\Registry\Vies;
-use Levy\EuVat\Registry\WpHttpTransport;
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Integration\Checkout\CheckoutTestCase;
+use Vatline\Checkout\InputGatherer;
+use Vatline\Domain\Rules;
+use Vatline\Integrations\Subscriptions;
+use Vatline\Ledger\Fx;
+use Vatline\Ledger\ThresholdTracker;
+use Vatline\Orders\DecisionStore;
+use Vatline\Registry\Brreg;
+use Vatline\Registry\Hmrc;
+use Vatline\Registry\Router;
+use Vatline\Registry\SwissUid;
+use Vatline\Registry\ValidationCache;
+use Vatline\Registry\Validator;
+use Vatline\Registry\Vies;
+use Vatline\Registry\WpHttpTransport;
+use Vatline\Settings;
+use Vatline\Tests\Integration\Checkout\CheckoutTestCase;
 use RuntimeException;
 use WC_Order;
 use WC_Order_Item_Product;
@@ -36,7 +36,7 @@ class SubscriptionsTest extends CheckoutTestCase {
 	const DOWN = '{"actionSucceed":false,"errorWrappers":[{"error":"MS_UNAVAILABLE"}]}';
 
 	public function set_up() {
-		if ( class_exists( 'WC_Subscriptions' ) && ! defined( 'LEVY_EU_VAT_TEST_WCS_STAND_IN' ) ) {
+		if ( class_exists( 'WC_Subscriptions' ) && ! defined( 'VATLINE_TEST_WCS_STAND_IN' ) ) {
 			$this->markTestSkipped( 'The real WooCommerce Subscriptions is active; these tests drive a stand-in.' );
 		}
 		parent::set_up();
@@ -224,7 +224,7 @@ class SubscriptionsTest extends CheckoutTestCase {
 		$switch = $this->order( WC_Order::class );
 		$this->decide_and_store( $switch );
 		add_filter(
-			'levy_eu_vat_test_wcs_switch_subscriptions',
+			'vatline_test_wcs_switch_subscriptions',
 			static function () use ( $sub ) {
 				return array( $sub->get_id() => $sub );
 			}

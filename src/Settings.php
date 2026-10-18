@@ -1,10 +1,10 @@
 <?php
 
-namespace Levy\EuVat;
+namespace Vatline;
 
 class Settings {
 
-	const OPTION = 'levy_eu_vat_settings';
+	const OPTION = 'vatline_settings';
 
 	/** @var Settings|null */
 	private static $instance = null;

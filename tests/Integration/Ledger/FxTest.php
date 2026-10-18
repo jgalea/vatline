@@ -1,10 +1,10 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Ledger;
+namespace Vatline\Tests\Integration\Ledger;
 
-use Levy\EuVat\Ledger\Fx;
-use Levy\EuVat\Ledger\Schema;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Ledger\Fx;
+use Vatline\Ledger\Schema;
+use Vatline\Tests\Support\IntegrationTestCase;
 
 require_once __DIR__ . '/EcbFixtureTransport.php';
 

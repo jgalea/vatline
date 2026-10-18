@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Admin;
+namespace Vatline\Tests\Integration\Admin;
 
-use Levy\EuVat\Admin\RateMappingEditor;
-use Levy\EuVat\Rates\RateMapping;
-use Levy\EuVat\Rates\RateSet;
-use Levy\EuVat\Rates\RateSync;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Admin\RateMappingEditor;
+use Vatline\Rates\RateMapping;
+use Vatline\Rates\RateSet;
+use Vatline\Rates\RateSync;
+use Vatline\Tests\Support\IntegrationTestCase;
 
 class RateMappingEditorTest extends IntegrationTestCase {
 
@@ -94,9 +94,9 @@ class RateMappingEditorTest extends IntegrationTestCase {
 		);
 		$html    = $this->html();
 		$classes = count( wc_get_product_tax_class_options() );
-		$this->assertSame( $classes, substr_count( $html, 'levy-eu-vat-countries' ) );
-		$this->assertSame( $classes - 1, substr_count( $html, 'levy-eu-vat-countries" hidden' ) );
-		$this->assertStringContainsString( 'levy_eu_vat_mapping[0][rates][DE]', $html );
+		$this->assertSame( $classes, substr_count( $html, 'vatline-countries' ) );
+		$this->assertSame( $classes - 1, substr_count( $html, 'vatline-countries" hidden' ) );
+		$this->assertStringContainsString( 'vatline_mapping[0][rates][DE]', $html );
 		$this->assertStringContainsString( '5.5% - Foodstuffs', $html );
 		$this->assertStringContainsString( '2.1% (super reduced)', $html );
 	}

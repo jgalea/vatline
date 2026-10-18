@@ -1,10 +1,10 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Rates;
+namespace Vatline\Tests\Unit\Rates;
 
-use Levy\EuVat\Rates\RateDiff;
-use Levy\EuVat\Rates\RateMapping;
-use Levy\EuVat\Rates\RateSet;
+use Vatline\Rates\RateDiff;
+use Vatline\Rates\RateMapping;
+use Vatline\Rates\RateSet;
 use PHPUnit\Framework\TestCase;
 
 class RateDiffTest extends TestCase {

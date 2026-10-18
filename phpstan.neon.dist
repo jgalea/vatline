@@ -6,7 +6,7 @@ parameters:
 	paths:
 		- src
 		- templates
-		- levy-eu-vat.php
+		- vatline.php
 		- uninstall.php
 	bootstrapFiles:
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php

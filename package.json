@@ -1,5 +1,5 @@
 {
-  "name": "levy-eu-vat-dev",
+  "name": "vatline",
   "private": true,
   "devDependencies": {
     "@playwright/test": "^1.62.0",

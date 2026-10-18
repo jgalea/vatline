@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Domain;
+namespace Vatline\Tests\Unit\Domain;
 
-use Levy\EuVat\Domain\Territory;
+use Vatline\Domain\Territory;
 use PHPUnit\Framework\TestCase;
 
 class TerritoryTest extends TestCase {

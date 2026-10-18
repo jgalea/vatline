@@ -1,6 +1,6 @@
 <?php
 
-namespace Levy\EuVat\Rates;
+namespace Vatline\Rates;
 
 class RateSet {
 

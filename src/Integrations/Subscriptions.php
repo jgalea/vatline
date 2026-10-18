@@ -1,16 +1,16 @@
 <?php
 
-namespace Levy\EuVat\Integrations;
+namespace Vatline\Integrations;
 
-use Levy\EuVat\Checkout\InputGatherer;
-use Levy\EuVat\Checkout\TaxLocation;
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\DecisionInput;
-use Levy\EuVat\Domain\Rules;
-use Levy\EuVat\Domain\Territory;
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Settings;
+use Vatline\Checkout\InputGatherer;
+use Vatline\Checkout\TaxLocation;
+use Vatline\Domain\Decision;
+use Vatline\Domain\DecisionInput;
+use Vatline\Domain\Rules;
+use Vatline\Domain\Territory;
+use Vatline\Domain\ValidationResult;
+use Vatline\Orders\DecisionStore;
+use Vatline\Settings;
 use Throwable;
 use WC_Order;
 use WC_Tax;
@@ -58,7 +58,7 @@ class Subscriptions {
 		try {
 			$this->renew( $renewal, $subscription );
 		} catch ( Throwable $e ) {
-			wc_get_logger()->error( 'Renewal VAT decision failed, charging VAT: ' . $e->getMessage(), array( 'source' => 'levy-eu-vat' ) );
+			wc_get_logger()->error( 'Renewal VAT decision failed, charging VAT: ' . $e->getMessage(), array( 'source' => 'vatline' ) );
 			$renewal->delete_meta_data( DecisionStore::META );
 			$renewal->update_meta_data( 'is_vat_exempt', 'no' );
 			add_filter( 'woocommerce_order_get_tax_location', array( self::class, 'origin_when_rate_missing' ), 20 );

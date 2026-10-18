@@ -1,11 +1,11 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Reports;
+namespace Vatline\Tests\Integration\Reports;
 
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Ledger\Schema;
-use Levy\EuVat\Reports\EcSalesList;
-use Levy\EuVat\Reports\IncompleteReport;
+use Vatline\Domain\Scheme;
+use Vatline\Ledger\Schema;
+use Vatline\Reports\EcSalesList;
+use Vatline\Reports\IncompleteReport;
 
 require_once __DIR__ . '/ReportsTestCase.php';
 

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { resetState, wp, wpEval } from './helpers';
 
-const forgetDismissal = () => wpEval( 'delete_user_meta( 1, "levy_eu_vat_dismissed_setup_notice" ); echo "@@1@@";' );
+const forgetDismissal = () => wpEval( 'delete_user_meta( 1, "vatline_dismissed_setup_notice" ); echo "@@1@@";' );
 
 test.beforeEach( async ( { page } ) => {
 	resetState();
@@ -21,12 +21,12 @@ test.afterEach( () => {
 test( 'a dismissed setup notice stays dismissed after a reload', async ( { page } ) => {
 	wp( 'option', 'update', 'woocommerce_tax_based_on', 'base' );
 	await page.goto( '/wp-admin/index.php' );
-	const notice = page.locator( '.levy-eu-vat-setup-notice' );
+	const notice = page.locator( '.vatline-setup-notice' );
 	await expect( notice ).toBeVisible();
 
 	await notice.locator( '.notice-dismiss' ).click();
 	await expect( notice ).toBeHidden();
-	await expect.poll( () => wpEval( 'echo "@@" . wp_json_encode( get_user_meta( 1, "levy_eu_vat_dismissed_setup_notice", true ) ) . "@@";' ) ).toBe( 'tax_based_on_shop_base' );
+	await expect.poll( () => wpEval( 'echo "@@" . wp_json_encode( get_user_meta( 1, "vatline_dismissed_setup_notice", true ) ) . "@@";' ) ).toBe( 'tax_based_on_shop_base' );
 
 	await page.reload();
 	await expect( page.locator( '#wpadminbar' ) ).toBeVisible();
@@ -34,9 +34,9 @@ test( 'a dismissed setup notice stays dismissed after a reload', async ( { page 
 } );
 
 test( 'picking reduced rate in the mapping editor shows the country selects without saving', async ( { page } ) => {
-	await page.goto( '/wp-admin/admin.php?page=wc-settings&tab=tax&section=levy_eu_vat' );
-	const type = page.locator( '#levy_eu_vat_mapping-0' );
-	const countries = type.locator( 'xpath=..' ).locator( '.levy-eu-vat-countries' );
+	await page.goto( '/wp-admin/admin.php?page=wc-settings&tab=tax&section=vatline' );
+	const type = page.locator( '#vatline_mapping-0' );
+	const countries = type.locator( 'xpath=..' ).locator( '.vatline-countries' );
 	await expect( countries ).toBeHidden();
 
 	await type.selectOption( 'reduced' );
@@ -47,7 +47,7 @@ test( 'picking reduced rate in the mapping editor shows the country selects with
 	await expect( countries ).toBeHidden();
 } );
 
-const RATES = '/wp-admin/admin.php?page=wc-settings&tab=tax&section=levy_eu_vat';
+const RATES = '/wp-admin/admin.php?page=wc-settings&tab=tax&section=vatline';
 
 /** What a click in the middle of the button would land on, after scrolling it as far into view as the page allows. */
 async function applyButtonIsClickable( page: import( '@playwright/test' ).Page ): Promise< string > {
@@ -79,7 +79,7 @@ for ( const size of [ { width: 390, height: 844 }, { width: 768, height: 1024 },
 test( 'the footer check fails when the rates block loses its room', async ( { page } ) => {
 	await page.setViewportSize( { width: 1280, height: 577 } );
 	await page.goto( RATES );
-	await page.addStyleTag( { content: '*{scroll-behavior:auto!important}.levy-eu-vat-rates{padding-block-end:0!important}' } );
+	await page.addStyleTag( { content: '*{scroll-behavior:auto!important}.vatline-rates{padding-block-end:0!important}' } );
 
 	expect( await applyButtonIsClickable( page ) ).not.toBe( 'ok' );
 } );
@@ -88,7 +88,7 @@ test( 'applying rates says how many were applied', async ( { page } ) => {
 	await page.goto( RATES );
 	await page.getByRole( 'button', { name: 'Apply selected rates' } ).click();
 
-	await expect( page ).toHaveURL( /levy_eu_vat_applied=\d+/ );
+	await expect( page ).toHaveURL( /vatline_applied=\d+/ );
 	await expect( page.locator( '#message.updated' ) ).toContainText( /VAT rates? applied\.|No VAT rates were changed\./ );
 } );
 
@@ -96,7 +96,7 @@ test( 'with taxes off, the setup notice links to the setting that turns them on'
 	wp( 'option', 'update', 'woocommerce_calc_taxes', 'no' );
 	try {
 		await page.goto( '/wp-admin/index.php' );
-		await page.locator( '.levy-eu-vat-setup-notice a' ).click();
+		await page.locator( '.vatline-setup-notice a' ).click();
 
 		await expect( page ).toHaveURL( /tab=general/ );
 		await expect( page.locator( '#woocommerce_calc_taxes' ) ).toBeVisible();

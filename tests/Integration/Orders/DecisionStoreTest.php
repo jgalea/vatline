@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Orders;
+namespace Vatline\Tests\Integration\Orders;
 
-use Levy\EuVat\Domain\Rule;
-use Levy\EuVat\Orders\DecisionStore;
+use Vatline\Domain\Rule;
+use Vatline\Orders\DecisionStore;
 
 require_once __DIR__ . '/OrderTestCase.php';
 
@@ -19,7 +19,7 @@ class DecisionStoreTest extends OrderTestCase {
 
 		$this->assertSame( $decision->to_array(), DecisionStore::get( $order )->to_array() );
 		$this->assertSame( 'yes', $order->get_meta( 'is_vat_exempt' ) );
-		$this->assertSame( 'DE114103379', $order->get_meta( '_levy_eu_vat_number' ) );
+		$this->assertSame( 'DE114103379', $order->get_meta( '_vatline_number' ) );
 		$log = DecisionStore::log( $order );
 		$this->assertCount( 1, $log );
 		$this->assertSame(

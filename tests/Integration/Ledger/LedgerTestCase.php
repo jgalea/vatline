@@ -1,17 +1,17 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Ledger;
+namespace Vatline\Tests\Integration\Ledger;
 
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\LineDecision;
-use Levy\EuVat\Domain\Rule;
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Ledger\Fx;
-use Levy\EuVat\Ledger\LedgerWriter;
-use Levy\EuVat\Ledger\Schema;
-use Levy\EuVat\Ledger\ThresholdTracker;
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Domain\Decision;
+use Vatline\Domain\LineDecision;
+use Vatline\Domain\Rule;
+use Vatline\Domain\Scheme;
+use Vatline\Ledger\Fx;
+use Vatline\Ledger\LedgerWriter;
+use Vatline\Ledger\Schema;
+use Vatline\Ledger\ThresholdTracker;
+use Vatline\Settings;
+use Vatline\Tests\Support\IntegrationTestCase;
 use WC_Order;
 use WC_Order_Item_Fee;
 use WC_Order_Item_Product;
@@ -53,7 +53,7 @@ abstract class LedgerTestCase extends IntegrationTestCase {
 
 		// The booted plugin's own writer (live transport) listens on these too.
 		remove_all_actions( LedgerWriter::FX_RETRY_HOOK );
-		remove_all_actions( \Levy\EuVat\Ledger\Backfill::HOOK );
+		remove_all_actions( \Vatline\Ledger\Backfill::HOOK );
 
 		$this->transport = new EcbFixtureTransport();
 		$this->writer    = new LedgerWriter( new Fx( $this->transport ) );

@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Orders;
+namespace Vatline\Tests\Integration\Orders;
 
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Orders\InvoiceText;
+use Vatline\Orders\DecisionStore;
+use Vatline\Orders\InvoiceText;
 use WC_Order;
 
 require_once __DIR__ . '/LifecycleTestCase.php';
@@ -52,13 +52,13 @@ class InvoiceTextTest extends LifecycleTestCase {
 
 		$labels = array_keys( $this->fresh( $order )->get_order_item_totals() );
 
-		$this->assertSame( array(), preg_grep( '/^levy_eu_vat_/', $labels ) );
+		$this->assertSame( array(), preg_grep( '/^vatline_/', $labels ) );
 	}
 
 	public function test_no_rows_on_an_order_without_a_decision() {
 		$order = $this->order( 'DE', 'DE', '10115', array( 'digital' ) );
 
-		$this->assertSame( array(), preg_grep( '/^levy_eu_vat_/', array_keys( $order->get_order_item_totals() ) ) );
+		$this->assertSame( array(), preg_grep( '/^vatline_/', array_keys( $order->get_order_item_totals() ) ) );
 	}
 
 	public function test_consultation_reference_only_for_a_valid_registry_answer() {
@@ -110,13 +110,13 @@ class InvoiceTextTest extends LifecycleTestCase {
 		add_filter(
 			'gettext',
 			static function ( $translated, $text, $domain ) {
-				return 'levy-eu-vat' === $domain && 'Customer VAT number' === $text ? 'Umsatzsteuer-ID des Kunden' : $translated;
+				return 'vatline' === $domain && 'Customer VAT number' === $text ? 'Umsatzsteuer-ID des Kunden' : $translated;
 			},
 			10,
 			3
 		);
 		add_filter(
-			'levy_eu_vat_legal_text',
+			'vatline_legal_text',
 			static function ( $text, $key, $filtered_order ) {
 				return 'art196' === $key && $filtered_order instanceof WC_Order ? 'Steuerschuldnerschaft des Leistungsempfängers' : $text;
 			},
@@ -134,15 +134,15 @@ class InvoiceTextTest extends LifecycleTestCase {
 	public function test_the_wording_is_escaped_and_an_empty_filter_result_drops_the_row() {
 		$order = $this->exempt_order();
 		add_filter(
-			'levy_eu_vat_legal_text',
+			'vatline_legal_text',
 			static function () {
 				return '<b>x</b>';
 			}
 		);
 		$this->assertContains( 'VAT note: &lt;b&gt;x&lt;/b&gt;', $this->values( $order ) );
 
-		remove_all_filters( 'levy_eu_vat_legal_text' );
-		add_filter( 'levy_eu_vat_legal_text', '__return_empty_string' );
+		remove_all_filters( 'vatline_legal_text' );
+		add_filter( 'vatline_legal_text', '__return_empty_string' );
 		$this->assertSame( array(), preg_grep( '/^VAT note/', $this->values( $order ) ) );
 	}
 }

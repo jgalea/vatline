@@ -1,18 +1,18 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Checkout;
+namespace Vatline\Tests\Integration\Checkout;
 
-use Levy\EuVat\Checkout\CartSteering;
-use Levy\EuVat\Checkout\InputGatherer;
-use Levy\EuVat\Checkout\SupplyType;
-use Levy\EuVat\Checkout\TaxLocation;
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Ledger\ThresholdTracker;
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Plugin;
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Support\HttpGuard;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Checkout\CartSteering;
+use Vatline\Checkout\InputGatherer;
+use Vatline\Checkout\SupplyType;
+use Vatline\Checkout\TaxLocation;
+use Vatline\Domain\Decision;
+use Vatline\Ledger\ThresholdTracker;
+use Vatline\Orders\DecisionStore;
+use Vatline\Plugin;
+use Vatline\Settings;
+use Vatline\Tests\Support\HttpGuard;
+use Vatline\Tests\Support\IntegrationTestCase;
 use RuntimeException;
 use WC_Order;
 use WC_Product_Simple;

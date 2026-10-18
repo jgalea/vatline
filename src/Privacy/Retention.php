@@ -1,19 +1,19 @@
 <?php
 
-namespace Levy\EuVat\Privacy;
+namespace Vatline\Privacy;
 
 use DateTimeImmutable;
-use Levy\EuVat\Ledger\Schema;
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Settings;
+use Vatline\Ledger\Schema;
+use Vatline\Orders\DecisionStore;
+use Vatline\Settings;
 use WC_Order;
 
 class Retention {
 
-	const HOOK          = 'levy_eu_vat_retention';
-	const AS_GROUP      = 'levy-eu-vat';
+	const HOOK          = 'vatline_retention';
+	const AS_GROUP      = 'vatline';
 	const BATCH         = 100;
-	const SCRUBBED_META = '_levy_eu_vat_scrubbed';
+	const SCRUBBED_META = '_vatline_scrubbed';
 
 	public function register(): void {
 		add_action( self::HOOK, array( $this, 'run_batch' ) );

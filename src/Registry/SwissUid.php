@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Registry;
+namespace Vatline\Registry;
 
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
 use Throwable;
 
 class SwissUid implements Registry {

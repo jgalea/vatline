@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Privacy;
+namespace Vatline\Tests\Integration\Privacy;
 
-use Levy\EuVat\Privacy\Retention;
+use Vatline\Privacy\Retention;
 
 require_once __DIR__ . '/PrivacyTestCase.php';
 
@@ -23,7 +23,7 @@ class RetentionTest extends PrivacyTestCase {
 	}
 
 	public function test_retention_follows_the_setting(): void {
-		update_option( 'levy_eu_vat_settings', array( 'retention_years' => 2 ) );
+		update_option( 'vatline_settings', array( 'retention_years' => 2 ) );
 		$order = $this->vat_order( $this->year() - 3 );
 
 		( new Retention() )->run_batch( 0 );

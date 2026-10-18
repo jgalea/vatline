@@ -1,11 +1,11 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Orders;
+namespace Vatline\Tests\Integration\Orders;
 
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Orders\Revalidation;
-use Levy\EuVat\Registry\ValidationCache;
-use Levy\EuVat\Settings;
+use Vatline\Orders\DecisionStore;
+use Vatline\Orders\Revalidation;
+use Vatline\Registry\ValidationCache;
+use Vatline\Settings;
 
 require_once __DIR__ . '/LifecycleTestCase.php';
 require_once dirname( __DIR__, 2 ) . '/Support/WcsStandIn.php';

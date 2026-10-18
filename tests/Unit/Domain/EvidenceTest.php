@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Domain;
+namespace Vatline\Tests\Unit\Domain;
 
-use Levy\EuVat\Domain\Evidence;
+use Vatline\Domain\Evidence;
 use PHPUnit\Framework\TestCase;
 
 class EvidenceTest extends TestCase {

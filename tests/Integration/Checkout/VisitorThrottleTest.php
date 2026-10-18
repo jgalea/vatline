@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Checkout;
+namespace Vatline\Tests\Integration\Checkout;
 
-use Levy\EuVat\Domain\Rule;
-use Levy\EuVat\Orders\Revalidation;
+use Vatline\Domain\Rule;
+use Vatline\Orders\Revalidation;
 use WP_REST_Response;
 
 require_once __DIR__ . '/CheckoutTestCase.php';
@@ -29,7 +29,7 @@ class VisitorThrottleTest extends CheckoutTestCase {
 
 	private function client_limit( int $limit ): void {
 		add_filter(
-			'levy_eu_vat_client_lookup_limit',
+			'vatline_client_lookup_limit',
 			static function () use ( $limit ) {
 				return array( $limit, 10 * MINUTE_IN_SECONDS );
 			}
@@ -38,7 +38,7 @@ class VisitorThrottleTest extends CheckoutTestCase {
 
 	private function global_limit( int $limit ): void {
 		add_filter(
-			'levy_eu_vat_global_lookup_limit',
+			'vatline_global_lookup_limit',
 			static function () use ( $limit ) {
 				return array( $limit, HOUR_IN_SECONDS );
 			}
@@ -50,7 +50,7 @@ class VisitorThrottleTest extends CheckoutTestCase {
 			'POST',
 			'cart/extensions',
 			array(
-				'namespace' => 'levy-eu-vat',
+				'namespace' => 'vatline',
 				'data'      => array(
 					'vat_number' => $number,
 					'country'    => 'DE',
@@ -90,7 +90,7 @@ class VisitorThrottleTest extends CheckoutTestCase {
 		$this->add_to_cart( $this->product( 'digital' ) );
 
 		$data      = json_decode( (string) wp_json_encode( $this->type_number( self::VALID_DE )->get_data() ), true );
-		$extension = $data['extensions']['levy-eu-vat'];
+		$extension = $data['extensions']['vatline'];
 
 		$this->assertSame( 0, $this->vies_calls );
 		$this->assertSame( 'pending', $extension['status'] );
@@ -147,7 +147,7 @@ class VisitorThrottleTest extends CheckoutTestCase {
 		$this->settings( array( 'outage_policy' => $policy ) );
 		$this->client_limit( 0 );
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_levy_eu_vat_number', self::VALID_DE );
+		WC()->customer->update_meta_data( '_vatline_number', self::VALID_DE );
 
 		$order = $this->order_from( $this->block_checkout( 'DE', '10115' ) );
 
@@ -164,11 +164,11 @@ class VisitorThrottleTest extends CheckoutTestCase {
 		$this->client_limit( 0 );
 		$this->global_limit( 0 );
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_levy_eu_vat_number', self::VALID_DE );
+		WC()->customer->update_meta_data( '_vatline_number', self::VALID_DE );
 		$order = $this->order_from( $this->block_checkout( 'DE', '10115' ) );
 		$this->assertSame( 0, $this->vies_calls );
 
-		do_action( 'levy_eu_vat_revalidate', $order->get_id(), 1 );
+		do_action( 'vatline_revalidate', $order->get_id(), 1 );
 
 		$this->assertSame( 1, $this->vies_calls );
 		$this->assertNotContains( Revalidation::PENDING_FLAG, $this->stored_decision( $order )->flags() );

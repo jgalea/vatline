@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Reports;
+namespace Vatline\Tests\Integration\Reports;
 
-use Levy\EuVat\Reports\Csv;
+use Vatline\Reports\Csv;
 use WP_UnitTestCase;
 
 class CsvTest extends WP_UnitTestCase {

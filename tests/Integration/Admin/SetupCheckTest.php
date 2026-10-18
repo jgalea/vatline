@@ -1,11 +1,11 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Admin;
+namespace Vatline\Tests\Integration\Admin;
 
-use Levy\EuVat\Admin\SetupCheck;
-use Levy\EuVat\Domain\Territory;
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Admin\SetupCheck;
+use Vatline\Domain\Territory;
+use Vatline\Settings;
+use Vatline\Tests\Support\IntegrationTestCase;
 use WC_Tax;
 
 class SetupCheckTest extends IntegrationTestCase {

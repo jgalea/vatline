@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Orders;
+namespace Vatline\Orders;
 
-use Levy\EuVat\Checkout\CartSteering;
-use Levy\EuVat\Checkout\InputGatherer;
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\Rules;
-use Levy\EuVat\Domain\VatNumber;
+use Vatline\Checkout\CartSteering;
+use Vatline\Checkout\InputGatherer;
+use Vatline\Domain\Decision;
+use Vatline\Domain\Rules;
+use Vatline\Domain\VatNumber;
 use Throwable;
 use WC_Order;
 
@@ -20,7 +20,7 @@ class AdminRecalc {
 	 * The order edit screen posts billing fields as _billing_{key}; the
 	 * checkout UI adds this one to that screen.
 	 */
-	const FIELD = '_billing_levy_eu_vat_number';
+	const FIELD = '_billing_vatline_number';
 
 	/** @var InputGatherer */
 	private $gatherer;
@@ -54,7 +54,7 @@ class AdminRecalc {
 		try {
 			$decision = $this->rules->decide( $this->gatherer->from_order( self::at_taxed_address( $order, $args ), 'admin', true ) );
 		} catch ( Throwable $e ) {
-			wc_get_logger()->error( 'VAT decision on admin recalculation failed: ' . $e->getMessage(), array( 'source' => 'levy-eu-vat' ) );
+			wc_get_logger()->error( 'VAT decision on admin recalculation failed: ' . $e->getMessage(), array( 'source' => 'vatline' ) );
 			return;
 		}
 

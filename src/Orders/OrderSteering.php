@@ -1,11 +1,11 @@
 <?php
 
-namespace Levy\EuVat\Orders;
+namespace Vatline\Orders;
 
-use Levy\EuVat\Checkout\CartSteering;
-use Levy\EuVat\Checkout\InputGatherer;
-use Levy\EuVat\Checkout\TaxLocation;
-use Levy\EuVat\Domain\Decision;
+use Vatline\Checkout\CartSteering;
+use Vatline\Checkout\InputGatherer;
+use Vatline\Checkout\TaxLocation;
+use Vatline\Domain\Decision;
 use WC_Order;
 use WC_Order_Item;
 use WC_Order_Item_Product;

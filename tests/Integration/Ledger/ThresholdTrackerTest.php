@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Ledger;
+namespace Vatline\Tests\Integration\Ledger;
 
-use Levy\EuVat\Domain\Rule;
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Ledger\Schema;
-use Levy\EuVat\Ledger\ThresholdTracker;
-use Levy\EuVat\Settings;
+use Vatline\Domain\Rule;
+use Vatline\Domain\Scheme;
+use Vatline\Ledger\Schema;
+use Vatline\Ledger\ThresholdTracker;
+use Vatline\Settings;
 
 require_once __DIR__ . '/LedgerTestCase.php';
 
@@ -113,7 +113,7 @@ class ThresholdTrackerTest extends LedgerTestCase {
 	public function test_filter_overrides_the_threshold(): void {
 		$this->row( 6000 );
 		add_filter(
-			'levy_eu_vat_threshold_eur',
+			'vatline_threshold_eur',
 			static function () {
 				return 5000.0;
 			}

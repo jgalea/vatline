@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Checkout;
+namespace Vatline\Tests\Integration\Checkout;
 
-use Levy\EuVat\Checkout\TaxLocation;
-use Levy\EuVat\Domain\Rule;
+use Vatline\Checkout\TaxLocation;
+use Vatline\Domain\Rule;
 
 require_once __DIR__ . '/CheckoutTestCase.php';
 
@@ -60,7 +60,7 @@ class StoreApiCheckoutTest extends CheckoutTestCase {
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'customer' ) ) );
 		WC()->customer = new \WC_Customer( get_current_user_id(), true );
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_levy_eu_vat_number', self::VALID_DE );
+		WC()->customer->update_meta_data( '_vatline_number', self::VALID_DE );
 
 		$order = $this->order_from( $this->block_checkout( 'DE', '10115' ) );
 
@@ -68,13 +68,13 @@ class StoreApiCheckoutTest extends CheckoutTestCase {
 		$this->assertSame( 'yes', $order->get_meta( 'is_vat_exempt' ) );
 		$decision = $this->stored_decision( $order );
 		$this->assertSame( Rule::RC_SERVICES_ART196, $decision->rule() );
-		$this->assertSame( self::VALID_DE, $order->get_meta( '_levy_eu_vat_number' ) );
+		$this->assertSame( self::VALID_DE, $order->get_meta( '_vatline_number' ) );
 	}
 
 	public function test_guest_store_api_checkout_exemption() {
 		wp_set_current_user( 0 );
 		$this->add_to_cart( $this->product( 'goods' ) );
-		WC()->customer->update_meta_data( '_levy_eu_vat_number', self::VALID_DE );
+		WC()->customer->update_meta_data( '_vatline_number', self::VALID_DE );
 
 		$order = $this->order_from( $this->block_checkout( 'DE', '10115' ) );
 
@@ -86,7 +86,7 @@ class StoreApiCheckoutTest extends CheckoutTestCase {
 
 	public function test_cache_miss_at_checkout_validates_once() {
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_levy_eu_vat_number', self::VALID_DE );
+		WC()->customer->update_meta_data( '_vatline_number', self::VALID_DE );
 
 		$this->store_api( 'POST', 'cart/update-customer', array( 'billing_address' => $this->address( 'DE', '10115' ) ) );
 		$this->assertSame( 0, $this->vies_calls, 'Cart recalculation must not call the registry.' );
@@ -101,7 +101,7 @@ class StoreApiCheckoutTest extends CheckoutTestCase {
 	public function test_vies_down_charge_policy_places_order_flagged() {
 		$this->vies_answer( self::DOWN_DE, '{"actionSucceed":false,"errorWrappers":[{"error":"MS_UNAVAILABLE"}]}' );
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_levy_eu_vat_number', self::DOWN_DE );
+		WC()->customer->update_meta_data( '_vatline_number', self::DOWN_DE );
 
 		$order = $this->order_from( $this->block_checkout( 'DE', '10115' ) );
 
@@ -116,24 +116,24 @@ class StoreApiCheckoutTest extends CheckoutTestCase {
 		$this->settings( array( 'outage_policy' => 'reject' ) );
 		$this->vies_answer( self::DOWN_DE, '{"actionSucceed":false,"errorWrappers":[{"error":"MS_UNAVAILABLE"}]}' );
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_levy_eu_vat_number', self::DOWN_DE );
+		WC()->customer->update_meta_data( '_vatline_number', self::DOWN_DE );
 
 		$response = $this->block_checkout( 'DE', '10115' );
 
 		$this->assertSame( 400, $response->get_status() );
-		$this->assertSame( 'levy_eu_vat_registry_unavailable', $response->get_data()['code'] );
+		$this->assertSame( 'vatline_registry_unavailable', $response->get_data()['code'] );
 		$this->assertSame( array(), wc_get_orders( array( 'status' => array( 'processing', 'completed', 'on-hold', 'pending' ) ) ) );
 	}
 
 	public function test_invalid_number_blocks_block_checkout() {
 		$this->vies_answer( self::INVALID_DE, '{"countryCode":"DE","vatNumber":"123475223","valid":false}' );
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_levy_eu_vat_number', self::INVALID_DE );
+		WC()->customer->update_meta_data( '_vatline_number', self::INVALID_DE );
 
 		$response = $this->block_checkout( 'DE', '10115' );
 
 		$this->assertSame( 400, $response->get_status() );
-		$this->assertSame( 'levy_eu_vat_invalid_vat_number', $response->get_data()['code'] );
+		$this->assertSame( 'vatline_invalid_vat_number', $response->get_data()['code'] );
 	}
 
 	/**
@@ -141,7 +141,7 @@ class StoreApiCheckoutTest extends CheckoutTestCase {
 	 */
 	public function test_registry_exception_never_breaks_checkout() {
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_levy_eu_vat_number', self::DOWN_DE );
+		WC()->customer->update_meta_data( '_vatline_number', self::DOWN_DE );
 
 		$order = $this->order_from( $this->block_checkout( 'DE', '10115' ) );
 
@@ -165,7 +165,7 @@ class StoreApiCheckoutTest extends CheckoutTestCase {
 			}
 		);
 		$_SERVER['REMOTE_ADDR'] = '203.0.113.5';
-		WC()->session->set( 'levy_eu_vat_self_certified', 'FR' );
+		WC()->session->set( 'vatline_self_certified', 'FR' );
 
 		$order = $this->order_from( $this->block_checkout( 'FR', '75001', array(), 'DE', '10115' ) );
 		unset( $_SERVER['REMOTE_ADDR'] );

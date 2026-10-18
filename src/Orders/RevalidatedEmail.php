@@ -1,6 +1,6 @@
 <?php
 
-namespace Levy\EuVat\Orders;
+namespace Vatline\Orders;
 
 use WC_DateTime;
 use WC_Email;
@@ -8,7 +8,7 @@ use WC_Order;
 
 class RevalidatedEmail extends WC_Email {
 
-	const KEY = 'levy_eu_vat_revalidated';
+	const KEY = 'vatline_revalidated';
 
 	const REFUND  = 'refund';
 	const INVALID = 'invalid';
@@ -19,10 +19,10 @@ class RevalidatedEmail extends WC_Email {
 	public function __construct() {
 		$this->id             = self::KEY;
 		$this->customer_email = false;
-		$this->title          = __( 'VAT number re-checked', 'levy-eu-vat' );
-		$this->description    = __( 'Sent to the store admin when a VAT number that could not be checked at checkout is checked later and the answer changes what is owed.', 'levy-eu-vat' );
-		$this->template_html  = 'emails/levy-eu-vat-revalidated.php';
-		$this->template_plain = 'emails/plain/levy-eu-vat-revalidated.php';
+		$this->title          = __( 'VAT number re-checked', 'vatline' );
+		$this->description    = __( 'Sent to the store admin when a VAT number that could not be checked at checkout is checked later and the answer changes what is owed.', 'vatline' );
+		$this->template_html  = 'emails/vatline-revalidated.php';
+		$this->template_plain = 'emails/plain/vatline-revalidated.php';
 		$this->template_base  = dirname( __DIR__, 2 ) . '/templates/';
 		$this->placeholders   = array(
 			'{order_date}'   => '',
@@ -36,16 +36,16 @@ class RevalidatedEmail extends WC_Email {
 
 	public function get_default_subject() {
 		if ( self::INVALID === $this->kind ) {
-			return __( '[{site_title}]: VAT not charged on order {order_number}, number invalid', 'levy-eu-vat' );
+			return __( '[{site_title}]: VAT not charged on order {order_number}, number invalid', 'vatline' );
 		}
-		return __( '[{site_title}]: VAT refund may be due on order {order_number}', 'levy-eu-vat' );
+		return __( '[{site_title}]: VAT refund may be due on order {order_number}', 'vatline' );
 	}
 
 	public function get_default_heading() {
 		if ( self::INVALID === $this->kind ) {
-			return __( 'VAT number reported invalid', 'levy-eu-vat' );
+			return __( 'VAT number reported invalid', 'vatline' );
 		}
-		return __( 'VAT number confirmed valid', 'levy-eu-vat' );
+		return __( 'VAT number confirmed valid', 'vatline' );
 	}
 
 	public function trigger( int $order_id, string $kind ): void {

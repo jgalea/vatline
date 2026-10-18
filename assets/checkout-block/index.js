@@ -5,10 +5,10 @@ import { createPortal, useEffect, useRef, useState } from '@wordpress/element';
 
 const { CheckboxControl } = window.wc.blocksCheckout;
 
-const NAMESPACE = 'levy-eu-vat';
-const FIELD = 'levy-eu-vat/vat-number';
+const NAMESPACE = 'vatline';
+const FIELD = 'vatline/vat-number';
 const DEBOUNCE_MS = 600;
-const FIELD_WRAPPER = '.wc-block-components-address-form__levy-eu-vat-vat-number';
+const FIELD_WRAPPER = '.wc-block-components-address-form__vatline-vat-number';
 
 /**
  * extensionCartUpdate() puts the server's copy of the address back in the
@@ -58,7 +58,7 @@ const useNoticeHost = () => {
 
 	useEffect( () => {
 		const element = document.createElement( 'div' );
-		element.className = 'levy-eu-vat-notice-host';
+		element.className = 'vatline-notice-host';
 
 		const place = () => {
 			const anchor = document.querySelector( FIELD_WRAPPER ) || document.getElementById( 'contact' );
@@ -83,7 +83,7 @@ const useNoticeHost = () => {
 	return host;
 };
 
-const LevyVatNotice = () => {
+const VatlineNotice = () => {
 	const { vatNumber, country, postcode, saving, extension } = useVatState();
 	const host = useNoticeHost();
 	const lastKey = useRef( null );
@@ -110,11 +110,11 @@ const LevyVatNotice = () => {
 	}
 
 	return createPortal(
-		<div className="levy-eu-vat-notice">
+		<div className="vatline-notice">
 			<div aria-live="polite">
 				{ extension.message ? (
 					<p
-						className={ `levy-eu-vat-notice__message levy-eu-vat-notice__message--${ extension.status }` }
+						className={ `vatline-notice__message vatline-notice__message--${ extension.status }` }
 					>
 						{ extension.message }
 					</p>
@@ -132,7 +132,7 @@ const LevyVatNotice = () => {
 	);
 };
 
-registerPlugin( 'levy-eu-vat', {
+registerPlugin( 'vatline', {
 	scope: 'woocommerce-checkout',
-	render: LevyVatNotice,
+	render: VatlineNotice,
 } );

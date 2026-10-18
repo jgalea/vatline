@@ -1,11 +1,11 @@
 <?php
 
-namespace Levy\EuVat\Registry;
+namespace Vatline\Registry;
 
-use Levy\EuVat\Domain\FormatCheck;
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Settings;
+use Vatline\Domain\FormatCheck;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Settings;
 
 class Validator {
 

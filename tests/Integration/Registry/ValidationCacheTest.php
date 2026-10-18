@@ -1,17 +1,17 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Registry;
+namespace Vatline\Tests\Integration\Registry;
 
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Registry\Router;
-use Levy\EuVat\Registry\ValidationCache;
-use Levy\EuVat\Registry\Validator;
-use Levy\EuVat\Registry\Vies;
-use Levy\EuVat\Registry\WpHttpTransport;
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Support\HttpGuard;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Registry\Router;
+use Vatline\Registry\ValidationCache;
+use Vatline\Registry\Validator;
+use Vatline\Registry\Vies;
+use Vatline\Registry\WpHttpTransport;
+use Vatline\Settings;
+use Vatline\Tests\Support\HttpGuard;
+use Vatline\Tests\Support\IntegrationTestCase;
 
 class ValidationCacheTest extends IntegrationTestCase {
 
@@ -136,11 +136,11 @@ class ValidationCacheTest extends IntegrationTestCase {
 		$transport = new WpHttpTransport();
 
 		$transport->request( 'GET', 'https://ec.europa.eu/x', '', array(), 5 );
-		add_filter( 'levy_eu_vat_registry_timeout', '__return_zero' );
+		add_filter( 'vatline_registry_timeout', '__return_zero' );
 		$transport->request( 'GET', 'https://ec.europa.eu/x', '', array(), 5 );
-		remove_filter( 'levy_eu_vat_registry_timeout', '__return_zero' );
+		remove_filter( 'vatline_registry_timeout', '__return_zero' );
 		add_filter(
-			'levy_eu_vat_registry_timeout',
+			'vatline_registry_timeout',
 			static function () {
 				return 30;
 			}

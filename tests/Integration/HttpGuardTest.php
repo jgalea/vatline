@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration;
+namespace Vatline\Tests\Integration;
 
-use Levy\EuVat\Tests\Support\HttpGuard;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Tests\Support\HttpGuard;
+use Vatline\Tests\Support\IntegrationTestCase;
 use RuntimeException;
 
 class HttpGuardTest extends IntegrationTestCase {

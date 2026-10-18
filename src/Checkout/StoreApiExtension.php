@@ -1,13 +1,13 @@
 <?php
 
-namespace Levy\EuVat\Checkout;
+namespace Vatline\Checkout;
 
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\Rule;
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Plugin;
-use Levy\EuVat\Settings;
+use Vatline\Domain\Decision;
+use Vatline\Domain\Rule;
+use Vatline\Domain\Scheme;
+use Vatline\Domain\ValidationResult;
+use Vatline\Plugin;
+use Vatline\Settings;
 use WC_Customer;
 
 /**
@@ -19,7 +19,7 @@ use WC_Customer;
  */
 class StoreApiExtension {
 
-	const NAMESPACE = 'levy-eu-vat';
+	const NAMESPACE = 'vatline';
 
 	/** @var VatField */
 	private $field;
@@ -119,10 +119,10 @@ class StoreApiExtension {
 		}
 		$meta   = require $dir;
 		$script = VatField::asset( 'build/checkout-block.js' );
-		wp_enqueue_script( 'levy-eu-vat-checkout-block', $script['url'], array_merge( $meta['dependencies'], array( 'wc-blocks-checkout' ) ), $script['version'], true );
-		wp_set_script_translations( 'levy-eu-vat-checkout-block', 'levy-eu-vat', dirname( __DIR__, 2 ) . '/languages' );
+		wp_enqueue_script( 'vatline-checkout-block', $script['url'], array_merge( $meta['dependencies'], array( 'wc-blocks-checkout' ) ), $script['version'], true );
+		wp_set_script_translations( 'vatline-checkout-block', 'vatline', dirname( __DIR__, 2 ) . '/languages' );
 		$style = VatField::asset( 'assets/checkout-block/style.css' );
-		wp_enqueue_style( 'levy-eu-vat-checkout-block', $style['url'], array(), $style['version'] );
+		wp_enqueue_style( 'vatline-checkout-block', $style['url'], array(), $style['version'] );
 	}
 
 	/**
@@ -171,7 +171,7 @@ class StoreApiExtension {
 	public static function self_certification_label( string $country ): string {
 		$names = WC()->countries->get_countries();
 		/* translators: %s: country name */
-		return sprintf( __( 'I confirm I am located in %s.', 'levy-eu-vat' ), $names[ $country ] ?? $country );
+		return sprintf( __( 'I confirm I am located in %s.', 'vatline' ), $names[ $country ] ?? $country );
 	}
 
 	/**
@@ -184,33 +184,33 @@ class StoreApiExtension {
 		}
 		if ( $decision->is_vat_exempt() ) {
 			if ( ValidationResult::VALID === $validation ) {
-				return array( 'verified', __( 'VAT number verified. Reverse charge applies.', 'levy-eu-vat' ) );
+				return array( 'verified', __( 'VAT number verified. Reverse charge applies.', 'vatline' ) );
 			}
-			return array( 'pending', __( 'Your VAT number could not be checked just now. No VAT is charged for now and the number will be checked again.', 'levy-eu-vat' ) );
+			return array( 'pending', __( 'Your VAT number could not be checked just now. No VAT is charged for now and the number will be checked again.', 'vatline' ) );
 		}
 		if ( Rule::DOMESTIC_B2B_GUARD === $decision->rule() ) {
-			return array( 'domestic', __( 'VAT is charged on sales to businesses in the shop\'s own country.', 'levy-eu-vat' ) );
+			return array( 'domestic', __( 'VAT is charged on sales to businesses in the shop\'s own country.', 'vatline' ) );
 		}
 		if ( Rule::PREFIX_MISMATCH_CHARGED === $decision->rule() ) {
-			return array( 'mismatch', __( 'This VAT number does not match your billing country, so VAT is charged.', 'levy-eu-vat' ) );
+			return array( 'mismatch', __( 'This VAT number does not match your billing country, so VAT is charged.', 'vatline' ) );
 		}
 		if ( ValidationResult::VALID === $validation ) {
 			foreach ( $decision->lines() as $line ) {
 				if ( in_array( $line->scheme(), array( Scheme::REVERSE_CHARGE_SERVICES, Scheme::INTRA_EU_GOODS ), true ) ) {
-					return array( 'verified', __( 'VAT number verified. Reverse charge applies to part of this order.', 'levy-eu-vat' ) );
+					return array( 'verified', __( 'VAT number verified. Reverse charge applies to part of this order.', 'vatline' ) );
 				}
 			}
-			return array( 'verified', __( 'VAT number verified. VAT is charged on this order.', 'levy-eu-vat' ) );
+			return array( 'verified', __( 'VAT number verified. VAT is charged on this order.', 'vatline' ) );
 		}
 		if ( in_array( $validation, array( ValidationResult::INVALID, ValidationResult::FORMAT_INVALID ), true ) ) {
 			return array( 'invalid', CheckoutDecider::message( 'invalid_vat_number' ) );
 		}
 		if ( ValidationResult::UNAVAILABLE === $validation ) {
-			return array( 'pending', __( 'Your VAT number could not be checked just now, so VAT is charged on this order.', 'levy-eu-vat' ) );
+			return array( 'pending', __( 'Your VAT number could not be checked just now, so VAT is charged on this order.', 'vatline' ) );
 		}
 		if ( 'cache_miss' === $detail ) {
-			return array( 'pending', __( 'Your VAT number has not been checked yet. VAT is charged until it is.', 'levy-eu-vat' ) );
+			return array( 'pending', __( 'Your VAT number has not been checked yet. VAT is charged until it is.', 'vatline' ) );
 		}
-		return array( 'unchecked', __( 'This VAT number cannot be checked automatically, so VAT is charged.', 'levy-eu-vat' ) );
+		return array( 'unchecked', __( 'This VAT number cannot be checked automatically, so VAT is charged.', 'vatline' ) );
 	}
 }

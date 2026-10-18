@@ -1,14 +1,14 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Admin;
+namespace Vatline\Tests\Integration\Admin;
 
-use Levy\EuVat\Admin\SettingsSection;
-use Levy\EuVat\Admin\SetupCheck;
-use Levy\EuVat\Ledger\Backfill;
-use Levy\EuVat\Rates\RateSync;
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
-use Levy\EuVat\Domain\ValidationResult;
+use Vatline\Admin\SettingsSection;
+use Vatline\Admin\SetupCheck;
+use Vatline\Ledger\Backfill;
+use Vatline\Rates\RateSync;
+use Vatline\Settings;
+use Vatline\Tests\Support\IntegrationTestCase;
+use Vatline\Domain\ValidationResult;
 use ReflectionProperty;
 use WC_Admin_Settings;
 
@@ -197,7 +197,7 @@ class SettingsSectionTest extends IntegrationTestCase {
 		WC_Admin_Settings::output_fields( $this->section->fields() );
 		$html = ob_get_clean();
 		$this->assertStringContainsString( 'notice-error', $html );
-		$this->assertLessThan( strpos( $html, 'levy_eu_vat_settings[store_vat_number]' ), strpos( $html, 'notice-error' ) );
+		$this->assertLessThan( strpos( $html, 'vatline_settings[store_vat_number]' ), strpos( $html, 'notice-error' ) );
 	}
 
 	public function test_initial_jobs_scheduled_once(): void {

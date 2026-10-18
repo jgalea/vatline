@@ -1,16 +1,16 @@
 <?php
 
-namespace Levy\EuVat\Checkout;
+namespace Vatline\Checkout;
 
-use Levy\EuVat\Domain\DecisionInput;
-use Levy\EuVat\Domain\Evidence;
-use Levy\EuVat\Domain\Line;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Ledger\Fx;
-use Levy\EuVat\Ledger\ThresholdTracker;
-use Levy\EuVat\Orders\DecisionStore;
-use Levy\EuVat\Registry\Validator;
-use Levy\EuVat\Settings;
+use Vatline\Domain\DecisionInput;
+use Vatline\Domain\Evidence;
+use Vatline\Domain\Line;
+use Vatline\Domain\VatNumber;
+use Vatline\Ledger\Fx;
+use Vatline\Ledger\ThresholdTracker;
+use Vatline\Orders\DecisionStore;
+use Vatline\Registry\Validator;
+use Vatline\Settings;
 use WC_Cart;
 use WC_Customer;
 use WC_Geolocation;
@@ -21,19 +21,19 @@ use WC_Product;
 
 class InputGatherer {
 
-	const NUMBER_META = '_levy_eu_vat_number';
+	const NUMBER_META = '_vatline_number';
 
 	/**
 	 * Session key holding the billing country the customer self-certified.
 	 * Ignored once the billing country no longer matches it.
 	 */
-	const SELF_CERTIFIED_SESSION = 'levy_eu_vat_self_certified';
+	const SELF_CERTIFIED_SESSION = 'vatline_self_certified';
 
 	/**
 	 * Order item meta tying an order line to the cart line the checkout
 	 * decision was made for.
 	 */
-	const LINE_KEY_META = '_levy_eu_vat_line_key';
+	const LINE_KEY_META = '_vatline_line_key';
 
 	const PICKUP_METHODS = array( 'local_pickup', 'pickup_location', 'legacy_local_pickup' );
 

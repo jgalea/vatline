@@ -1,13 +1,13 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Registry;
+namespace Vatline\Tests\Unit\Registry;
 
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Registry\HttpTransport;
-use Levy\EuVat\Registry\Registry;
-use Levy\EuVat\Registry\Router;
-use Levy\EuVat\Registry\Vies;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Registry\HttpTransport;
+use Vatline\Registry\Registry;
+use Vatline\Registry\Router;
+use Vatline\Registry\Vies;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase {

@@ -1,18 +1,18 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Registry;
+namespace Vatline\Tests\Unit\Registry;
 
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
-use Levy\EuVat\Registry\HttpTransport;
-use Levy\EuVat\Registry\LookupThrottle;
-use Levy\EuVat\Registry\Registry;
-use Levy\EuVat\Registry\Router;
-use Levy\EuVat\Registry\ValidationCache;
-use Levy\EuVat\Registry\Validator;
-use Levy\EuVat\Registry\Vies;
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Support\FixtureTransport;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
+use Vatline\Registry\HttpTransport;
+use Vatline\Registry\LookupThrottle;
+use Vatline\Registry\Registry;
+use Vatline\Registry\Router;
+use Vatline\Registry\ValidationCache;
+use Vatline\Registry\Validator;
+use Vatline\Registry\Vies;
+use Vatline\Settings;
+use Vatline\Tests\Support\FixtureTransport;
 use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase {

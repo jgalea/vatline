@@ -1,16 +1,16 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Ledger;
+namespace Vatline\Tests\Integration\Ledger;
 
 use ActionScheduler_QueueRunner;
 use ActionScheduler_Store;
-use Levy\EuVat\Admin\SettingsSection;
-use Levy\EuVat\Admin\SetupCheck;
-use Levy\EuVat\Domain\Decision;
-use Levy\EuVat\Domain\Scheme;
-use Levy\EuVat\Ledger\Backfill;
-use Levy\EuVat\Ledger\LedgerWriter;
-use Levy\EuVat\Ledger\ThresholdTracker;
+use Vatline\Admin\SettingsSection;
+use Vatline\Admin\SetupCheck;
+use Vatline\Domain\Decision;
+use Vatline\Domain\Scheme;
+use Vatline\Ledger\Backfill;
+use Vatline\Ledger\LedgerWriter;
+use Vatline\Ledger\ThresholdTracker;
 use WC_Order;
 
 require_once __DIR__ . '/LedgerTestCase.php';

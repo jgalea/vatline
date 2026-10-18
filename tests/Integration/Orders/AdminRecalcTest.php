@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration\Orders;
+namespace Vatline\Tests\Integration\Orders;
 
-use Levy\EuVat\Orders\AdminRecalc;
-use Levy\EuVat\Orders\DecisionStore;
+use Vatline\Orders\AdminRecalc;
+use Vatline\Orders\DecisionStore;
 
 require_once __DIR__ . '/LifecycleTestCase.php';
 

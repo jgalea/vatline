@@ -1,9 +1,9 @@
 <?php
 
-namespace Levy\EuVat\Tests\Integration;
+namespace Vatline\Tests\Integration;
 
-use Levy\EuVat\Settings;
-use Levy\EuVat\Tests\Support\IntegrationTestCase;
+use Vatline\Settings;
+use Vatline\Tests\Support\IntegrationTestCase;
 
 class SettingsTest extends IntegrationTestCase {
 

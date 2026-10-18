@@ -1,8 +1,8 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Domain;
+namespace Vatline\Tests\Unit\Domain;
 
-use Levy\EuVat\Domain\VatNumber;
+use Vatline\Domain\VatNumber;
 use PHPUnit\Framework\TestCase;
 
 class VatNumberTest extends TestCase {

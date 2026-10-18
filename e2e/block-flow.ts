@@ -2,7 +2,7 @@ import { expect, type Page } from '@playwright/test';
 import { TEST_CUSTOMER, addToCart, type Customer } from './helpers';
 
 export const taxRow = ( page: Page ) => page.locator( '.wc-block-components-totals-taxes' ).filter( { visible: true } );
-export const notice = ( page: Page ) => page.locator( '.levy-eu-vat-notice__message' ).filter( { visible: true } );
+export const notice = ( page: Page ) => page.locator( '.vatline-notice__message' ).filter( { visible: true } );
 
 export async function openCheckout( page: Page, product: number ) {
 	await addToCart( page, product );

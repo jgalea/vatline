@@ -1,11 +1,11 @@
 <?php
 
-namespace Levy\EuVat\Rates;
+namespace Vatline\Rates;
 
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use Levy\EuVat\Registry\HttpTransport;
+use Vatline\Registry\HttpTransport;
 use Throwable;
 
 class Tedb {

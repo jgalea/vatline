@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Levy EU VAT">
-	<file>levy-eu-vat.php</file>
+<ruleset name="Vatline">
+	<file>vatline.php</file>
 	<file>uninstall.php</file>
 	<file>src</file>
 	<file>templates</file>
@@ -20,7 +20,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="levy-eu-vat"/>
+				<element value="vatline"/>
 			</property>
 		</properties>
 	</rule>
@@ -31,9 +31,9 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="levy_eu_vat"/>
-				<element value="Levy\EuVat"/>
-				<element value="LEVY_EU_VAT"/>
+				<element value="vatline"/>
+				<element value="Vatline"/>
+				<element value="VATLINE"/>
 			</property>
 		</properties>
 	</rule>

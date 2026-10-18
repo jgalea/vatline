@@ -3,7 +3,7 @@
  * on its settings screens and pads #mainform instead. The rates table renders
  * after that form, so it carries the same padding and the footer's room itself.
  */
-.levy-eu-vat-rates {
+.vatline-rates {
 	padding-block: 0 65px;
 	padding-inline: 30px;
 	background: oklch(0.955 0.001 286);

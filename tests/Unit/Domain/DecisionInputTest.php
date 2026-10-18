@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit\Domain;
+namespace Vatline\Tests\Unit\Domain;
 
-use Levy\EuVat\Domain\DecisionInput;
-use Levy\EuVat\Domain\Evidence;
-use Levy\EuVat\Domain\Line;
-use Levy\EuVat\Domain\ValidationResult;
-use Levy\EuVat\Domain\VatNumber;
+use Vatline\Domain\DecisionInput;
+use Vatline\Domain\Evidence;
+use Vatline\Domain\Line;
+use Vatline\Domain\ValidationResult;
+use Vatline\Domain\VatNumber;
 use PHPUnit\Framework\TestCase;
 
 class DecisionInputTest extends TestCase {

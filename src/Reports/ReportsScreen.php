@@ -1,12 +1,12 @@
 <?php
 
-namespace Levy\EuVat\Reports;
+namespace Vatline\Reports;
 
 class ReportsScreen {
 
-	const SLUG       = 'levy-eu-vat-reports';
+	const SLUG       = 'vatline-reports';
 	const CAPABILITY = 'view_woocommerce_reports';
-	const NONCE      = 'levy_eu_vat_export';
+	const NONCE      = 'vatline_export';
 
 	/** @var OssReport */
 	private $oss;
@@ -21,15 +21,15 @@ class ReportsScreen {
 
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
-		add_action( 'admin_post_levy_eu_vat_export_oss', array( $this, 'export_oss' ) );
-		add_action( 'admin_post_levy_eu_vat_export_esl', array( $this, 'export_esl' ) );
+		add_action( 'admin_post_vatline_export_oss', array( $this, 'export_oss' ) );
+		add_action( 'admin_post_vatline_export_esl', array( $this, 'export_esl' ) );
 	}
 
 	public function add_menu(): void {
 		add_submenu_page(
 			'woocommerce',
-			__( 'EU VAT reports', 'levy-eu-vat' ),
-			__( 'EU VAT reports', 'levy-eu-vat' ),
+			__( 'EU VAT reports', 'vatline' ),
+			__( 'EU VAT reports', 'vatline' ),
 			self::CAPABILITY,
 			self::SLUG,
 			array( $this, 'render' )
@@ -44,7 +44,7 @@ class ReportsScreen {
 		$this_year              = (int) wp_date( 'Y' );
 		?>
 		<div class="wrap woocommerce">
-			<h1><?php esc_html_e( 'EU VAT reports', 'levy-eu-vat' ); ?></h1>
+			<h1><?php esc_html_e( 'EU VAT reports', 'vatline' ); ?></h1>
 			<form method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>">
 				<input type="hidden" name="page" value="<?php echo esc_attr( self::SLUG ); ?>" />
 				<select name="year">
@@ -57,22 +57,22 @@ class ReportsScreen {
 						<option value="<?php echo esc_attr( (string) $q ); ?>" <?php selected( $q, $quarter ); ?>><?php echo esc_html( 'Q' . $q ); ?></option>
 					<?php endfor; ?>
 				</select>
-				<button type="submit" class="button"><?php esc_html_e( 'Show', 'levy-eu-vat' ); ?></button>
+				<button type="submit" class="button"><?php esc_html_e( 'Show', 'vatline' ); ?></button>
 			</form>
 
-			<h2><?php esc_html_e( 'OSS return', 'levy-eu-vat' ); ?></h2>
-			<p><?php echo esc_html( sprintf( /* translators: %s: conversion rule. */ __( 'Non-euro orders are converted at the %s.', 'levy-eu-vat' ), $oss['rate_rule'] ) ); ?></p>
+			<h2><?php esc_html_e( 'OSS return', 'vatline' ); ?></h2>
+			<p><?php echo esc_html( sprintf( /* translators: %s: conversion rule. */ __( 'Non-euro orders are converted at the %s.', 'vatline' ), $oss['rate_rule'] ) ); ?></p>
 			<?php $this->oss_table( $oss ); ?>
-			<?php $this->export_form( 'levy_eu_vat_export_oss', $year, $quarter, __( 'Download OSS CSV', 'levy-eu-vat' ) ); ?>
+			<?php $this->export_form( 'vatline_export_oss', $year, $quarter, __( 'Download OSS CSV', 'vatline' ) ); ?>
 
-			<h2><?php esc_html_e( 'EC Sales List', 'levy-eu-vat' ); ?></h2>
+			<h2><?php esc_html_e( 'EC Sales List', 'vatline' ); ?></h2>
 			<?php if ( null === $esl ) : ?>
 				<div class="notice notice-error inline"><p>
 					<?php
 					echo esc_html(
 						sprintf(
 							/* translators: %s: order numbers. */
-							__( 'No ECB rate was available for these orders, so the list is not shown: %s', 'levy-eu-vat' ),
+							__( 'No ECB rate was available for these orders, so the list is not shown: %s', 'vatline' ),
 							implode( ', ', $missing )
 						)
 					);
@@ -82,10 +82,10 @@ class ReportsScreen {
 				<table class="widefat striped">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'VAT number', 'levy-eu-vat' ); ?></th>
-							<th><?php esc_html_e( 'Country', 'levy-eu-vat' ); ?></th>
-							<th><?php esc_html_e( 'Goods or services', 'levy-eu-vat' ); ?></th>
-							<th><?php esc_html_e( 'Net amount (EUR)', 'levy-eu-vat' ); ?></th>
+							<th><?php esc_html_e( 'VAT number', 'vatline' ); ?></th>
+							<th><?php esc_html_e( 'Country', 'vatline' ); ?></th>
+							<th><?php esc_html_e( 'Goods or services', 'vatline' ); ?></th>
+							<th><?php esc_html_e( 'Net amount (EUR)', 'vatline' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -98,11 +98,11 @@ class ReportsScreen {
 							</tr>
 						<?php endforeach; ?>
 						<?php if ( array() === $esl ) : ?>
-							<tr><td colspan="4"><?php esc_html_e( 'No intra-EU B2B sales in this period.', 'levy-eu-vat' ); ?></td></tr>
+							<tr><td colspan="4"><?php esc_html_e( 'No intra-EU B2B sales in this period.', 'vatline' ); ?></td></tr>
 						<?php endif; ?>
 					</tbody>
 				</table>
-				<?php $this->export_form( 'levy_eu_vat_export_esl', $year, $quarter, __( 'Download EC Sales List CSV', 'levy-eu-vat' ) ); ?>
+				<?php $this->export_form( 'vatline_export_esl', $year, $quarter, __( 'Download EC Sales List CSV', 'vatline' ) ); ?>
 			<?php endif; ?>
 		</div>
 		<?php
@@ -123,7 +123,7 @@ class ReportsScreen {
 				esc_html(
 					sprintf(
 						/* translators: %s: order numbers. */
-						__( 'The EC Sales List cannot be exported: no ECB rate was available for orders %s.', 'levy-eu-vat' ),
+						__( 'The EC Sales List cannot be exported: no ECB rate was available for orders %s.', 'vatline' ),
 						implode( ', ', $e->order_ids() )
 					)
 				)
@@ -151,7 +151,7 @@ class ReportsScreen {
 	 */
 	private function authorised_selection(): array {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You do not have permission to export these reports.', 'levy-eu-vat' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to export these reports.', 'vatline' ), '', array( 'response' => 403 ) );
 		}
 		check_admin_referer( self::NONCE );
 		return $this->selection( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -175,11 +175,11 @@ class ReportsScreen {
 		<table class="widefat striped">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Member state', 'levy-eu-vat' ); ?></th>
-					<th><?php esc_html_e( 'VAT rate %', 'levy-eu-vat' ); ?></th>
-					<th><?php esc_html_e( 'Supply type', 'levy-eu-vat' ); ?></th>
-					<th><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'Taxable amount (%s)', 'levy-eu-vat' ), $oss['currency'] ) ); ?></th>
-					<th><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'VAT amount (%s)', 'levy-eu-vat' ), $oss['currency'] ) ); ?></th>
+					<th><?php esc_html_e( 'Member state', 'vatline' ); ?></th>
+					<th><?php esc_html_e( 'VAT rate %', 'vatline' ); ?></th>
+					<th><?php esc_html_e( 'Supply type', 'vatline' ); ?></th>
+					<th><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'Taxable amount (%s)', 'vatline' ), $oss['currency'] ) ); ?></th>
+					<th><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'VAT amount (%s)', 'vatline' ), $oss['currency'] ) ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -193,7 +193,7 @@ class ReportsScreen {
 					</tr>
 				<?php endforeach; ?>
 				<?php if ( array() === $oss['rows'] ) : ?>
-					<tr><td colspan="5"><?php esc_html_e( 'No OSS sales in this period.', 'levy-eu-vat' ); ?></td></tr>
+					<tr><td colspan="5"><?php esc_html_e( 'No OSS sales in this period.', 'vatline' ); ?></td></tr>
 				<?php endif; ?>
 			</tbody>
 		</table>
@@ -204,7 +204,7 @@ class ReportsScreen {
 					echo esc_html(
 						sprintf(
 							/* translators: 1: currency, 2: rate, 3: date, 4: period. */
-							__( '%1$s: %2$s per EUR on %3$s (%4$s).', 'levy-eu-vat' ),
+							__( '%1$s: %2$s per EUR on %3$s (%4$s).', 'vatline' ),
 							$rate['currency'],
 							$rate['rate'],
 							$rate['rate_date'],
@@ -217,16 +217,16 @@ class ReportsScreen {
 		<?php endforeach; ?>
 		<?php if ( array() !== $oss['needs_correction'] ) : ?>
 			<h3><?php echo esc_html( OssReport::needs_correction_title() ); ?></h3>
-			<p><?php esc_html_e( 'Your tax tables had no rate for these destinations, so checkout charged your own country\'s rate. That VAT is not the destination VAT these sales owe, so they are left out of the figures above. Decide with your adviser how to declare each one, then add the missing rates.', 'levy-eu-vat' ); ?></p>
+			<p><?php esc_html_e( 'Your tax tables had no rate for these destinations, so checkout charged your own country\'s rate. That VAT is not the destination VAT these sales owe, so they are left out of the figures above. Decide with your adviser how to declare each one, then add the missing rates.', 'vatline' ); ?></p>
 			<table class="widefat striped">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Order', 'levy-eu-vat' ); ?></th>
-						<th><?php esc_html_e( 'Member state', 'levy-eu-vat' ); ?></th>
-						<th><?php esc_html_e( 'Rate charged %', 'levy-eu-vat' ); ?></th>
-						<th><?php esc_html_e( 'Supply type', 'levy-eu-vat' ); ?></th>
-						<th><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'Taxable amount (%s)', 'levy-eu-vat' ), $oss['currency'] ) ); ?></th>
-						<th><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'VAT charged (%s)', 'levy-eu-vat' ), $oss['currency'] ) ); ?></th>
+						<th><?php esc_html_e( 'Order', 'vatline' ); ?></th>
+						<th><?php esc_html_e( 'Member state', 'vatline' ); ?></th>
+						<th><?php esc_html_e( 'Rate charged %', 'vatline' ); ?></th>
+						<th><?php esc_html_e( 'Supply type', 'vatline' ); ?></th>
+						<th><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'Taxable amount (%s)', 'vatline' ), $oss['currency'] ) ); ?></th>
+						<th><?php echo esc_html( sprintf( /* translators: %s: currency code. */ __( 'VAT charged (%s)', 'vatline' ), $oss['currency'] ) ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -251,7 +251,7 @@ class ReportsScreen {
 			</table>
 		<?php endif; ?>
 		<?php if ( array() !== $oss['corrections'] ) : ?>
-			<p><?php esc_html_e( 'Refunds booked in this period against earlier periods are listed in the CSV so those returns can be amended.', 'levy-eu-vat' ); ?></p>
+			<p><?php esc_html_e( 'Refunds booked in this period against earlier periods are listed in the CSV so those returns can be amended.', 'vatline' ); ?></p>
 		<?php endif; ?>
 		<?php
 	}

@@ -1,10 +1,10 @@
 <?php
 
-namespace Levy\EuVat\Ledger;
+namespace Vatline\Ledger;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Levy\EuVat\Registry\HttpTransport;
+use Vatline\Registry\HttpTransport;
 
 /**
  * Rates are the ECB reference quote: units of the currency per 1 EUR.
@@ -129,7 +129,7 @@ class Fx {
 			)
 		);
 
-		$throttle = 'levy_eu_vat_fx_' . md5( $url );
+		$throttle = 'vatline_fx_' . md5( $url );
 		if ( false !== get_transient( $throttle ) ) {
 			return;
 		}

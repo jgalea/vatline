@@ -1,6 +1,6 @@
 <?php
 
-namespace Levy\EuVat\Tests\Unit;
+namespace Vatline\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
