@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Tests\Integration;
+namespace Vatright\Tests\Integration;
 
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Tests\Support\IntegrationTestCase;
 use ReflectionFunction;
 use ReflectionMethod;
 
@@ -127,16 +127,16 @@ class ScheduledHooksTest extends IntegrationTestCase {
 	}
 
 	public function test_the_scanner_catches_a_mismatched_hook(): void {
-		$dir = get_temp_dir() . 'vatline-scan-' . wp_generate_password( 6, false );
+		$dir = get_temp_dir() . 'vatright-scan-' . wp_generate_password( 6, false );
 		wp_mkdir_p( $dir );
-		file_put_contents( $dir . '/Bad.php', "<?php\nnamespace Vatline\\Ledger;\nclass Bad {\n\tpublic function go() {\n\t\tas_enqueue_async_action( 'vatline_nobody_listens', array( 1, 2 ), 'g' );\n\t\tas_schedule_single_action( time() + 60, Backfill::HOOK, array(), 'g' );\n\t}\n}\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+		file_put_contents( $dir . '/Bad.php', "<?php\nnamespace Vatright\\Ledger;\nclass Bad {\n\tpublic function go() {\n\t\tas_enqueue_async_action( 'vatright_nobody_listens', array( 1, 2 ), 'g' );\n\t\tas_schedule_single_action( time() + 60, Backfill::HOOK, array(), 'g' );\n\t}\n}\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 
 		$calls = self::calls_in( $dir );
 		array_map( 'unlink', (array) glob( $dir . '/*' ) );
 		rmdir( $dir ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir
 
-		$this->assertSame( array( 'vatline_nobody_listens', 2 ), array_slice( $calls['Bad.php:5'], 1 ) );
-		$this->assertSame( array( 'vatline_backfill_batch', 0 ), array_slice( $calls['Bad.php:6'], 1 ) );
-		$this->assertFalse( has_action( 'vatline_nobody_listens' ) );
+		$this->assertSame( array( 'vatright_nobody_listens', 2 ), array_slice( $calls['Bad.php:5'], 1 ) );
+		$this->assertSame( array( 'vatright_backfill_batch', 0 ), array_slice( $calls['Bad.php:6'], 1 ) );
+		$this->assertFalse( has_action( 'vatright_nobody_listens' ) );
 	}
 }

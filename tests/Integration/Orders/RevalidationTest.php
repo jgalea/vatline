@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Tests\Integration\Orders;
+namespace Vatright\Tests\Integration\Orders;
 
-use Vatline\Orders\DecisionStore;
-use Vatline\Orders\Revalidation;
-use Vatline\Registry\ValidationCache;
-use Vatline\Settings;
+use Vatright\Orders\DecisionStore;
+use Vatright\Orders\Revalidation;
+use Vatright\Registry\ValidationCache;
+use Vatright\Settings;
 
 require_once __DIR__ . '/LifecycleTestCase.php';
 require_once dirname( __DIR__, 2 ) . '/Support/WcsStandIn.php';

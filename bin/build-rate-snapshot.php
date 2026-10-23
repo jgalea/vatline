@@ -1,8 +1,8 @@
 <?php
 // phpcs:ignoreFile -- dev-only script, not shipped. Rebuilds data/rates.json from the live EU TEDB service: php bin/build-rate-snapshot.php [YYYY-MM-DD]
 
-use Vatline\Rates\Tedb;
-use Vatline\Registry\HttpTransport;
+use Vatright\Rates\Tedb;
+use Vatright\Registry\HttpTransport;
 
 require dirname( __DIR__ ) . '/vendor/autoload.php';
 

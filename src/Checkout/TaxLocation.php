@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Checkout;
+namespace Vatright\Checkout;
 
-use Vatline\Domain\Decision;
-use Vatline\Domain\Line;
-use Vatline\Domain\LineDecision;
-use Vatline\Domain\Scheme;
+use Vatright\Domain\Decision;
+use Vatright\Domain\Line;
+use Vatright\Domain\LineDecision;
+use Vatright\Domain\Scheme;
 use WC_Tax;
 
 /**
@@ -23,7 +23,7 @@ final class TaxLocation {
 
 	const MISSING_FLAG = 'rate_missing';
 
-	const MISSING_OPTION = 'vatline_rate_missing';
+	const MISSING_OPTION = 'vatright_rate_missing';
 
 	const UNTAXED_SCHEMES = array(
 		Scheme::EXPORT,

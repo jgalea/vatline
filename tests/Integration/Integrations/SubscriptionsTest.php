@@ -1,23 +1,23 @@
 <?php
 
-namespace Vatline\Tests\Integration\Integrations;
+namespace Vatright\Tests\Integration\Integrations;
 
-use Vatline\Checkout\InputGatherer;
-use Vatline\Domain\Rules;
-use Vatline\Integrations\Subscriptions;
-use Vatline\Ledger\Fx;
-use Vatline\Ledger\ThresholdTracker;
-use Vatline\Orders\DecisionStore;
-use Vatline\Registry\Brreg;
-use Vatline\Registry\Hmrc;
-use Vatline\Registry\Router;
-use Vatline\Registry\SwissUid;
-use Vatline\Registry\ValidationCache;
-use Vatline\Registry\Validator;
-use Vatline\Registry\Vies;
-use Vatline\Registry\WpHttpTransport;
-use Vatline\Settings;
-use Vatline\Tests\Integration\Checkout\CheckoutTestCase;
+use Vatright\Checkout\InputGatherer;
+use Vatright\Domain\Rules;
+use Vatright\Integrations\Subscriptions;
+use Vatright\Ledger\Fx;
+use Vatright\Ledger\ThresholdTracker;
+use Vatright\Orders\DecisionStore;
+use Vatright\Registry\Brreg;
+use Vatright\Registry\Hmrc;
+use Vatright\Registry\Router;
+use Vatright\Registry\SwissUid;
+use Vatright\Registry\ValidationCache;
+use Vatright\Registry\Validator;
+use Vatright\Registry\Vies;
+use Vatright\Registry\WpHttpTransport;
+use Vatright\Settings;
+use Vatright\Tests\Integration\Checkout\CheckoutTestCase;
 use RuntimeException;
 use WC_Order;
 use WC_Order_Item_Product;
@@ -36,7 +36,7 @@ class SubscriptionsTest extends CheckoutTestCase {
 	const DOWN = '{"actionSucceed":false,"errorWrappers":[{"error":"MS_UNAVAILABLE"}]}';
 
 	public function set_up() {
-		if ( class_exists( 'WC_Subscriptions' ) && ! defined( 'VATLINE_TEST_WCS_STAND_IN' ) ) {
+		if ( class_exists( 'WC_Subscriptions' ) && ! defined( 'VATRIGHT_TEST_WCS_STAND_IN' ) ) {
 			$this->markTestSkipped( 'The real WooCommerce Subscriptions is active; these tests drive a stand-in.' );
 		}
 		parent::set_up();
@@ -224,7 +224,7 @@ class SubscriptionsTest extends CheckoutTestCase {
 		$switch = $this->order( WC_Order::class );
 		$this->decide_and_store( $switch );
 		add_filter(
-			'vatline_test_wcs_switch_subscriptions',
+			'vatright_test_wcs_switch_subscriptions',
 			static function () use ( $sub ) {
 				return array( $sub->get_id() => $sub );
 			}

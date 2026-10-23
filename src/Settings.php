@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline;
+namespace Vatright;
 
 class Settings {
 
-	const OPTION = 'vatline_settings';
+	const OPTION = 'vatright_settings';
 
 	/** @var Settings|null */
 	private static $instance = null;

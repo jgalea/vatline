@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Tests\Unit\Domain;
+namespace Vatright\Tests\Unit\Domain;
 
-use Vatline\Domain\Rule;
-use Vatline\Domain\Scheme;
+use Vatright\Domain\Rule;
+use Vatright\Domain\Scheme;
 use PHPUnit\Framework\TestCase;
 
 class SchemeRuleTest extends TestCase {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Tests\Integration\Reports;
+namespace Vatright\Tests\Integration\Reports;
 
-use Vatline\Domain\Scheme;
-use Vatline\Ledger\Fx;
-use Vatline\Reports\OssReport;
+use Vatright\Domain\Scheme;
+use Vatright\Ledger\Fx;
+use Vatright\Reports\OssReport;
 use RuntimeException;
 
 require_once __DIR__ . '/ReportsTestCase.php';

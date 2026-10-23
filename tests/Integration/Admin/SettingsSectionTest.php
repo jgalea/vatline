@@ -1,14 +1,14 @@
 <?php
 
-namespace Vatline\Tests\Integration\Admin;
+namespace Vatright\Tests\Integration\Admin;
 
-use Vatline\Admin\SettingsSection;
-use Vatline\Admin\SetupCheck;
-use Vatline\Ledger\Backfill;
-use Vatline\Rates\RateSync;
-use Vatline\Settings;
-use Vatline\Tests\Support\IntegrationTestCase;
-use Vatline\Domain\ValidationResult;
+use Vatright\Admin\SettingsSection;
+use Vatright\Admin\SetupCheck;
+use Vatright\Ledger\Backfill;
+use Vatright\Rates\RateSync;
+use Vatright\Settings;
+use Vatright\Tests\Support\IntegrationTestCase;
+use Vatright\Domain\ValidationResult;
 use ReflectionProperty;
 use WC_Admin_Settings;
 
@@ -197,7 +197,7 @@ class SettingsSectionTest extends IntegrationTestCase {
 		WC_Admin_Settings::output_fields( $this->section->fields() );
 		$html = ob_get_clean();
 		$this->assertStringContainsString( 'notice-error', $html );
-		$this->assertLessThan( strpos( $html, 'vatline_settings[store_vat_number]' ), strpos( $html, 'notice-error' ) );
+		$this->assertLessThan( strpos( $html, 'vatright_settings[store_vat_number]' ), strpos( $html, 'notice-error' ) );
 	}
 
 	public function test_initial_jobs_scheduled_once(): void {
@@ -219,7 +219,7 @@ class SettingsSectionTest extends IntegrationTestCase {
 	}
 
 	private function notice_output(): string {
-		set_current_screen( 'dashboard' );
+		set_current_screen( 'woocommerce_page_wc-settings' );
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
 		update_option( 'woocommerce_calc_taxes', 'no' );
 		ob_start();
@@ -229,6 +229,16 @@ class SettingsSectionTest extends IntegrationTestCase {
 
 	public function test_blocking_setup_problem_shows_a_dismissible_notice(): void {
 		$this->assertStringContainsString( 'data-issue="taxes_disabled"', $this->notice_output() );
+	}
+
+	public function test_setup_notice_stays_off_the_dashboard(): void {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		update_option( 'woocommerce_calc_taxes', 'no' );
+		set_current_screen( 'dashboard' );
+
+		ob_start();
+		$this->section->setup_notice();
+		$this->assertSame( '', ob_get_clean() );
 	}
 
 	public function test_taxes_off_notice_links_to_the_general_tab_setting(): void {

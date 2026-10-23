@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Orders;
+namespace Vatright\Orders;
 
-use Vatline\Domain\ValidationResult;
+use Vatright\Domain\ValidationResult;
 use WC_Order;
 
 /**
@@ -30,8 +30,8 @@ class InvoiceText {
 
 		$number = (string) ( $record['vat_number']['canonical'] ?? '' );
 		if ( '' !== $number ) {
-			$rows['vatline_number'] = array(
-				'label' => __( 'Customer VAT number', 'vatline' ),
+			$rows['vatright_number'] = array(
+				'label' => __( 'Customer VAT number', 'vatright' ),
 				'value' => esc_html( $number ),
 			);
 		}
@@ -39,8 +39,8 @@ class InvoiceText {
 		foreach ( $decision->legal_text() as $key ) {
 			$text = self::legal_text( $key, $order );
 			if ( '' !== $text ) {
-				$rows[ 'vatline_legal_' . $key ] = array(
-					'label' => __( 'VAT note', 'vatline' ),
+				$rows[ 'vatright_legal_' . $key ] = array(
+					'label' => __( 'VAT note', 'vatright' ),
 					'value' => esc_html( $text ),
 				);
 			}
@@ -48,8 +48,8 @@ class InvoiceText {
 
 		$consultation = (string) ( $record['validation']['consultation'] ?? '' );
 		if ( '' !== $consultation && ValidationResult::VALID === ( $record['validation']['status'] ?? '' ) ) {
-			$rows['vatline_consultation'] = array(
-				'label' => __( 'VAT number consultation reference', 'vatline' ),
+			$rows['vatright_consultation'] = array(
+				'label' => __( 'VAT number consultation reference', 'vatright' ),
 				'value' => esc_html( $consultation ),
 			);
 		}
@@ -59,14 +59,14 @@ class InvoiceText {
 	public static function legal_text( string $key, ?WC_Order $order = null ): string {
 		switch ( $key ) {
 			case 'art196':
-				$text = __( 'Reverse charge: VAT to be accounted for by the recipient, Article 196 Council Directive 2006/112/EC', 'vatline' );
+				$text = __( 'Reverse charge: VAT to be accounted for by the recipient, Article 196 Council Directive 2006/112/EC', 'vatright' );
 				break;
 			case 'art138':
-				$text = __( 'Exempt intra-Community supply of goods, Article 138 Council Directive 2006/112/EC', 'vatline' );
+				$text = __( 'Exempt intra-Community supply of goods, Article 138 Council Directive 2006/112/EC', 'vatright' );
 				break;
 			default:
 				$text = '';
 		}
-		return (string) apply_filters( 'vatline_legal_text', $text, $key, $order );
+		return (string) apply_filters( 'vatright_legal_text', $text, $key, $order );
 	}
 }

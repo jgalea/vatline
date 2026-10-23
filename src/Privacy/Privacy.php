@@ -1,19 +1,19 @@
 <?php
 
-namespace Vatline\Privacy;
+namespace Vatright\Privacy;
 
-use Vatline\Checkout\InputGatherer;
-use Vatline\Checkout\VatField;
-use Vatline\Domain\VatNumber;
-use Vatline\Orders\DecisionStore;
-use Vatline\Registry\ValidationCache;
-use Vatline\Ledger\Schema;
-use Vatline\Settings;
+use Vatright\Checkout\InputGatherer;
+use Vatright\Checkout\VatField;
+use Vatright\Domain\VatNumber;
+use Vatright\Orders\DecisionStore;
+use Vatright\Registry\ValidationCache;
+use Vatright\Ledger\Schema;
+use Vatright\Settings;
 use WC_Order;
 
 class Privacy {
 
-	const GROUP    = 'vatline';
+	const GROUP    = 'vatright';
 	const PER_PAGE = 25;
 
 	/**
@@ -41,7 +41,7 @@ class Privacy {
 	 */
 	public function add_exporter( array $exporters ): array {
 		$exporters[ self::GROUP ] = array(
-			'exporter_friendly_name' => __( 'EU VAT records', 'vatline' ),
+			'exporter_friendly_name' => __( 'EU VAT records', 'vatright' ),
 			'callback'               => array( $this, 'export' ),
 		);
 		return $exporters;
@@ -53,7 +53,7 @@ class Privacy {
 	 */
 	public function add_eraser( array $erasers ): array {
 		$erasers[ self::GROUP ] = array(
-			'eraser_friendly_name' => __( 'EU VAT records', 'vatline' ),
+			'eraser_friendly_name' => __( 'EU VAT records', 'vatright' ),
 			'callback'             => array( $this, 'erase' ),
 		);
 		return $erasers;
@@ -72,11 +72,11 @@ class Privacy {
 		if ( '' !== $saved ) {
 			$items[] = array(
 				'group_id'    => self::GROUP,
-				'group_label' => __( 'EU VAT records', 'vatline' ),
-				'item_id'     => 'vatline-account-' . $user_id,
+				'group_label' => __( 'EU VAT records', 'vatright' ),
+				'item_id'     => 'vatright-account-' . $user_id,
 				'data'        => array(
 					array(
-						'name'  => __( 'Saved VAT number', 'vatline' ),
+						'name'  => __( 'Saved VAT number', 'vatright' ),
 						'value' => $saved,
 					),
 				),
@@ -88,34 +88,34 @@ class Privacy {
 			$record  = is_array( $record ) ? $record : array();
 			$data    = array(
 				array(
-					'name'  => __( 'Order', 'vatline' ),
+					'name'  => __( 'Order', 'vatright' ),
 					'value' => $order->get_order_number(),
 				),
 				array(
-					'name'  => __( 'VAT number', 'vatline' ),
+					'name'  => __( 'VAT number', 'vatright' ),
 					'value' => (string) $order->get_meta( DecisionStore::NUMBER_META ),
 				),
 				array(
-					'name'  => __( 'Registered name', 'vatline' ),
+					'name'  => __( 'Registered name', 'vatright' ),
 					'value' => (string) ( $record['validation']['name'] ?? '' ),
 				),
 				array(
-					'name'  => __( 'Registered address', 'vatline' ),
+					'name'  => __( 'Registered address', 'vatright' ),
 					'value' => (string) ( $record['validation']['address'] ?? '' ),
 				),
 				array(
-					'name'  => __( 'Consultation number', 'vatline' ),
+					'name'  => __( 'Consultation number', 'vatright' ),
 					'value' => (string) ( $record['validation']['consultation'] ?? '' ),
 				),
 				array(
-					'name'  => __( 'Country of IP address', 'vatline' ),
+					'name'  => __( 'Country of IP address', 'vatright' ),
 					'value' => (string) ( $record['evidence']['ip'] ?? '' ),
 				),
 			);
 			$items[] = array(
 				'group_id'    => self::GROUP,
-				'group_label' => __( 'EU VAT records', 'vatline' ),
-				'item_id'     => 'vatline-order-' . $order->get_id(),
+				'group_label' => __( 'EU VAT records', 'vatright' ),
+				'item_id'     => 'vatright-order-' . $order->get_id(),
 				'data'        => array_values(
 					array_filter(
 						$data,
@@ -129,31 +129,31 @@ class Privacy {
 			foreach ( $this->ledger_rows( $order->get_id() ) as $row ) {
 				$items[] = array(
 					'group_id'    => self::GROUP . '-ledger',
-					'group_label' => __( 'EU VAT ledger', 'vatline' ),
-					'item_id'     => 'vatline-ledger-' . $row['id'],
+					'group_label' => __( 'EU VAT ledger', 'vatright' ),
+					'item_id'     => 'vatright-ledger-' . $row['id'],
 					'data'        => array(
 						array(
-							'name'  => __( 'Order', 'vatline' ),
+							'name'  => __( 'Order', 'vatright' ),
 							'value' => $order->get_order_number(),
 						),
 						array(
-							'name'  => __( 'Period', 'vatline' ),
+							'name'  => __( 'Period', 'vatright' ),
 							'value' => $row['period'],
 						),
 						array(
-							'name'  => __( 'Scheme', 'vatline' ),
+							'name'  => __( 'Scheme', 'vatright' ),
 							'value' => $row['scheme'],
 						),
 						array(
-							'name'  => __( 'VAT number', 'vatline' ),
+							'name'  => __( 'VAT number', 'vatright' ),
 							'value' => (string) $row['customer_vat'],
 						),
 						array(
-							'name'  => __( 'Net', 'vatline' ),
+							'name'  => __( 'Net', 'vatright' ),
 							'value' => $row['net'] . ' ' . $row['currency'],
 						),
 						array(
-							'name'  => __( 'VAT', 'vatline' ),
+							'name'  => __( 'VAT', 'vatright' ),
 							'value' => $row['vat'] . ' ' . $row['currency'],
 						),
 					),
@@ -206,7 +206,7 @@ class Privacy {
 				$retained   = true;
 				$messages[] = sprintf(
 					/* translators: 1: order number, 2: date */
-					__( 'The VAT number and registry check for order %1$s are kept until %2$s because tax law requires VAT records to be kept.', 'vatline' ),
+					__( 'The VAT number and registry check for order %1$s are kept until %2$s because tax law requires VAT records to be kept.', 'vatright' ),
 					$order->get_order_number(),
 					wp_date( get_option( 'date_format' ), Retention::retained_until( $order )->getTimestamp() )
 				);
@@ -228,7 +228,7 @@ class Privacy {
 		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
 			return;
 		}
-		wp_add_privacy_policy_content( 'Vatline – EU VAT & OSS for WooCommerce', wp_kses_post( wpautop( $this->policy_text() ) ) );
+		wp_add_privacy_policy_content( 'VAT Right – EU VAT & OSS for WooCommerce', wp_kses_post( wpautop( $this->policy_text() ) ) );
 	}
 
 	public function policy_text(): string {
@@ -240,7 +240,7 @@ class Privacy {
 We store the VAT number, the registry result including that name and address and the consultation number, and the country of the customer\'s IP address with the order. We use the IP country, together with the billing and shipping country, as evidence of where the sale takes place. Registry results are also cached for a short period.
 
 EU VAT rules require us to keep these records for %d years after the end of the year of the sale. Within that period a request to erase them cannot be met, and we keep only what the VAT records need. After that period the VAT number, registered name and address, consultation number and IP country are removed from the order and the VAT ledger automatically.',
-				'vatline'
+				'vatright'
 			),
 			Settings::get()->retention_years()
 		);

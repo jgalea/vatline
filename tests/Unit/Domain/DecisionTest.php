@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Tests\Unit\Domain;
+namespace Vatright\Tests\Unit\Domain;
 
-use Vatline\Domain\Decision;
-use Vatline\Domain\LineDecision;
-use Vatline\Domain\Rule;
-use Vatline\Domain\Scheme;
+use Vatright\Domain\Decision;
+use Vatright\Domain\LineDecision;
+use Vatright\Domain\Rule;
+use Vatright\Domain\Scheme;
 use PHPUnit\Framework\TestCase;
 
 class DecisionTest extends TestCase {

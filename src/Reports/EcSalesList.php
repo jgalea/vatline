@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Reports;
+namespace Vatright\Reports;
 
-use Vatline\Ledger\Schema;
+use Vatright\Ledger\Schema;
 
 class EcSalesList {
 
@@ -63,10 +63,10 @@ class EcSalesList {
 	 */
 	public static function csv( array $rows ): array {
 		$header = array(
-			__( 'VAT number', 'vatline' ),
-			__( 'Country', 'vatline' ),
-			__( 'Goods or services', 'vatline' ),
-			__( 'Net amount (EUR)', 'vatline' ),
+			__( 'VAT number', 'vatright' ),
+			__( 'Country', 'vatright' ),
+			__( 'Goods or services', 'vatright' ),
+			__( 'Net amount (EUR)', 'vatright' ),
 		);
 		$lines  = array();
 		foreach ( $rows as $row ) {

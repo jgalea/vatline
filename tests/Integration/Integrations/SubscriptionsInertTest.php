@@ -1,13 +1,13 @@
 <?php
 
-namespace Vatline\Tests\Integration\Integrations;
+namespace Vatright\Tests\Integration\Integrations;
 
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Tests\Support\IntegrationTestCase;
 
 class SubscriptionsInertTest extends IntegrationTestCase {
 
 	public function test_nothing_is_hooked_without_subscriptions() {
-		if ( class_exists( 'WC_Subscriptions' ) && ! defined( 'VATLINE_TEST_WCS_STAND_IN' ) ) {
+		if ( class_exists( 'WC_Subscriptions' ) && ! defined( 'VATRIGHT_TEST_WCS_STAND_IN' ) ) {
 			$this->markTestSkipped( 'WooCommerce Subscriptions is active, so the plugin legitimately hooks into it.' );
 		}
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Tests\Unit\Registry;
+namespace Vatright\Tests\Unit\Registry;
 
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
-use Vatline\Registry\Brreg;
-use Vatline\Tests\Support\FixtureTransport;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
+use Vatright\Registry\Brreg;
+use Vatright\Tests\Support\FixtureTransport;
 use PHPUnit\Framework\TestCase;
 
 require_once dirname( __DIR__, 2 ) . '/Support/FixtureTransport.php';

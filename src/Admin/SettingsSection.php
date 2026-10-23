@@ -1,27 +1,27 @@
 <?php
 
-namespace Vatline\Admin;
+namespace Vatright\Admin;
 
-use Vatline\Checkout\VatField;
-use Vatline\Domain\FormatCheck;
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
-use Vatline\Ledger\Backfill;
-use Vatline\Rates\RateSync;
-use Vatline\Settings;
+use Vatright\Checkout\VatField;
+use Vatright\Domain\FormatCheck;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
+use Vatright\Ledger\Backfill;
+use Vatright\Rates\RateSync;
+use Vatright\Settings;
 use WC_Admin_Settings;
 
 class SettingsSection {
 
-	const SECTION = 'vatline';
+	const SECTION = 'vatright';
 
-	const JOBS_SCHEDULED = 'vatline_jobs_scheduled';
+	const JOBS_SCHEDULED = 'vatright_jobs_scheduled';
 
-	const AS_GROUP = 'vatline';
+	const AS_GROUP = 'vatright';
 
-	const DISMISS_ACTION = 'vatline_dismiss_setup_notice';
+	const DISMISS_ACTION = 'vatright_dismiss_setup_notice';
 
-	const DISMISSED_META = 'vatline_dismissed_setup_notice';
+	const DISMISSED_META = 'vatright_dismissed_setup_notice';
 
 	/** @var SetupCheck */
 	private $setup_check;
@@ -53,10 +53,10 @@ class SettingsSection {
 		add_filter( 'woocommerce_get_sections_tax', array( $this, 'add_section' ) );
 		add_filter( 'woocommerce_get_settings_tax', array( $this, 'settings_for_section' ), 10, 2 );
 		add_filter( 'woocommerce_admin_settings_sanitize_option', array( $this, 'sanitize' ), 10, 2 );
-		add_action( 'woocommerce_admin_field_vatline_setup_check', array( $this, 'render_setup_check' ) );
+		add_action( 'woocommerce_admin_field_vatright_setup_check', array( $this, 'render_setup_check' ) );
 		add_action( 'woocommerce_after_settings_tax', array( $this, 'render_rates' ) );
 		if ( null !== $this->mapping_editor ) {
-			add_action( 'woocommerce_admin_field_vatline_rate_mapping', array( $this->mapping_editor, 'render' ) );
+			add_action( 'woocommerce_admin_field_vatright_rate_mapping', array( $this->mapping_editor, 'render' ) );
 			add_action( 'woocommerce_update_options_tax_' . self::SECTION, array( $this->mapping_editor, 'save' ) );
 		}
 		add_action( 'admin_notices', array( $this, 'setup_notice' ) );
@@ -74,7 +74,7 @@ class SettingsSection {
 	 * @return array<string,string>
 	 */
 	public function add_section( $sections ): array {
-		$sections[ self::SECTION ] = __( 'Vatline', 'vatline' );
+		$sections[ self::SECTION ] = __( 'VAT Right', 'vatright' );
 		return $sections;
 	}
 
@@ -98,19 +98,19 @@ class SettingsSection {
 
 		$mapping = null === $this->mapping_editor ? array() : array(
 			array(
-				'title' => __( 'Tax class mapping', 'vatline' ),
-				'desc'  => __( 'Choose which EU rate each tax class follows. For reduced rates, pick the rate for each country from the EU list. Rates are only applied when you review and apply them in the rates table below.', 'vatline' ),
+				'title' => __( 'Tax class mapping', 'vatright' ),
+				'desc'  => __( 'Choose which EU rate each tax class follows. For reduced rates, pick the rate for each country from the EU list. Rates are only applied when you review and apply them in the rates table below.', 'vatright' ),
 				'type'  => 'title',
-				'id'    => 'vatline_mapping',
+				'id'    => 'vatright_mapping',
 			),
 			array(
-				'type'      => 'vatline_rate_mapping',
-				'id'        => 'vatline_rate_mapping',
+				'type'      => 'vatright_rate_mapping',
+				'id'        => 'vatright_rate_mapping',
 				'is_option' => false,
 			),
 			array(
 				'type' => 'sectionend',
-				'id'   => 'vatline_mapping',
+				'id'   => 'vatright_mapping',
 			),
 		);
 
@@ -127,56 +127,56 @@ class SettingsSection {
 	private function main_fields( Settings $s ): array {
 		return array(
 			array(
-				'type'      => 'vatline_setup_check',
-				'id'        => 'vatline_setup_check',
+				'type'      => 'vatright_setup_check',
+				'id'        => 'vatright_setup_check',
 				'is_option' => false,
 			),
 			array(
-				'title' => __( 'Store', 'vatline' ),
+				'title' => __( 'Store', 'vatright' ),
 				'type'  => 'title',
-				'id'    => 'vatline_store',
+				'id'    => 'vatright_store',
 			),
 			$this->field(
 				'store_vat_number',
 				'text',
-				__( 'Store VAT number', 'vatline' ),
+				__( 'Store VAT number', 'vatright' ),
 				$s->store_vat_number(),
-				array( 'desc_tip' => __( 'Sent to VIES as the requester, which returns a consultation number as proof of each check.', 'vatline' ) )
+				array( 'desc_tip' => __( 'Sent to VIES as the requester, which returns a consultation number as proof of each check.', 'vatright' ) )
 			),
 			$this->field(
 				'report_currency',
 				'select',
-				__( 'Report currency', 'vatline' ),
+				__( 'Report currency', 'vatright' ),
 				$s->report_currency(),
 				array( 'options' => get_woocommerce_currencies() )
 			),
 			array(
 				'type' => 'sectionend',
-				'id'   => 'vatline_store',
+				'id'   => 'vatright_store',
 			),
 			array(
-				'title' => __( 'VAT number validation', 'vatline' ),
+				'title' => __( 'VAT number validation', 'vatright' ),
 				'type'  => 'title',
-				'id'    => 'vatline_validation',
+				'id'    => 'vatright_validation',
 			),
 			$this->field(
 				'outage_policy',
 				'select',
-				__( 'When a registry is unavailable', 'vatline' ),
+				__( 'When a registry is unavailable', 'vatright' ),
 				$s->outage_policy(),
 				array(
 					'options'  => array(
-						'charge'         => __( 'Accept the order, charge VAT and flag it', 'vatline' ),
-						'exempt_pending' => __( 'Accept the order, exempt VAT and re-check later', 'vatline' ),
-						'reject'         => __( 'Do not accept the order', 'vatline' ),
+						'charge'         => __( 'Accept the order, charge VAT and flag it', 'vatright' ),
+						'exempt_pending' => __( 'Accept the order, exempt VAT and re-check later', 'vatright' ),
+						'reject'         => __( 'Do not accept the order', 'vatright' ),
 					),
-					'desc_tip' => __( 'Charging VAT and flagging the order is the safe choice: you can refund the VAT once the number validates.', 'vatline' ),
+					'desc_tip' => __( 'Charging VAT and flagging the order is the safe choice: you can refund the VAT once the number validates.', 'vatright' ),
 				)
 			),
 			$this->field(
 				'cache_ttl_valid_days',
 				'number',
-				__( 'Keep valid results for (days)', 'vatline' ),
+				__( 'Keep valid results for (days)', 'vatright' ),
 				$s->cache_ttl_valid_days(),
 				array(
 					'css'               => 'width: 80px;',
@@ -186,23 +186,23 @@ class SettingsSection {
 					),
 				)
 			),
-			$this->checkbox( 'self_certification', __( 'Self-certification', 'vatline' ), __( 'Ask digital customers to confirm their country when the evidence conflicts', 'vatline' ), $s->self_certification() ),
-			$this->checkbox( 'allow_domestic_exemption', __( 'Domestic B2B', 'vatline' ), __( 'Allow VAT exemption for valid numbers from the store country', 'vatline' ), $s->allow_domestic_exemption() ),
-			$this->checkbox( 'notify_admin_on_revalidation', __( 'Revalidation emails', 'vatline' ), __( 'Email the admin when a number validates after the order was placed', 'vatline' ), $s->notify_admin_on_revalidation() ),
+			$this->checkbox( 'self_certification', __( 'Self-certification', 'vatright' ), __( 'Ask digital customers to confirm their country when the evidence conflicts', 'vatright' ), $s->self_certification() ),
+			$this->checkbox( 'allow_domestic_exemption', __( 'Domestic B2B', 'vatright' ), __( 'Allow VAT exemption for valid numbers from the store country', 'vatright' ), $s->allow_domestic_exemption() ),
+			$this->checkbox( 'notify_admin_on_revalidation', __( 'Revalidation emails', 'vatright' ), __( 'Email the admin when a number validates after the order was placed', 'vatright' ), $s->notify_admin_on_revalidation() ),
 			array(
 				'type' => 'sectionend',
-				'id'   => 'vatline_validation',
+				'id'   => 'vatright_validation',
 			),
 			array(
-				'title' => __( 'Tax treatment', 'vatline' ),
+				'title' => __( 'Tax treatment', 'vatright' ),
 				'type'  => 'title',
-				'id'    => 'vatline_treatment',
+				'id'    => 'vatright_treatment',
 			),
-			$this->checkbox( 'oss_registered', __( 'OSS', 'vatline' ), __( 'I am registered for the One Stop Shop (always charge destination VAT)', 'vatline' ), $s->oss_registered() ),
-			$this->checkbox( 'fixed_prices', __( 'Fixed prices', 'vatline' ), __( 'Keep gross prices the same in every EU country (prices entered with tax)', 'vatline' ), $s->fixed_prices() ),
+			$this->checkbox( 'oss_registered', __( 'OSS', 'vatright' ), __( 'I am registered for the One Stop Shop (always charge destination VAT)', 'vatright' ), $s->oss_registered() ),
+			$this->checkbox( 'fixed_prices', __( 'Fixed prices', 'vatright' ), __( 'Keep gross prices the same in every EU country (prices entered with tax)', 'vatright' ), $s->fixed_prices() ),
 			array(
 				'type' => 'sectionend',
-				'id'   => 'vatline_treatment',
+				'id'   => 'vatright_treatment',
 			),
 		);
 	}
@@ -213,36 +213,36 @@ class SettingsSection {
 	private function data_fields( Settings $s ): array {
 		return array(
 			array(
-				'title' => __( 'HMRC (optional)', 'vatline' ),
-				'desc'  => __( 'Credentials from your own HMRC Developer Hub application. Without them GB numbers are format-checked only.', 'vatline' ),
+				'title' => __( 'HMRC (optional)', 'vatright' ),
+				'desc'  => __( 'Credentials from your own HMRC Developer Hub application. Without them GB numbers are format-checked only.', 'vatright' ),
 				'type'  => 'title',
-				'id'    => 'vatline_hmrc',
+				'id'    => 'vatright_hmrc',
 			),
-			$this->field( 'hmrc_client_id', 'text', __( 'Client ID', 'vatline' ), $s->hmrc_client_id() ),
+			$this->field( 'hmrc_client_id', 'text', __( 'Client ID', 'vatright' ), $s->hmrc_client_id() ),
 			$this->field(
 				'hmrc_client_secret',
 				'password',
-				__( 'Client secret', 'vatline' ),
+				__( 'Client secret', 'vatright' ),
 				'',
 				array(
-					'placeholder'       => '' === $s->hmrc_client_secret() ? '' : __( 'Saved. Leave empty to keep it.', 'vatline' ),
-					'desc_tip'          => __( 'The saved secret is never shown. Clear the client ID to remove it.', 'vatline' ),
+					'placeholder'       => '' === $s->hmrc_client_secret() ? '' : __( 'Saved. Leave empty to keep it.', 'vatright' ),
+					'desc_tip'          => __( 'The saved secret is never shown. Clear the client ID to remove it.', 'vatright' ),
 					'custom_attributes' => array( 'autocomplete' => 'new-password' ),
 				)
 			),
 			array(
 				'type' => 'sectionend',
-				'id'   => 'vatline_hmrc',
+				'id'   => 'vatright_hmrc',
 			),
 			array(
-				'title' => __( 'Data', 'vatline' ),
+				'title' => __( 'Data', 'vatright' ),
 				'type'  => 'title',
-				'id'    => 'vatline_data',
+				'id'    => 'vatright_data',
 			),
 			$this->field(
 				'retention_years',
 				'number',
-				__( 'Keep VAT records for (years)', 'vatline' ),
+				__( 'Keep VAT records for (years)', 'vatright' ),
 				$s->retention_years(),
 				array(
 					'css'               => 'width: 80px;',
@@ -252,10 +252,10 @@ class SettingsSection {
 					),
 				)
 			),
-			$this->checkbox( 'delete_data_on_uninstall', __( 'Uninstall', 'vatline' ), __( 'Delete all plugin data when the plugin is deleted', 'vatline' ), $s->delete_data_on_uninstall() ),
+			$this->checkbox( 'delete_data_on_uninstall', __( 'Uninstall', 'vatright' ), __( 'Delete all plugin data when the plugin is deleted', 'vatright' ), $s->delete_data_on_uninstall() ),
 			array(
 				'type' => 'sectionend',
-				'id'   => 'vatline_data',
+				'id'   => 'vatright_data',
 			),
 		);
 	}
@@ -293,9 +293,9 @@ class SettingsSection {
 
 	public function render_setup_check(): void {
 		$issues = $this->setup_check->issues();
-		echo '<h2>' . esc_html__( 'Setup check', 'vatline' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Setup check', 'vatright' ) . '</h2>';
 		if ( ! $issues ) {
-			echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Nothing to fix.', 'vatline' ) . '</p></div>';
+			echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Nothing to fix.', 'vatright' ) . '</p></div>';
 			return;
 		}
 		foreach ( $issues as $issue ) {
@@ -304,7 +304,7 @@ class SettingsSection {
 				esc_attr( self::notice_class( $issue['severity'] ) ),
 				esc_html( $issue['message'] ),
 				esc_url( $issue['fix_url'] ),
-				esc_html__( 'Fix', 'vatline' )
+				esc_html__( 'Fix', 'vatright' )
 			);
 		}
 	}
@@ -314,7 +314,7 @@ class SettingsSection {
 		if ( self::SECTION !== $current_section || null === $this->rates_renderer ) {
 			return;
 		}
-		echo '<div class="vatline-rates">';
+		echo '<div class="vatright-rates">';
 		( $this->rates_renderer )();
 		echo '</div>';
 	}
@@ -324,10 +324,10 @@ class SettingsSection {
 			return;
 		}
 		$screen = get_current_screen();
-		if ( ! $screen || ! in_array( $screen->id, array( 'dashboard', 'woocommerce_page_wc-settings' ), true ) ) {
+		if ( ! $screen || 'woocommerce_page_wc-settings' !== $screen->id ) {
 			return;
 		}
-		$on_section = 'woocommerce_page_wc-settings' === $screen->id && isset( $_GET['section'] ) && self::SECTION === $_GET['section']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
+		$on_section = isset( $_GET['section'] ) && self::SECTION === $_GET['section']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
 		if ( $on_section ) {
 			return;
 		}
@@ -344,29 +344,29 @@ class SettingsSection {
 		if ( get_user_meta( get_current_user_id(), self::DISMISSED_META, true ) === $first['id'] ) {
 			return;
 		}
-		// WooCommerce hides the Tax tab while taxes are off, so the Vatline section can't be reached yet.
+		// WooCommerce hides the Tax tab while taxes are off, so the VAT Right section can't be reached yet.
 		$taxes_off = 'taxes_disabled' === $first['id'];
 		printf(
-			'<div class="notice notice-error is-dismissible vatline-setup-notice" data-issue="%1$s"><p>%2$s <a href="%3$s">%4$s</a></p></div>',
+			'<div class="notice notice-error is-dismissible vatright-setup-notice" data-issue="%1$s"><p>%2$s <a href="%3$s">%4$s</a></p></div>',
 			esc_attr( $first['id'] ),
 			esc_html( $first['message'] ),
 			esc_url( $taxes_off ? $first['fix_url'] : self::url() ),
-			$taxes_off ? esc_html__( 'Turn on "Enable tax rates and calculations"', 'vatline' ) : esc_html__( 'Open the Vatline setup check', 'vatline' )
+			$taxes_off ? esc_html__( 'Turn on "Enable tax rates and calculations"', 'vatright' ) : esc_html__( 'Open the VAT Right setup check', 'vatright' )
 		);
 	}
 
 	public function enqueue_script(): void {
 		$screen = get_current_screen();
-		if ( ! $screen || ! in_array( $screen->id, array( 'dashboard', 'woocommerce_page_wc-settings' ), true ) || ! current_user_can( 'manage_woocommerce' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown
+		if ( ! $screen || 'woocommerce_page_wc-settings' !== $screen->id || ! current_user_can( 'manage_woocommerce' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown
 			return;
 		}
 		$style = VatField::asset( 'assets/admin.css' );
-		wp_enqueue_style( 'vatline-admin', $style['url'], array(), $style['version'] );
+		wp_enqueue_style( 'vatright-admin', $style['url'], array(), $style['version'] );
 		$script = VatField::asset( 'assets/admin.js' );
-		wp_enqueue_script( 'vatline-admin', $script['url'], array(), $script['version'], true );
+		wp_enqueue_script( 'vatright-admin', $script['url'], array(), $script['version'], true );
 		wp_localize_script(
-			'vatline-admin',
-			'vatlineAdmin',
+			'vatright-admin',
+			'vatrightAdmin',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'action'  => self::DISMISS_ACTION,
@@ -411,7 +411,7 @@ class SettingsSection {
 		}
 		$parsed = VatNumber::parse( $raw, WC()->countries->get_base_country() );
 		if ( null === $parsed || ! FormatCheck::is_plausible( $parsed ) ) {
-			WC_Admin_Settings::add_error( __( 'The store VAT number does not look valid, so it was not saved.', 'vatline' ) );
+			WC_Admin_Settings::add_error( __( 'The store VAT number does not look valid, so it was not saved.', 'vatright' ) );
 			return Settings::get()->store_vat_number();
 		}
 		$result  = null === $this->store_number_check ? null : ( $this->store_number_check )( $parsed );
@@ -420,7 +420,7 @@ class SettingsSection {
 			trim(
 				sprintf(
 					/* translators: 1: canonical VAT number, 2: registry result. */
-					__( 'Store VAT number saved as %1$s. %2$s', 'vatline' ),
+					__( 'Store VAT number saved as %1$s. %2$s', 'vatright' ),
 					$parsed->canonical(),
 					$message
 				)
@@ -448,11 +448,11 @@ class SettingsSection {
 	private function registry_message( ValidationResult $result ): string {
 		switch ( $result->status() ) {
 			case ValidationResult::VALID:
-				return __( 'VIES confirms the number is registered.', 'vatline' );
+				return __( 'VIES confirms the number is registered.', 'vatright' );
 			case ValidationResult::INVALID:
-				return __( 'VIES does not know this number. Check it before you rely on it.', 'vatline' );
+				return __( 'VIES does not know this number. Check it before you rely on it.', 'vatright' );
 			case ValidationResult::UNAVAILABLE:
-				return __( 'VIES could not be reached, so the number was not checked.', 'vatline' );
+				return __( 'VIES could not be reached, so the number was not checked.', 'vatright' );
 			default:
 				return '';
 		}

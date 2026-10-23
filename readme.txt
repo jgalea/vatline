@@ -1,11 +1,11 @@
-=== Vatline – EU VAT & OSS for WooCommerce ===
+=== VAT Right – EU VAT & OSS for WooCommerce ===
 Contributors: jeangalea
 Tags: vat, woocommerce, eu vat, oss, reverse charge
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.1.0
+Stable tag: 0.1.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -15,7 +15,7 @@ Validates EU VAT numbers, applies reverse charge or destination VAT, tracks the 
 
 The plugin decides which VAT treatment each WooCommerce order gets, applies it through WooCommerce's own tax calculation, and records the decision with its inputs on the order. It's free, has no Pro version, and shows no branding in your store.
 
-Settings live under WooCommerce > Settings > Tax > Vatline.
+Settings live under WooCommerce > Settings > Tax > VAT Right.
 
 **What it does**
 
@@ -36,9 +36,9 @@ Settings live under WooCommerce > Settings > Tax > Vatline.
 
 == Installation ==
 
-1. Make sure WooCommerce is active, then install and activate Vatline.
+1. Make sure WooCommerce is active, then install and activate VAT Right.
 2. Go to WooCommerce > Settings > General and tick "Enable tax rates and calculations". WooCommerce hides the Tax tab until you do.
-3. Go to WooCommerce > Settings > Tax > Vatline and read the setup check.
+3. Go to WooCommerce > Settings > Tax > VAT Right and read the setup check.
 4. Enter your store VAT number so VIES can return a consultation number for each check.
 5. Apply the EU rates in the rates table at the bottom of the screen, or map your tax classes first.
 
@@ -55,7 +55,7 @@ HMRC only answers requests that carry credentials from a registered application,
 1. Create an account at the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/).
 2. Register an application and subscribe it to the VAT Registered Companies API (check a UK VAT number).
 3. Copy the client ID and client secret from the application.
-4. Paste them into WooCommerce > Settings > Tax > Vatline > HMRC.
+4. Paste them into WooCommerce > Settings > Tax > VAT Right > HMRC.
 
 Without credentials, GB numbers are only format-checked and a business customer in the UK is treated as a consumer.
 
@@ -98,17 +98,17 @@ The plugin contacts the services below. It never sends them an order's contents,
 
 == Disclaimer ==
 
-Vatline is a tool, not tax advice. You, the store owner, are responsible for your VAT treatment and your filings. VAT rates and registry results come from third parties and can be wrong or out of date, so check them with an accountant. The plugin is provided without warranty and without liability, under the GPL.
+VAT Right is a tool, not tax advice. You, the store owner, are responsible for your VAT treatment and your filings. VAT rates and registry results come from third parties and can be wrong or out of date, so check them with an accountant. The plugin is provided without warranty and without liability, under the GPL.
 
 == Screenshots ==
 
 1. Block checkout with a valid VAT number and the reverse charge notice.
 2. Classic checkout with the VAT number field and the notice in the order review.
-3. The Vatline section under WooCommerce > Settings > Tax.
+3. The VAT Right section under WooCommerce > Settings > Tax.
 4. The EU VAT box on an order, with the decision and its inputs.
 5. The EU VAT reports: OSS return and EC Sales List.
 
 == Changelog ==
 
-= 0.1.0 =
+= 0.1.1 =
 * First release.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Tests\Support;
+namespace Vatright\Tests\Support;
 
 use RuntimeException;
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace Vatline\Checkout;
+namespace Vatright\Checkout;
 
-use Vatline\Domain\FormatCheck;
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
-use Vatline\Plugin;
-use Vatline\Registry\Validator;
+use Vatright\Domain\FormatCheck;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
+use Vatright\Plugin;
+use Vatright\Registry\Validator;
 use WC_Customer;
 use WC_Data;
 use WP_Error;
@@ -17,18 +17,18 @@ use WP_Error;
  * the admin order screen; only the classic checkout needs a field of ours.
  * It sits in the contact location, so there is one value per customer and
  * order instead of a billing and a shipping copy to keep in step.
- * Whichever input saved it, the number ends up in _vatline_number on the
+ * Whichever input saved it, the number ends up in _vatright_number on the
  * customer and the order.
  */
 class VatField {
 
-	const FIELD_ID = 'vatline/vat-number';
+	const FIELD_ID = 'vatright/vat-number';
 
-	const CLASSIC_FIELD = 'billing_vatline_number';
+	const CLASSIC_FIELD = 'billing_vatright_number';
 
-	const SELF_CERTIFY_FIELD = 'vatline_self_certify';
+	const SELF_CERTIFY_FIELD = 'vatright_self_certify';
 
-	const SELF_CERTIFY_MARKER = 'vatline_self_certify_field';
+	const SELF_CERTIFY_MARKER = 'vatright_self_certify_field';
 
 	/**
 	 * Countries where a VAT number means something to us: the EU, Northern
@@ -79,6 +79,7 @@ class VatField {
 		add_action( 'woocommerce_set_additional_field_value', array( $this, 'mirror_block_value' ), 10, 4 );
 
 		add_filter( 'woocommerce_billing_fields', array( $this, 'add_classic_field' ) );
+		add_filter( 'woocommerce_form_field', array( $this, 'add_classic_disclosure' ), 10, 2 );
 		add_filter( 'woocommerce_checkout_get_value', array( $this, 'classic_default' ), 10, 2 );
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'on_update_order_review' ) );
 		add_filter( 'woocommerce_checkout_posted_data', array( $this, 'on_posted_data' ) );
@@ -97,7 +98,7 @@ class VatField {
 		woocommerce_register_additional_checkout_field(
 			array(
 				'id'                         => self::FIELD_ID,
-				'label'                      => __( 'VAT number', 'vatline' ),
+				'label'                      => __( 'VAT number', 'vatright' ),
 				'location'                   => 'contact',
 				'type'                       => 'text',
 				'required'                   => false,
@@ -156,10 +157,10 @@ class VatField {
 		}
 		$number = VatNumber::parse( $raw, self::billing_country() );
 		if ( null === $number || ! FormatCheck::is_plausible( $number ) ) {
-			return new WP_Error( 'vatline_format', __( 'This does not look like a VAT number. Check it, or leave the field empty to pay with VAT.', 'vatline' ) );
+			return new WP_Error( 'vatright_format', __( 'This does not look like a VAT number. Check it, or leave the field empty to pay with VAT.', 'vatright' ) );
 		}
 		if ( ValidationResult::INVALID === $this->validator->validate( $number, false )->status() ) {
-			return new WP_Error( 'vatline_invalid', CheckoutDecider::message( 'invalid_vat_number' ) );
+			return new WP_Error( 'vatright_invalid', CheckoutDecider::message( 'invalid_vat_number' ) );
 		}
 		return true;
 	}
@@ -188,14 +189,38 @@ class VatField {
 			return $fields;
 		}
 		$fields[ self::CLASSIC_FIELD ] = array(
-			'type'         => 'text',
-			'label'        => __( 'VAT number', 'vatline' ),
-			'required'     => false,
-			'class'        => array( 'form-row-wide' ),
-			'priority'     => 125,
-			'autocomplete' => 'off',
+			'type'              => 'text',
+			'label'             => __( 'VAT number', 'vatright' ),
+			'required'          => false,
+			'class'             => array( 'form-row-wide' ),
+			'priority'          => 125,
+			'autocomplete'      => 'off',
+			'custom_attributes' => array( 'aria-describedby' => 'vatright-disclosure' ),
 		);
 		return $fields;
+	}
+
+	/**
+	 * Tells the shopper where the number goes before they enter it.
+	 */
+	public static function disclosure(): string {
+		return __( 'Your VAT number is sent to the official tax registry for its country, such as the EU\'s VIES service, to confirm it before VAT is removed.', 'vatright' );
+	}
+
+	/**
+	 * WooCommerce's own field description stays hidden until the input has
+	 * focus and is hidden from screen readers, so the disclosure is ours.
+	 *
+	 * @param string $html
+	 * @param string $key
+	 */
+	public function add_classic_disclosure( $html, $key ): string {
+		$html = (string) $html;
+		$end  = strrpos( $html, '</p>' );
+		if ( self::CLASSIC_FIELD !== $key || false === $end ) {
+			return $html;
+		}
+		return substr( $html, 0, $end ) . '<span class="vatright-disclosure" id="vatright-disclosure">' . esc_html( self::disclosure() ) . '</span>' . substr( $html, $end );
 	}
 
 	/**
@@ -247,9 +272,9 @@ class VatField {
 		if ( '' === $status['message'] && ! $status['needs_self_certification'] && ! $status['self_certified'] ) {
 			return;
 		}
-		echo '<tr class="vatline-notice"><td colspan="2">';
+		echo '<tr class="vatright-notice"><td colspan="2">';
 		if ( '' !== $status['message'] ) {
-			echo '<p class="vatline-notice__message vatline-notice__message--' . esc_attr( $status['status'] ) . '" role="status">' . esc_html( $status['message'] ) . '</p>';
+			echo '<p class="vatright-notice__message vatright-notice__message--' . esc_attr( $status['status'] ) . '" role="status">' . esc_html( $status['message'] ) . '</p>';
 		}
 		if ( $status['needs_self_certification'] || $status['self_certified'] ) {
 			echo '<input type="hidden" name="' . esc_attr( self::SELF_CERTIFY_MARKER ) . '" value="1" />';
@@ -265,16 +290,16 @@ class VatField {
 			return;
 		}
 		$script = self::asset( 'assets/classic-checkout.js' );
-		wp_enqueue_script( 'vatline-classic-checkout', $script['url'], array( 'jquery', 'wc-checkout' ), $script['version'], true );
+		wp_enqueue_script( 'vatright-classic-checkout', $script['url'], array( 'jquery', 'wc-checkout' ), $script['version'], true );
 		$style = self::asset( 'assets/checkout-block/style.css' );
-		wp_enqueue_style( 'vatline-checkout', $style['url'], array(), $style['version'] );
+		wp_enqueue_style( 'vatright-checkout', $style['url'], array(), $style['version'] );
 	}
 
 	/**
 	 * WooCommerce lists its own copy of the block field here, but only for
 	 * orders placed through the Store API that have a value, so an admin could
 	 * not add a number to any other order. One input of ours replaces it; the
-	 * saved value is read from _billing_vatline_number by AdminRecalc.
+	 * saved value is read from _billing_vatright_number by AdminRecalc.
 	 *
 	 * @param array<string,mixed> $fields
 	 * @param mixed               $order
@@ -282,8 +307,8 @@ class VatField {
 	 */
 	public function add_admin_field( $fields, $order = null ) {
 		unset( $fields[ self::FIELD_ID ], $fields[ '_wc_other/' . self::FIELD_ID ] );
-		$fields['vatline_number'] = array(
-			'label'         => __( 'VAT number', 'vatline' ),
+		$fields['vatright_number'] = array(
+			'label'         => __( 'VAT number', 'vatright' ),
 			'wrapper_class' => 'form-field-wide',
 			'show'          => true,
 			'value'         => $order instanceof \WC_Order ? (string) $order->get_meta( InputGatherer::NUMBER_META ) : '',
@@ -298,7 +323,7 @@ class VatField {
 	public function add_profile_field( $fields ) {
 		if ( isset( $fields['billing']['fields'] ) ) {
 			$fields['billing']['fields'][ InputGatherer::NUMBER_META ] = array(
-				'label'       => __( 'VAT number', 'vatline' ),
+				'label'       => __( 'VAT number', 'vatright' ),
 				'description' => '',
 			);
 		}
@@ -343,7 +368,7 @@ class VatField {
 	 * @return array{url: string, version: string}
 	 */
 	public static function asset( string $path ): array {
-		$main = dirname( __DIR__, 2 ) . '/vatline.php';
+		$main = dirname( __DIR__, 2 ) . '/vatright.php';
 		return array(
 			'url'     => plugins_url( $path, $main ),
 			'version' => (string) filemtime( dirname( __DIR__, 2 ) . '/' . $path ),

@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Tests\Integration\Privacy;
+namespace Vatright\Tests\Integration\Privacy;
 
-use Vatline\Ledger\Schema;
-use Vatline\Orders\DecisionStore;
-use Vatline\Tests\Integration\Orders\OrderTestCase;
+use Vatright\Ledger\Schema;
+use Vatright\Orders\DecisionStore;
+use Vatright\Tests\Integration\Orders\OrderTestCase;
 use WC_Order;
 
 require_once dirname( __DIR__ ) . '/Orders/OrderTestCase.php';

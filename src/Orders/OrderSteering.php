@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Orders;
+namespace Vatright\Orders;
 
-use Vatline\Checkout\CartSteering;
-use Vatline\Checkout\InputGatherer;
-use Vatline\Checkout\TaxLocation;
-use Vatline\Domain\Decision;
+use Vatright\Checkout\CartSteering;
+use Vatright\Checkout\InputGatherer;
+use Vatright\Checkout\TaxLocation;
+use Vatright\Domain\Decision;
 use WC_Order;
 use WC_Order_Item;
 use WC_Order_Item_Product;

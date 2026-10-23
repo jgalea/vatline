@@ -1,17 +1,17 @@
 <?php
 
-namespace Vatline\Tests\Integration\Ledger;
+namespace Vatright\Tests\Integration\Ledger;
 
-use Vatline\Domain\Decision;
-use Vatline\Domain\LineDecision;
-use Vatline\Domain\Rule;
-use Vatline\Domain\Scheme;
-use Vatline\Ledger\Fx;
-use Vatline\Ledger\LedgerWriter;
-use Vatline\Ledger\Schema;
-use Vatline\Ledger\ThresholdTracker;
-use Vatline\Settings;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Domain\Decision;
+use Vatright\Domain\LineDecision;
+use Vatright\Domain\Rule;
+use Vatright\Domain\Scheme;
+use Vatright\Ledger\Fx;
+use Vatright\Ledger\LedgerWriter;
+use Vatright\Ledger\Schema;
+use Vatright\Ledger\ThresholdTracker;
+use Vatright\Settings;
+use Vatright\Tests\Support\IntegrationTestCase;
 use WC_Order;
 use WC_Order_Item_Fee;
 use WC_Order_Item_Product;
@@ -53,7 +53,7 @@ abstract class LedgerTestCase extends IntegrationTestCase {
 
 		// The booted plugin's own writer (live transport) listens on these too.
 		remove_all_actions( LedgerWriter::FX_RETRY_HOOK );
-		remove_all_actions( \Vatline\Ledger\Backfill::HOOK );
+		remove_all_actions( \Vatright\Ledger\Backfill::HOOK );
 
 		$this->transport = new EcbFixtureTransport();
 		$this->writer    = new LedgerWriter( new Fx( $this->transport ) );

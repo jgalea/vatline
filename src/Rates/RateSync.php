@@ -1,16 +1,16 @@
 <?php
 
-namespace Vatline\Rates;
+namespace Vatright\Rates;
 
 use WC_Tax;
 
 class RateSync {
 
-	const HOOK = 'vatline_rates_check';
+	const HOOK = 'vatright_rates_check';
 
-	const OPTION_LATEST = 'vatline_rates_latest';
+	const OPTION_LATEST = 'vatright_rates_latest';
 
-	const OPTION_PENDING = 'vatline_rates_pending';
+	const OPTION_PENDING = 'vatright_rates_pending';
 
 	/** @var Tedb */
 	private $tedb;
@@ -48,7 +48,7 @@ class RateSync {
 
 		$targets  = $mapping->targets( $set );
 		$imported = array();
-		$table    = $wpdb->prefix . 'vatline_rate_rows';
+		$table    = $wpdb->prefix . 'vatright_rate_rows';
 		$rows     = $wpdb->get_results( "SELECT woo_rate_id, imported_rate FROM {$table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		foreach ( (array) $rows as $row ) {
 			$imported[ (int) $row->woo_rate_id ] = (float) $row->imported_rate;
@@ -112,7 +112,7 @@ class RateSync {
 				WC_Tax::_update_tax_rate( $rate_id, array( 'tax_rate' => (string) $entry['rate'] ) );
 			}
 			$wpdb->replace( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-				$wpdb->prefix . 'vatline_rate_rows',
+				$wpdb->prefix . 'vatright_rate_rows',
 				array(
 					'woo_rate_id'   => $rate_id,
 					'country'       => $entry['country'],

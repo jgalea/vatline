@@ -1,18 +1,18 @@
 <?php
 
-namespace Vatline\Tests\Integration\Checkout;
+namespace Vatright\Tests\Integration\Checkout;
 
-use Vatline\Checkout\CartSteering;
-use Vatline\Checkout\InputGatherer;
-use Vatline\Checkout\SupplyType;
-use Vatline\Checkout\TaxLocation;
-use Vatline\Domain\Decision;
-use Vatline\Ledger\ThresholdTracker;
-use Vatline\Orders\DecisionStore;
-use Vatline\Plugin;
-use Vatline\Settings;
-use Vatline\Tests\Support\HttpGuard;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Checkout\CartSteering;
+use Vatright\Checkout\InputGatherer;
+use Vatright\Checkout\SupplyType;
+use Vatright\Checkout\TaxLocation;
+use Vatright\Domain\Decision;
+use Vatright\Ledger\ThresholdTracker;
+use Vatright\Orders\DecisionStore;
+use Vatright\Plugin;
+use Vatright\Settings;
+use Vatright\Tests\Support\HttpGuard;
+use Vatright\Tests\Support\IntegrationTestCase;
 use RuntimeException;
 use WC_Order;
 use WC_Product_Simple;

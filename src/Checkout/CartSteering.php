@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Checkout;
+namespace Vatright\Checkout;
 
-use Vatline\Domain\Decision;
-use Vatline\Domain\Rules;
-use Vatline\Settings;
+use Vatright\Domain\Decision;
+use Vatright\Domain\Rules;
+use Vatright\Settings;
 use Throwable;
 use WC_Cart;
 use WC_Customer;
@@ -20,7 +20,7 @@ use WC_Tax;
  */
 class CartSteering {
 
-	const SESSION_KEY = 'vatline_decision';
+	const SESSION_KEY = 'vatright_decision';
 
 	/** @var InputGatherer */
 	private $gatherer;
@@ -128,7 +128,7 @@ class CartSteering {
 		$taxed_in = null === $line ? '' : $line->tax_country();
 		foreach ( $packages as $index => $package ) {
 			if ( is_array( $package ) ) {
-				$packages[ $index ]['vatline_taxed_in'] = $taxed_in;
+				$packages[ $index ]['vatright_taxed_in'] = $taxed_in;
 			}
 		}
 		return $packages;
@@ -148,7 +148,7 @@ class CartSteering {
 				$this->gatherer->from_cart( $cart, $customer, $this->checkout ? 'checkout' : 'cart', $this->checkout )
 			);
 		} catch ( Throwable $e ) {
-			wc_get_logger()->error( 'VAT decision failed, charging VAT: ' . $e->getMessage(), array( 'source' => 'vatline' ) );
+			wc_get_logger()->error( 'VAT decision failed, charging VAT: ' . $e->getMessage(), array( 'source' => 'vatright' ) );
 			$decision = null;
 		}
 

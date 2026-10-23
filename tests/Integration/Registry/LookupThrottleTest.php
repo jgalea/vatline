@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Tests\Integration\Registry;
+namespace Vatright\Tests\Integration\Registry;
 
-use Vatline\Registry\LookupThrottle;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Registry\LookupThrottle;
+use Vatright\Tests\Support\IntegrationTestCase;
 
 class LookupThrottleTest extends IntegrationTestCase {
 
@@ -13,8 +13,8 @@ class LookupThrottleTest extends IntegrationTestCase {
 	public function set_up() {
 		parent::set_up();
 		// The e2e mu-plugin, mounted in this environment too, raises the caps under test.
-		remove_all_filters( 'vatline_client_lookup_limit' );
-		remove_all_filters( 'vatline_global_lookup_limit' );
+		remove_all_filters( 'vatright_client_lookup_limit' );
+		remove_all_filters( 'vatright_global_lookup_limit' );
 		$this->throttle         = new LookupThrottle();
 		$_SERVER['REMOTE_ADDR'] = '203.0.113.9';
 	}
@@ -46,7 +46,7 @@ class LookupThrottleTest extends IntegrationTestCase {
 
 	public function test_global_cap_holds_across_clients() {
 		add_filter(
-			'vatline_global_lookup_limit',
+			'vatright_global_lookup_limit',
 			static function () {
 				return array( 25, HOUR_IN_SECONDS );
 			}
@@ -79,7 +79,7 @@ class LookupThrottleTest extends IntegrationTestCase {
 		$this->assertSame( 10, $this->allowed( 10 ) );
 
 		add_filter(
-			'vatline_client_ip',
+			'vatright_client_ip',
 			static function () {
 				return '192.0.2.77';
 			}
@@ -126,7 +126,7 @@ class LookupThrottleTest extends IntegrationTestCase {
 
 	public function test_cart_updates_cannot_use_up_the_checkout_share_of_the_global_cap() {
 		add_filter(
-			'vatline_global_lookup_limit',
+			'vatright_global_lookup_limit',
 			static function () {
 				return array( 5, HOUR_IN_SECONDS );
 			}
@@ -173,7 +173,7 @@ class LookupThrottleTest extends IntegrationTestCase {
 
 	public function test_refused_lookups_write_nothing() {
 		add_filter(
-			'vatline_global_lookup_limit',
+			'vatright_global_lookup_limit',
 			static function () {
 				return array( 0, HOUR_IN_SECONDS );
 			}
@@ -191,7 +191,7 @@ class LookupThrottleTest extends IntegrationTestCase {
 
 		$this->assertSame( $before, $count() );
 
-		remove_all_filters( 'vatline_global_lookup_limit' );
+		remove_all_filters( 'vatright_global_lookup_limit' );
 		$this->assertSame( 1, $this->allowed( 1 ) );
 		$this->assertSame( $before + 4, $count(), 'An allowed lookup writes its client and global counters (value and timeout rows), so the count above can move.' );
 	}

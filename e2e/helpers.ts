@@ -13,11 +13,11 @@ export const PRODUCTS = { book: 10, ebook: 11, consulting: 12 };
 export const DECISION_PHP = `
 $order = wc_get_order( %ID% );
 echo "@@" . wp_json_encode( array(
-	'decision'   => json_decode( (string) $order->get_meta( '_vatline_decision' ), true ),
+	'decision'   => json_decode( (string) $order->get_meta( '_vatright_decision' ), true ),
 	'exempt'     => $order->get_meta( 'is_vat_exempt' ),
-	'number'     => $order->get_meta( '_vatline_number' ),
+	'number'     => $order->get_meta( '_vatright_number' ),
 	'total_tax'  => $order->get_total_tax(),
-	'log'        => count( $order->get_meta( '_vatline_log', false ) ),
+	'log'        => count( $order->get_meta( '_vatright_log', false ) ),
 ) ) . "@@";
 `;
 
@@ -43,20 +43,20 @@ export function orderCount(): number {
 }
 
 export function setSettings( settings: Record< string, unknown > ) {
-	wp( 'option', 'update', 'vatline_settings', JSON.stringify( settings ), '--format=json' );
+	wp( 'option', 'update', 'vatright_settings', JSON.stringify( settings ), '--format=json' );
 }
 
 export function resetState() {
-	const out = wp( 'eval-file', 'wp-content/plugins/vatline/e2e/reset.php' );
+	const out = wp( 'eval-file', 'wp-content/plugins/vatright/e2e/reset.php' );
 	expect( out ).toContain( '@@1@@' );
 }
 
 export function registryCalls(): number {
-	return wpEval( 'echo "@@" . (int) get_option( "vatline_e2e_vies_calls", 0 ) . "@@";' );
+	return wpEval( 'echo "@@" . (int) get_option( "vatright_e2e_vies_calls", 0 ) . "@@";' );
 }
 
 export async function visitorIpIn( context: BrowserContext, country: string ) {
-	await context.addCookies( [ { name: 'vatline_e2e_ip_country', value: country, url: 'http://localhost:8899' } ] );
+	await context.addCookies( [ { name: 'vatright_e2e_ip_country', value: country, url: 'http://localhost:8899' } ] );
 }
 
 export async function addToCart( page: Page, productId: number ) {

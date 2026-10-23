@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Registry;
+namespace Vatright\Registry;
 
 /**
  * Caps the registry lookups an anonymous visitor can set off, per client and
@@ -15,7 +15,7 @@ namespace Vatline\Registry;
  */
 class LookupThrottle {
 
-	const PREFIX = 'vatline_t_';
+	const PREFIX = 'vatright_t_';
 
 	/**
 	 * Each bucket has its own per-client and site-wide counters, so cart
@@ -25,8 +25,8 @@ class LookupThrottle {
 	 */
 	public function allow( string $bucket ): bool {
 		$now    = time();
-		$client = $this->counter( self::PREFIX . md5( $bucket . '|' . self::client() ), (array) apply_filters( 'vatline_client_lookup_limit', array( 10, 10 * MINUTE_IN_SECONDS ) ), $now );
-		$global = $this->counter( self::PREFIX . 'global_' . $bucket, (array) apply_filters( 'vatline_global_lookup_limit', array( 300, HOUR_IN_SECONDS ), $bucket ), $now );
+		$client = $this->counter( self::PREFIX . md5( $bucket . '|' . self::client() ), (array) apply_filters( 'vatright_client_lookup_limit', array( 10, 10 * MINUTE_IN_SECONDS ) ), $now );
+		$global = $this->counter( self::PREFIX . 'global_' . $bucket, (array) apply_filters( 'vatright_global_lookup_limit', array( 300, HOUR_IN_SECONDS ), $bucket ), $now );
 
 		if ( $client['count'] >= $client['limit'] || $global['count'] >= $global['limit'] ) {
 			return false;
@@ -75,7 +75,7 @@ class LookupThrottle {
 	 */
 	private static function client(): string {
 		$remote = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-		$ip     = (string) apply_filters( 'vatline_client_ip', $remote );
+		$ip     = (string) apply_filters( 'vatright_client_ip', $remote );
 		$packed = false === filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) ? false : inet_pton( $ip );
 		if ( false === $packed ) {
 			return $ip;

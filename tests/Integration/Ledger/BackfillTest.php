@@ -1,16 +1,16 @@
 <?php
 
-namespace Vatline\Tests\Integration\Ledger;
+namespace Vatright\Tests\Integration\Ledger;
 
 use ActionScheduler_QueueRunner;
 use ActionScheduler_Store;
-use Vatline\Admin\SettingsSection;
-use Vatline\Admin\SetupCheck;
-use Vatline\Domain\Decision;
-use Vatline\Domain\Scheme;
-use Vatline\Ledger\Backfill;
-use Vatline\Ledger\LedgerWriter;
-use Vatline\Ledger\ThresholdTracker;
+use Vatright\Admin\SettingsSection;
+use Vatright\Admin\SetupCheck;
+use Vatright\Domain\Decision;
+use Vatright\Domain\Scheme;
+use Vatright\Ledger\Backfill;
+use Vatright\Ledger\LedgerWriter;
+use Vatright\Ledger\ThresholdTracker;
 use WC_Order;
 
 require_once __DIR__ . '/LedgerTestCase.php';

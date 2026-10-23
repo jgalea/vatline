@@ -1,17 +1,17 @@
 <?php
 
-namespace Vatline\Tests\Integration\Registry;
+namespace Vatright\Tests\Integration\Registry;
 
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
-use Vatline\Registry\Router;
-use Vatline\Registry\ValidationCache;
-use Vatline\Registry\Validator;
-use Vatline\Registry\Vies;
-use Vatline\Registry\WpHttpTransport;
-use Vatline\Settings;
-use Vatline\Tests\Support\HttpGuard;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
+use Vatright\Registry\Router;
+use Vatright\Registry\ValidationCache;
+use Vatright\Registry\Validator;
+use Vatright\Registry\Vies;
+use Vatright\Registry\WpHttpTransport;
+use Vatright\Settings;
+use Vatright\Tests\Support\HttpGuard;
+use Vatright\Tests\Support\IntegrationTestCase;
 
 class ValidationCacheTest extends IntegrationTestCase {
 
@@ -136,11 +136,11 @@ class ValidationCacheTest extends IntegrationTestCase {
 		$transport = new WpHttpTransport();
 
 		$transport->request( 'GET', 'https://ec.europa.eu/x', '', array(), 5 );
-		add_filter( 'vatline_registry_timeout', '__return_zero' );
+		add_filter( 'vatright_registry_timeout', '__return_zero' );
 		$transport->request( 'GET', 'https://ec.europa.eu/x', '', array(), 5 );
-		remove_filter( 'vatline_registry_timeout', '__return_zero' );
+		remove_filter( 'vatright_registry_timeout', '__return_zero' );
 		add_filter(
-			'vatline_registry_timeout',
+			'vatright_registry_timeout',
 			static function () {
 				return 30;
 			}

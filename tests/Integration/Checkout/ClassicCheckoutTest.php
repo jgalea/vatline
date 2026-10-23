@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Tests\Integration\Checkout;
+namespace Vatright\Tests\Integration\Checkout;
 
-use Vatline\Domain\Rule;
-use Vatline\Orders\DecisionStore;
+use Vatright\Domain\Rule;
+use Vatright\Orders\DecisionStore;
 use WC_Order;
 
 require_once __DIR__ . '/CheckoutTestCase.php';
@@ -12,7 +12,7 @@ class ClassicCheckoutTest extends CheckoutTestCase {
 
 	public function test_classic_valid_number_exempts_order() {
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_vatline_number', self::VALID_DE );
+		WC()->customer->update_meta_data( '_vatright_number', self::VALID_DE );
 
 		$reply = $this->classic_checkout( 'DE', '10115' );
 
@@ -46,7 +46,7 @@ class ClassicCheckoutTest extends CheckoutTestCase {
 		$this->settings( array( 'outage_policy' => 'reject' ) );
 		$this->vies_answer( self::DOWN_DE, '{"actionSucceed":false,"errorWrappers":[{"error":"MS_UNAVAILABLE"}]}' );
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_vatline_number', self::DOWN_DE );
+		WC()->customer->update_meta_data( '_vatright_number', self::DOWN_DE );
 
 		$reply = $this->classic_checkout( 'DE', '10115' );
 
@@ -58,7 +58,7 @@ class ClassicCheckoutTest extends CheckoutTestCase {
 	public function test_invalid_number_blocks_classic_checkout() {
 		$this->vies_answer( self::INVALID_DE, '{"countryCode":"DE","vatNumber":"123475223","valid":false}' );
 		$this->add_to_cart( $this->product( 'digital' ) );
-		WC()->customer->update_meta_data( '_vatline_number', self::INVALID_DE );
+		WC()->customer->update_meta_data( '_vatright_number', self::INVALID_DE );
 
 		$reply = $this->classic_checkout( 'DE', '10115' );
 
@@ -87,8 +87,8 @@ class ClassicCheckoutTest extends CheckoutTestCase {
 			$this->assertCount( 1, $log, $flow );
 			$this->assertSame( $decision->id(), $log[0]['decision_id'], $flow );
 			foreach ( $order->get_items() as $item ) {
-				$this->assertNotSame( '', $item->get_meta( '_vatline_line_key' ), "$flow: line not tied to its decision line" );
-				$this->assertNotNull( $decision->line( (string) $item->get_meta( '_vatline_line_key' ) ), $flow );
+				$this->assertNotSame( '', $item->get_meta( '_vatright_line_key' ), "$flow: line not tied to its decision line" );
+				$this->assertNotNull( $decision->line( (string) $item->get_meta( '_vatright_line_key' ) ), $flow );
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Rates;
+namespace Vatright\Rates;
 
 class RateDiff {
 

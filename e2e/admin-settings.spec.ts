@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { resetState, wp, wpEval } from './helpers';
 
-const forgetDismissal = () => wpEval( 'delete_user_meta( 1, "vatline_dismissed_setup_notice" ); echo "@@1@@";' );
+const forgetDismissal = () => wpEval( 'delete_user_meta( 1, "vatright_dismissed_setup_notice" ); echo "@@1@@";' );
 
 test.beforeEach( async ( { page } ) => {
 	resetState();
@@ -20,13 +20,13 @@ test.afterEach( () => {
 
 test( 'a dismissed setup notice stays dismissed after a reload', async ( { page } ) => {
 	wp( 'option', 'update', 'woocommerce_tax_based_on', 'base' );
-	await page.goto( '/wp-admin/index.php' );
-	const notice = page.locator( '.vatline-setup-notice' );
+	await page.goto( '/wp-admin/admin.php?page=wc-settings&tab=products' );
+	const notice = page.locator( '.vatright-setup-notice' );
 	await expect( notice ).toBeVisible();
 
 	await notice.locator( '.notice-dismiss' ).click();
 	await expect( notice ).toBeHidden();
-	await expect.poll( () => wpEval( 'echo "@@" . wp_json_encode( get_user_meta( 1, "vatline_dismissed_setup_notice", true ) ) . "@@";' ) ).toBe( 'tax_based_on_shop_base' );
+	await expect.poll( () => wpEval( 'echo "@@" . wp_json_encode( get_user_meta( 1, "vatright_dismissed_setup_notice", true ) ) . "@@";' ) ).toBe( 'tax_based_on_shop_base' );
 
 	await page.reload();
 	await expect( page.locator( '#wpadminbar' ) ).toBeVisible();
@@ -34,9 +34,9 @@ test( 'a dismissed setup notice stays dismissed after a reload', async ( { page 
 } );
 
 test( 'picking reduced rate in the mapping editor shows the country selects without saving', async ( { page } ) => {
-	await page.goto( '/wp-admin/admin.php?page=wc-settings&tab=tax&section=vatline' );
-	const type = page.locator( '#vatline_mapping-0' );
-	const countries = type.locator( 'xpath=..' ).locator( '.vatline-countries' );
+	await page.goto( '/wp-admin/admin.php?page=wc-settings&tab=tax&section=vatright' );
+	const type = page.locator( '#vatright_mapping-0' );
+	const countries = type.locator( 'xpath=..' ).locator( '.vatright-countries' );
 	await expect( countries ).toBeHidden();
 
 	await type.selectOption( 'reduced' );
@@ -47,7 +47,7 @@ test( 'picking reduced rate in the mapping editor shows the country selects with
 	await expect( countries ).toBeHidden();
 } );
 
-const RATES = '/wp-admin/admin.php?page=wc-settings&tab=tax&section=vatline';
+const RATES = '/wp-admin/admin.php?page=wc-settings&tab=tax&section=vatright';
 
 /** What a click in the middle of the button would land on, after scrolling it as far into view as the page allows. */
 async function applyButtonIsClickable( page: import( '@playwright/test' ).Page ): Promise< string > {
@@ -79,7 +79,7 @@ for ( const size of [ { width: 390, height: 844 }, { width: 768, height: 1024 },
 test( 'the footer check fails when the rates block loses its room', async ( { page } ) => {
 	await page.setViewportSize( { width: 1280, height: 577 } );
 	await page.goto( RATES );
-	await page.addStyleTag( { content: '*{scroll-behavior:auto!important}.vatline-rates{padding-block-end:0!important}' } );
+	await page.addStyleTag( { content: '*{scroll-behavior:auto!important}.vatright-rates{padding-block-end:0!important}' } );
 
 	expect( await applyButtonIsClickable( page ) ).not.toBe( 'ok' );
 } );
@@ -88,15 +88,15 @@ test( 'applying rates says how many were applied', async ( { page } ) => {
 	await page.goto( RATES );
 	await page.getByRole( 'button', { name: 'Apply selected rates' } ).click();
 
-	await expect( page ).toHaveURL( /vatline_applied=\d+/ );
+	await expect( page ).toHaveURL( /vatright_applied=\d+/ );
 	await expect( page.locator( '#message.updated' ) ).toContainText( /VAT rates? applied\.|No VAT rates were changed\./ );
 } );
 
 test( 'with taxes off, the setup notice links to the setting that turns them on', async ( { page } ) => {
 	wp( 'option', 'update', 'woocommerce_calc_taxes', 'no' );
 	try {
-		await page.goto( '/wp-admin/index.php' );
-		await page.locator( '.vatline-setup-notice a' ).click();
+		await page.goto( '/wp-admin/admin.php?page=wc-settings&tab=products' );
+		await page.locator( '.vatright-setup-notice a' ).click();
 
 		await expect( page ).toHaveURL( /tab=general/ );
 		await expect( page.locator( '#woocommerce_calc_taxes' ) ).toBeVisible();

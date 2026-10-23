@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Reports;
+namespace Vatright\Reports;
 
-use Vatline\Ledger\LedgerWriter;
+use Vatright\Ledger\LedgerWriter;
 use RuntimeException;
 use WP_Error;
 use WP_REST_Request;
@@ -11,8 +11,8 @@ use WP_REST_Server;
 
 class RestController {
 
-	const NAMESPACE_V1 = 'vatline/v1';
-	const LOG_META     = '_vatline_log';
+	const NAMESPACE_V1 = 'vatright/v1';
+	const LOG_META     = '_vatright_log';
 
 	/** @var OssReport */
 	private $oss;
@@ -105,7 +105,7 @@ class RestController {
 		try {
 			return rest_ensure_response( $this->oss->build( (int) $request['year'], (int) $request['quarter'], (string) $request['currency'] ) );
 		} catch ( RuntimeException $e ) {
-			return new WP_Error( 'vatline_rate_unavailable', $e->getMessage(), array( 'status' => 502 ) );
+			return new WP_Error( 'vatright_rate_unavailable', $e->getMessage(), array( 'status' => 502 ) );
 		}
 	}
 
@@ -119,7 +119,7 @@ class RestController {
 			$rows = $this->esl->build( $year, $quarter );
 		} catch ( IncompleteReport $e ) {
 			return new WP_Error(
-				'vatline_incomplete_report',
+				'vatright_incomplete_report',
 				$e->getMessage(),
 				array(
 					'status'    => 502,
@@ -143,7 +143,7 @@ class RestController {
 	public function order_vat( WP_REST_Request $request ) {
 		$order = wc_get_order( (int) $request['id'] );
 		if ( ! $order instanceof \WC_Order ) {
-			return new WP_Error( 'vatline_no_order', __( 'Order not found.', 'vatline' ), array( 'status' => 404 ) );
+			return new WP_Error( 'vatright_no_order', __( 'Order not found.', 'vatright' ), array( 'status' => 404 ) );
 		}
 
 		$entries = $order->get_meta( self::LOG_META, false );

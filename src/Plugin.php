@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline;
+namespace Vatright;
 
 class Plugin {
 
@@ -82,6 +82,6 @@ class Plugin {
 	}
 
 	public static function missing_woocommerce_notice(): void {
-		echo '<div class="notice notice-error"><p>' . esc_html__( 'Vatline requires WooCommerce to be active.', 'vatline' ) . '</p></div>';
+		echo '<div class="notice notice-error"><p>' . esc_html__( 'VAT Right requires WooCommerce to be active.', 'vatright' ) . '</p></div>';
 	}
 }

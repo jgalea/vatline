@@ -1,13 +1,13 @@
 <?php
 
-namespace Vatline\Checkout;
+namespace Vatright\Checkout;
 
-use Vatline\Domain\Decision;
-use Vatline\Domain\Rule;
-use Vatline\Domain\Scheme;
-use Vatline\Domain\ValidationResult;
-use Vatline\Plugin;
-use Vatline\Settings;
+use Vatright\Domain\Decision;
+use Vatright\Domain\Rule;
+use Vatright\Domain\Scheme;
+use Vatright\Domain\ValidationResult;
+use Vatright\Plugin;
+use Vatright\Settings;
 use WC_Customer;
 
 /**
@@ -19,7 +19,7 @@ use WC_Customer;
  */
 class StoreApiExtension {
 
-	const NAMESPACE = 'vatline';
+	const NAMESPACE = 'vatright';
 
 	/** @var VatField */
 	private $field;
@@ -119,10 +119,11 @@ class StoreApiExtension {
 		}
 		$meta   = require $dir;
 		$script = VatField::asset( 'build/checkout-block.js' );
-		wp_enqueue_script( 'vatline-checkout-block', $script['url'], array_merge( $meta['dependencies'], array( 'wc-blocks-checkout' ) ), $script['version'], true );
-		wp_set_script_translations( 'vatline-checkout-block', 'vatline', dirname( __DIR__, 2 ) . '/languages' );
+		wp_enqueue_script( 'vatright-checkout-block', $script['url'], array_merge( $meta['dependencies'], array( 'wc-blocks-checkout' ) ), $script['version'], true );
+		wp_set_script_translations( 'vatright-checkout-block', 'vatright', dirname( __DIR__, 2 ) . '/languages' );
+		wp_localize_script( 'vatright-checkout-block', 'vatrightCheckout', array( 'disclosure' => VatField::disclosure() ) );
 		$style = VatField::asset( 'assets/checkout-block/style.css' );
-		wp_enqueue_style( 'vatline-checkout-block', $style['url'], array(), $style['version'] );
+		wp_enqueue_style( 'vatright-checkout-block', $style['url'], array(), $style['version'] );
 	}
 
 	/**
@@ -171,7 +172,7 @@ class StoreApiExtension {
 	public static function self_certification_label( string $country ): string {
 		$names = WC()->countries->get_countries();
 		/* translators: %s: country name */
-		return sprintf( __( 'I confirm I am located in %s.', 'vatline' ), $names[ $country ] ?? $country );
+		return sprintf( __( 'I confirm I am located in %s.', 'vatright' ), $names[ $country ] ?? $country );
 	}
 
 	/**
@@ -184,33 +185,33 @@ class StoreApiExtension {
 		}
 		if ( $decision->is_vat_exempt() ) {
 			if ( ValidationResult::VALID === $validation ) {
-				return array( 'verified', __( 'VAT number verified. Reverse charge applies.', 'vatline' ) );
+				return array( 'verified', __( 'VAT number verified. Reverse charge applies.', 'vatright' ) );
 			}
-			return array( 'pending', __( 'Your VAT number could not be checked just now. No VAT is charged for now and the number will be checked again.', 'vatline' ) );
+			return array( 'pending', __( 'Your VAT number could not be checked just now. No VAT is charged for now and the number will be checked again.', 'vatright' ) );
 		}
 		if ( Rule::DOMESTIC_B2B_GUARD === $decision->rule() ) {
-			return array( 'domestic', __( 'VAT is charged on sales to businesses in the shop\'s own country.', 'vatline' ) );
+			return array( 'domestic', __( 'VAT is charged on sales to businesses in the shop\'s own country.', 'vatright' ) );
 		}
 		if ( Rule::PREFIX_MISMATCH_CHARGED === $decision->rule() ) {
-			return array( 'mismatch', __( 'This VAT number does not match your billing country, so VAT is charged.', 'vatline' ) );
+			return array( 'mismatch', __( 'This VAT number does not match your billing country, so VAT is charged.', 'vatright' ) );
 		}
 		if ( ValidationResult::VALID === $validation ) {
 			foreach ( $decision->lines() as $line ) {
 				if ( in_array( $line->scheme(), array( Scheme::REVERSE_CHARGE_SERVICES, Scheme::INTRA_EU_GOODS ), true ) ) {
-					return array( 'verified', __( 'VAT number verified. Reverse charge applies to part of this order.', 'vatline' ) );
+					return array( 'verified', __( 'VAT number verified. Reverse charge applies to part of this order.', 'vatright' ) );
 				}
 			}
-			return array( 'verified', __( 'VAT number verified. VAT is charged on this order.', 'vatline' ) );
+			return array( 'verified', __( 'VAT number verified. VAT is charged on this order.', 'vatright' ) );
 		}
 		if ( in_array( $validation, array( ValidationResult::INVALID, ValidationResult::FORMAT_INVALID ), true ) ) {
 			return array( 'invalid', CheckoutDecider::message( 'invalid_vat_number' ) );
 		}
 		if ( ValidationResult::UNAVAILABLE === $validation ) {
-			return array( 'pending', __( 'Your VAT number could not be checked just now, so VAT is charged on this order.', 'vatline' ) );
+			return array( 'pending', __( 'Your VAT number could not be checked just now, so VAT is charged on this order.', 'vatright' ) );
 		}
 		if ( 'cache_miss' === $detail ) {
-			return array( 'pending', __( 'Your VAT number has not been checked yet. VAT is charged until it is.', 'vatline' ) );
+			return array( 'pending', __( 'Your VAT number has not been checked yet. VAT is charged until it is.', 'vatright' ) );
 		}
-		return array( 'unchecked', __( 'This VAT number cannot be checked automatically, so VAT is charged.', 'vatline' ) );
+		return array( 'unchecked', __( 'This VAT number cannot be checked automatically, so VAT is charged.', 'vatright' ) );
 	}
 }

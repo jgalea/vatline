@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Registry;
+namespace Vatright\Registry;
 
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
 use Throwable;
 
 class Hmrc implements Registry {
@@ -144,7 +144,7 @@ class Hmrc implements Registry {
 	}
 
 	private function token_key(): string {
-		return 'vatline_hmrc_token_' . md5( $this->base() . '|' . $this->client_id );
+		return 'vatright_hmrc_token_' . md5( $this->base() . '|' . $this->client_id );
 	}
 
 	private function base(): string {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Vatline\Tests\Integration\Ledger;
+namespace Vatright\Tests\Integration\Ledger;
 
 use Automattic\WooCommerce\Utilities\OrderUtil;
-use Vatline\Checkout\TaxLocation;
-use Vatline\Domain\Rule;
-use Vatline\Domain\Scheme;
-use Vatline\Ledger\LedgerWriter;
+use Vatright\Checkout\TaxLocation;
+use Vatright\Domain\Rule;
+use Vatright\Domain\Scheme;
+use Vatright\Ledger\LedgerWriter;
 use WC_Order;
 
 require_once __DIR__ . '/LedgerTestCase.php';
@@ -619,7 +619,7 @@ class LedgerWriterTest extends LedgerTestCase {
 		$this->assertNull( $this->ledger_rows()[0]['net_eur'] );
 
 		$this->transport->fail = false;
-		delete_transient( 'vatline_fx_' . md5( $this->transport->calls[0] ) );
+		delete_transient( 'vatright_fx_' . md5( $this->transport->calls[0] ) );
 		do_action( LedgerWriter::FX_RETRY_HOOK, $order->get_id() ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 
 		$rows = $this->ledger_rows();

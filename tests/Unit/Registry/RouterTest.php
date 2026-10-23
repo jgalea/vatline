@@ -1,13 +1,13 @@
 <?php
 
-namespace Vatline\Tests\Unit\Registry;
+namespace Vatright\Tests\Unit\Registry;
 
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
-use Vatline\Registry\HttpTransport;
-use Vatline\Registry\Registry;
-use Vatline\Registry\Router;
-use Vatline\Registry\Vies;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
+use Vatright\Registry\HttpTransport;
+use Vatright\Registry\Registry;
+use Vatright\Registry\Router;
+use Vatright\Registry\Vies;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase {

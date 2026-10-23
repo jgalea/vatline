@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Tests\Unit\Rates;
+namespace Vatright\Tests\Unit\Rates;
 
-use Vatline\Rates\RateDiff;
-use Vatline\Rates\RateMapping;
-use Vatline\Rates\RateSet;
+use Vatright\Rates\RateDiff;
+use Vatright\Rates\RateMapping;
+use Vatright\Rates\RateSet;
 use PHPUnit\Framework\TestCase;
 
 class RateDiffTest extends TestCase {

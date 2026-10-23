@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Tests\Integration;
+namespace Vatright\Tests\Integration;
 
-use Vatline\Tests\Support\HttpGuard;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Tests\Support\HttpGuard;
+use Vatright\Tests\Support\IntegrationTestCase;
 use RuntimeException;
 
 class HttpGuardTest extends IntegrationTestCase {

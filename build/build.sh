@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-STAGE="$ROOT/dist/vatline"
+STAGE="$ROOT/dist/vatright"
 
 rm -rf "$ROOT/dist"
 mkdir -p "$STAGE"
@@ -24,5 +24,5 @@ for excluded in tests e2e node_modules bin package.json playwright.config.ts php
 	[ ! -e "$STAGE/$excluded" ] || { echo "dev file in package: $excluded" >&2; exit 1; }
 done
 
-(cd "$ROOT/dist" && zip -qr vatline.zip vatline)
-echo "$ROOT/dist/vatline.zip"
+(cd "$ROOT/dist" && zip -qr vatright.zip vatright)
+echo "$ROOT/dist/vatright.zip"

@@ -1,12 +1,12 @@
 <?php
 
-namespace Vatline\Tests\Unit\Registry;
+namespace Vatright\Tests\Unit\Registry;
 
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
-use Vatline\Registry\HttpTransport;
-use Vatline\Registry\Vies;
-use Vatline\Tests\Support\FixtureTransport;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
+use Vatright\Registry\HttpTransport;
+use Vatright\Registry\Vies;
+use Vatright\Tests\Support\FixtureTransport;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 

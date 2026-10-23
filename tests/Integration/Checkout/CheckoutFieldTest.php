@@ -1,15 +1,15 @@
 <?php
 
-namespace Vatline\Tests\Integration\Checkout;
+namespace Vatright\Tests\Integration\Checkout;
 
 use Automattic\WooCommerce\Blocks\Domain\Services\CheckoutFields;
 use Automattic\WooCommerce\Blocks\Package;
-use Vatline\Admin\ProductSupplyField;
-use Vatline\Checkout\CartSteering;
-use Vatline\Checkout\InputGatherer;
-use Vatline\Checkout\StoreApiExtension;
-use Vatline\Checkout\VatField;
-use Vatline\Domain\Decision;
+use Vatright\Admin\ProductSupplyField;
+use Vatright\Checkout\CartSteering;
+use Vatright\Checkout\InputGatherer;
+use Vatright\Checkout\StoreApiExtension;
+use Vatright\Checkout\VatField;
+use Vatright\Domain\Decision;
 use WC_Customer;
 use WP_Error;
 
@@ -24,7 +24,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 	 */
 	private function extension( \WP_REST_Response $response ): array {
 		$data = json_decode( (string) wp_json_encode( $response->get_data() ), true );
-		return $data['extensions']['vatline'];
+		return $data['extensions']['vatright'];
 	}
 
 	public function test_block_field_is_registered_once_in_the_contact_location() {
@@ -117,7 +117,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 
 		$this->assertTrue( $field['validate_callback']( self::INVALID_DE ), 'Unchecked numbers pass.' );
 
-		do_action( 'woocommerce_checkout_update_order_review', 'billing_country=DE&billing_vatline_number=' . self::INVALID_DE );
+		do_action( 'woocommerce_checkout_update_order_review', 'billing_country=DE&billing_vatright_number=' . self::INVALID_DE );
 
 		$this->assertInstanceOf( WP_Error::class, $field['validate_callback']( self::INVALID_DE ) );
 		$this->assertSame( 1, $this->vies_calls );
@@ -147,7 +147,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 	public function test_order_review_update_validates_once_and_the_cart_uses_the_verdict() {
 		$this->add_to_cart( $this->product( 'goods' ) );
 		$this->customer( 'DE', '10115' );
-		$post_data = 'billing_country=DE&billing_vatline_number=' . rawurlencode( self::VALID_DE );
+		$post_data = 'billing_country=DE&billing_vatright_number=' . rawurlencode( self::VALID_DE );
 
 		do_action( 'woocommerce_checkout_update_order_review', $post_data );
 		do_action( 'woocommerce_checkout_update_order_review', $post_data );
@@ -162,7 +162,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 		$this->customer( 'MT', '', '' );
 		$this->vies_answer( self::VALID_DE, '{"valid":true,"requestDate":"2026-10-17T10:00:00Z"}' );
 
-		do_action( 'woocommerce_checkout_update_order_review', 'billing_country=DE&billing_vatline_number=114103379' );
+		do_action( 'woocommerce_checkout_update_order_review', 'billing_country=DE&billing_vatright_number=114103379' );
 
 		$this->assertSame( 1, $this->vies_calls, 'The bare number was parsed with the posted country, not the stale MT one.' );
 	}
@@ -185,7 +185,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 			'POST',
 			'cart/extensions',
 			array(
-				'namespace' => 'vatline',
+				'namespace' => 'vatright',
 				'data'      => array( 'vat_number' => ' de 114.103.379' ),
 			)
 		);
@@ -205,7 +205,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 			'POST',
 			'cart/extensions',
 			array(
-				'namespace' => 'vatline',
+				'namespace' => 'vatright',
 				'data'      => array(
 					'vat_number' => self::VALID_DE,
 					'country'    => 'DE',
@@ -226,7 +226,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 			'POST',
 			'cart/extensions',
 			array(
-				'namespace' => 'vatline',
+				'namespace' => 'vatright',
 				'data'      => array( 'vat_number' => '' ),
 			)
 		);
@@ -243,7 +243,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 			'POST',
 			'cart/extensions',
 			array(
-				'namespace' => 'vatline',
+				'namespace' => 'vatright',
 				'data'      => array( 'self_certify' => true ),
 			)
 		);
@@ -253,7 +253,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 			'POST',
 			'cart/extensions',
 			array(
-				'namespace' => 'vatline',
+				'namespace' => 'vatright',
 				'data'      => array( 'self_certify' => false ),
 			)
 		);
@@ -277,7 +277,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 		foreach ( $cases as $label => list( $number, $status, $message ) ) {
 			$this->customer( 'DE', '10115', $number );
 			if ( in_array( $label, array( 'verified', 'invalid', 'pending' ), true ) ) {
-				do_action( 'woocommerce_checkout_update_order_review', 'billing_country=DE&billing_vatline_number=' . $number );
+				do_action( 'woocommerce_checkout_update_order_review', 'billing_country=DE&billing_vatright_number=' . $number );
 			}
 			$result = StoreApiExtension::status( $this->calculate() );
 
@@ -290,13 +290,13 @@ class CheckoutFieldTest extends CheckoutTestCase {
 		$this->vies_answer( self::INVALID_DE, '{"countryCode":"DE","vatNumber":"123475223","valid":false}' );
 		$this->add_to_cart( $this->product( 'goods' ) );
 		$this->customer( 'DE', '10115', self::INVALID_DE );
-		do_action( 'woocommerce_checkout_update_order_review', 'billing_country=DE&billing_vatline_number=' . self::INVALID_DE );
+		do_action( 'woocommerce_checkout_update_order_review', 'billing_country=DE&billing_vatright_number=' . self::INVALID_DE );
 		$field = Package::container()->get( CheckoutFields::class )->get_fields_for_location( 'contact' )[ VatField::FIELD_ID ];
 
 		$error = call_user_func( $field['validate_callback'], self::INVALID_DE );
 
 		$this->assertInstanceOf( WP_Error::class, $error );
-		$this->assertSame( 'vatline_invalid', $error->get_error_code() );
+		$this->assertSame( 'vatright_invalid', $error->get_error_code() );
 		$this->assertSame( StoreApiExtension::status( $this->calculate() )['message'], $error->get_error_message() );
 	}
 
@@ -304,7 +304,7 @@ class CheckoutFieldTest extends CheckoutTestCase {
 		$this->vies_answer( 'MT12345634', '{"valid":true,"requestDate":"2026-10-17T10:00:00Z"}' );
 		$this->add_to_cart( $this->product( 'goods' ) );
 		$this->customer( 'MT', '', 'MT12345634' );
-		do_action( 'woocommerce_checkout_update_order_review', 'billing_country=MT&billing_vatline_number=MT12345634' );
+		do_action( 'woocommerce_checkout_update_order_review', 'billing_country=MT&billing_vatright_number=MT12345634' );
 
 		$result = StoreApiExtension::status( $this->calculate() );
 
@@ -363,8 +363,8 @@ class CheckoutFieldTest extends CheckoutTestCase {
 			$fields = apply_filters( 'woocommerce_admin_billing_fields', array( 'first_name' => array( 'label' => 'First name' ) ), $order, $context );
 
 			$this->assertArrayHasKey( 'first_name', $fields );
-			$this->assertSame( self::VALID_DE, $fields['vatline_number']['value'] );
-			$this->assertSame( array( 'vatline_number' ), array_keys( wp_list_filter( $fields, array( 'label' => 'VAT number' ) ) ), $context );
+			$this->assertSame( self::VALID_DE, $fields['vatright_number']['value'] );
+			$this->assertSame( array( 'vatright_number' ), array_keys( wp_list_filter( $fields, array( 'label' => 'VAT number' ) ) ), $context );
 		}
 		remove_filter( 'woocommerce_admin_billing_fields', array( $woo_admin, 'admin_contact_fields' ), 10 );
 	}
@@ -373,17 +373,17 @@ class CheckoutFieldTest extends CheckoutTestCase {
 		$product = $this->product( 'goods' );
 		$field   = new ProductSupplyField();
 
-		$_POST = array( \Vatline\Checkout\SupplyType::META => 'service' );
+		$_POST = array( \Vatright\Checkout\SupplyType::META => 'service' );
 		$field->save( $product );
-		$this->assertSame( 'service', $product->get_meta( \Vatline\Checkout\SupplyType::META ) );
+		$this->assertSame( 'service', $product->get_meta( \Vatright\Checkout\SupplyType::META ) );
 
-		$_POST = array( \Vatline\Checkout\SupplyType::META => '' );
+		$_POST = array( \Vatright\Checkout\SupplyType::META => '' );
 		$field->save( $product );
-		$this->assertSame( '', $product->get_meta( \Vatline\Checkout\SupplyType::META ) );
+		$this->assertSame( '', $product->get_meta( \Vatright\Checkout\SupplyType::META ) );
 
-		$_POST = array( \Vatline\Checkout\SupplyType::META => 'nonsense' );
+		$_POST = array( \Vatright\Checkout\SupplyType::META => 'nonsense' );
 		$field->save( $product );
-		$this->assertSame( '', $product->get_meta( \Vatline\Checkout\SupplyType::META ) );
+		$this->assertSame( '', $product->get_meta( \Vatright\Checkout\SupplyType::META ) );
 		$_POST = array();
 	}
 }

@@ -1,11 +1,11 @@
-<h1 align="center">Vatline – EU VAT &amp; OSS for WooCommerce</h1>
+<h1 align="center">VAT Right – EU VAT &amp; OSS for WooCommerce</h1>
 
 <p align="center">
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/LICENSE-GPL-5C9E31?style=for-the-badge"></a>
   <a href="https://jeangalea.com"><img alt="Built by" src="https://img.shields.io/badge/BUILT%20BY-JEAN%20GALEA-8A2BE2?style=for-the-badge"></a>
 </p>
 
-<p align="center"><b>Vatline is free EU VAT handling for WooCommerce: number validation, reverse charge, the OSS threshold and a decision record on every order.</b></p>
+<p align="center"><b>VAT Right is free EU VAT handling for WooCommerce: number validation, reverse charge, the OSS threshold and a decision record on every order.</b></p>
 
 ## What it does
 
@@ -20,7 +20,7 @@ The plugin decides the VAT treatment of each order, applies it through WooCommer
 - OSS return and EC Sales List reports with CSV export, plus REST endpoints.
 - Personal data exporters, erasers and a retention setting.
 
-Settings are under WooCommerce > Settings > Tax > Vatline. `readme.txt` has the FAQ and the list of external services the plugin calls.
+Settings are under WooCommerce > Settings > Tax > VAT Right. `readme.txt` has the FAQ and the list of external services the plugin calls.
 
 ## Requirements
 
@@ -30,7 +30,7 @@ Settings are under WooCommerce > Settings > Tax > Vatline. `readme.txt` has the 
 
 ## Install
 
-Download the zip, upload it under Plugins > Add New > Upload Plugin and activate it. Tick "Enable tax rates and calculations" under WooCommerce > Settings > General if it isn't already, since WooCommerce hides the Tax tab until you do. Then open the Vatline tax section and read the setup check.
+Download the zip, upload it under Plugins > Add New > Upload Plugin and activate it. Tick "Enable tax rates and calculations" under WooCommerce > Settings > General if it isn't already, since WooCommerce hides the Tax tab until you do. Then open the VAT Right tax section and read the setup check.
 
 ## Known limitations
 
@@ -55,7 +55,7 @@ Tests never call live services; registry responses come from recorded fixtures.
 composer test:unit
 composer lint
 composer stan
-npx wp-env run tests-cli --env-cwd=wp-content/plugins/vatline vendor/bin/phpunit --bootstrap tests/bootstrap-integration.php --testsuite integration
+npx wp-env run tests-cli --env-cwd=wp-content/plugins/vatright vendor/bin/phpunit --bootstrap tests/bootstrap-integration.php --testsuite integration
 npx playwright test
 ```
 
@@ -63,4 +63,4 @@ npx playwright test
 
 ## Disclaimer
 
-Vatline is a tool, not tax advice. You, the store owner, are responsible for your VAT treatment and your filings. VAT rates and registry results come from third parties and can be wrong or out of date, so check them with an accountant. The plugin is provided without warranty and without liability, under the GPL.
+VAT Right is a tool, not tax advice. You, the store owner, are responsible for your VAT treatment and your filings. VAT rates and registry results come from third parties and can be wrong or out of date, so check them with an accountant. The plugin is provided without warranty and without liability, under the GPL.

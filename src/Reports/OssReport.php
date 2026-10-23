@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Reports;
+namespace Vatright\Reports;
 
 use DateTimeImmutable;
-use Vatline\Ledger\Fx;
-use Vatline\Ledger\Schema;
+use Vatright\Ledger\Fx;
+use Vatright\Ledger\Schema;
 use RuntimeException;
 
 class OssReport {
@@ -70,13 +70,13 @@ class OssReport {
 	public static function csv( array $report ): array {
 		$currency = $report['currency'];
 		$header   = array(
-			__( 'Member state of consumption', 'vatline' ),
-			__( 'VAT rate %', 'vatline' ),
-			__( 'Supply type', 'vatline' ),
+			__( 'Member state of consumption', 'vatright' ),
+			__( 'VAT rate %', 'vatright' ),
+			__( 'Supply type', 'vatright' ),
 			/* translators: %s: currency code. */
-			sprintf( __( 'Taxable amount (%s)', 'vatline' ), $currency ),
+			sprintf( __( 'Taxable amount (%s)', 'vatright' ), $currency ),
 			/* translators: %s: currency code. */
-			sprintf( __( 'VAT amount (%s)', 'vatline' ), $currency ),
+			sprintf( __( 'VAT amount (%s)', 'vatright' ), $currency ),
 		);
 
 		$lines = array();
@@ -86,7 +86,7 @@ class OssReport {
 
 		if ( array() !== $report['corrections'] ) {
 			$lines[] = array();
-			$lines[] = array( __( 'Corrections to earlier periods', 'vatline' ), __( 'VAT rate %', 'vatline' ), __( 'Supply type', 'vatline' ), __( 'Taxable amount', 'vatline' ), __( 'VAT amount', 'vatline' ), __( 'Period corrected', 'vatline' ) );
+			$lines[] = array( __( 'Corrections to earlier periods', 'vatright' ), __( 'VAT rate %', 'vatright' ), __( 'Supply type', 'vatright' ), __( 'Taxable amount', 'vatright' ), __( 'VAT amount', 'vatright' ), __( 'Period corrected', 'vatright' ) );
 			foreach ( $report['corrections'] as $row ) {
 				$lines[] = array( $row['member_state'], $row['rate_percent'], $row['supply_type'], self::money( $row['taxable'] ), self::money( $row['vat'] ), $row['relates_to_period'] );
 			}
@@ -94,7 +94,7 @@ class OssReport {
 
 		if ( array() !== $report['needs_correction'] ) {
 			$lines[] = array();
-			$lines[] = array( self::needs_correction_title(), __( 'Order', 'vatline' ), __( 'Rate charged %', 'vatline' ), __( 'Supply type', 'vatline' ), __( 'Taxable amount', 'vatline' ), __( 'VAT charged', 'vatline' ) );
+			$lines[] = array( self::needs_correction_title(), __( 'Order', 'vatright' ), __( 'Rate charged %', 'vatright' ), __( 'Supply type', 'vatright' ), __( 'Taxable amount', 'vatright' ), __( 'VAT charged', 'vatright' ) );
 			foreach ( $report['needs_correction'] as $row ) {
 				$lines[] = array( $row['member_state'], $row['order_id'], $row['rate_percent'], $row['supply_type'], self::money( $row['taxable'] ), self::money( $row['vat'] ) );
 			}
@@ -104,10 +104,10 @@ class OssReport {
 			$lines[] = array();
 			$lines[] = array(
 				/* translators: %s: conversion rule. */
-				sprintf( __( 'Exchange rates used: %s', 'vatline' ), $report['rate_rule'] ),
-				__( 'Period', 'vatline' ),
-				__( 'Rate date', 'vatline' ),
-				__( 'Units per EUR', 'vatline' ),
+				sprintf( __( 'Exchange rates used: %s', 'vatright' ), $report['rate_rule'] ),
+				__( 'Period', 'vatright' ),
+				__( 'Rate date', 'vatright' ),
+				__( 'Units per EUR', 'vatright' ),
 			);
 			foreach ( $report['rates'] as $rate ) {
 				$lines[] = array( $rate['currency'], $rate['period'], $rate['rate_date'], $rate['rate'] );
@@ -118,7 +118,7 @@ class OssReport {
 	}
 
 	public static function needs_correction_title(): string {
-		return __( 'Charged at your own rate, needs correction (not included above)', 'vatline' );
+		return __( 'Charged at your own rate, needs correction (not included above)', 'vatright' );
 	}
 
 	private static function money( float $amount ): string {

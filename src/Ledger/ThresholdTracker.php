@@ -1,15 +1,15 @@
 <?php
 
-namespace Vatline\Ledger;
+namespace Vatright\Ledger;
 
-use Vatline\Domain\Line;
-use Vatline\Domain\Scheme;
-use Vatline\Settings;
+use Vatright\Domain\Line;
+use Vatright\Domain\Scheme;
+use Vatright\Settings;
 
 class ThresholdTracker {
 
 	const THRESHOLD_EUR = 10000.00;
-	const TRANSIENT     = 'vatline_threshold_';
+	const TRANSIENT     = 'vatright_threshold_';
 
 	/** @var array<int,float> */
 	private static $sums = array();
@@ -40,7 +40,7 @@ class ThresholdTracker {
 	}
 
 	private function threshold(): float {
-		return (float) apply_filters( 'vatline_threshold_eur', self::THRESHOLD_EUR );
+		return (float) apply_filters( 'vatright_threshold_eur', self::THRESHOLD_EUR );
 	}
 
 	private function sum( int $year ): float {

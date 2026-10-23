@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Registry;
+namespace Vatright\Registry;
 
-use Vatline\Domain\VatNumber;
+use Vatright\Domain\VatNumber;
 
 class Router {
 

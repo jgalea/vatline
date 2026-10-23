@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Tests\Support;
+namespace Vatright\Tests\Support;
 
-use Vatline\Ledger\Schema;
+use Vatright\Ledger\Schema;
 use WP_UnitTestCase;
 
 abstract class IntegrationTestCase extends WP_UnitTestCase {

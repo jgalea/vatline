@@ -1,12 +1,12 @@
 <?php
 
-namespace Vatline\Tests\Integration\Reports;
+namespace Vatright\Tests\Integration\Reports;
 
-use Vatline\Checkout\TaxLocation;
-use Vatline\Domain\Rule;
-use Vatline\Domain\Scheme;
-use Vatline\Ledger\LedgerWriter;
-use Vatline\Tests\Integration\Ledger\LedgerTestCase;
+use Vatright\Checkout\TaxLocation;
+use Vatright\Domain\Rule;
+use Vatright\Domain\Scheme;
+use Vatright\Ledger\LedgerWriter;
+use Vatright\Tests\Integration\Ledger\LedgerTestCase;
 use WC_Order;
 
 require_once dirname( __DIR__ ) . '/Ledger/LedgerTestCase.php';

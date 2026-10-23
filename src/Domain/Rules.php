@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Domain;
+namespace Vatright\Domain;
 
 /**
  * Turns a fully gathered DecisionInput into a Decision. Pure and deterministic

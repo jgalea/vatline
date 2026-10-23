@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Tests\Unit\Domain;
+namespace Vatright\Tests\Unit\Domain;
 
-use Vatline\Domain\FormatCheck;
-use Vatline\Domain\VatNumber;
+use Vatright\Domain\FormatCheck;
+use Vatright\Domain\VatNumber;
 use PHPUnit\Framework\TestCase;
 
 class FormatCheckTest extends TestCase {

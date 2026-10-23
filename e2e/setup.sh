@@ -28,5 +28,5 @@ if [ -z "$(wp post list --post_type=page --name=classic-checkout --format=ids)" 
 	wp post create --post_type=page --post_status=publish --post_title="Classic checkout" --post_name=classic-checkout --post_content="[woocommerce_checkout]" >/dev/null
 fi
 
-wp eval 'Vatline\Ledger\Schema::install();'
-wp eval-file wp-content/plugins/vatline/e2e/seed.php
+wp eval 'Vatright\Ledger\Schema::install();'
+wp eval-file wp-content/plugins/vatright/e2e/seed.php

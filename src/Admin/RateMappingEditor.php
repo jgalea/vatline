@@ -1,14 +1,14 @@
 <?php
 
-namespace Vatline\Admin;
+namespace Vatright\Admin;
 
-use Vatline\Rates\RateMapping;
-use Vatline\Rates\RateSet;
-use Vatline\Rates\RateSync;
+use Vatright\Rates\RateMapping;
+use Vatright\Rates\RateSet;
+use Vatright\Rates\RateSync;
 
 class RateMappingEditor {
 
-	const FIELD = 'vatline_mapping';
+	const FIELD = 'vatright_mapping';
 
 	/** @var RateSync */
 	private $sync;
@@ -34,7 +34,7 @@ class RateMappingEditor {
 				</th>
 				<td class="forminp forminp-select">
 					<input type="hidden" name="<?php echo esc_attr( self::FIELD . '[' . $index . '][class]' ); ?>" value="<?php echo esc_attr( $class ); ?>" />
-					<select id="<?php echo esc_attr( $id ); ?>" class="vatline-class-type" name="<?php echo esc_attr( self::FIELD . '[' . $index . '][type]' ); ?>">
+					<select id="<?php echo esc_attr( $id ); ?>" class="vatright-class-type" name="<?php echo esc_attr( self::FIELD . '[' . $index . '][type]' ); ?>">
 						<?php foreach ( $types as $value => $label ) : ?>
 							<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $type, $value ); ?>><?php echo esc_html( $label ); ?></option>
 						<?php endforeach; ?>
@@ -77,10 +77,10 @@ class RateMappingEditor {
 	 */
 	private function types(): array {
 		return array(
-			''         => __( 'Not mapped', 'vatline' ),
-			'standard' => __( 'Standard rate', 'vatline' ),
-			'reduced'  => __( 'Reduced rate', 'vatline' ),
-			'zero'     => __( 'Zero rate', 'vatline' ),
+			''         => __( 'Not mapped', 'vatright' ),
+			'standard' => __( 'Standard rate', 'vatright' ),
+			'reduced'  => __( 'Reduced rate', 'vatright' ),
+			'zero'     => __( 'Zero rate', 'vatright' ),
 		);
 	}
 
@@ -110,7 +110,7 @@ class RateMappingEditor {
 	private function render_countries( RateSet $set, int $index, array $current, bool $hidden ): void {
 		$countries = WC()->countries->get_countries();
 		?>
-		<table class="widefat striped vatline-countries" <?php echo $hidden ? 'hidden' : ''; ?>>
+		<table class="widefat striped vatright-countries" <?php echo $hidden ? 'hidden' : ''; ?>>
 			<tbody>
 				<?php foreach ( $set->country_codes() as $country ) : ?>
 					<?php $options = $this->rate_options( $set, $country ); ?>
@@ -122,7 +122,7 @@ class RateMappingEditor {
 						<td><label for="<?php echo esc_attr( $field ); ?>"><?php echo esc_html( $countries[ $country ] ?? $country ); ?></label></td>
 						<td>
 							<select id="<?php echo esc_attr( $field ); ?>" name="<?php echo esc_attr( self::FIELD . '[' . $index . '][rates][' . $country . ']' ); ?>">
-								<option value=""><?php esc_html_e( 'Not mapped', 'vatline' ); ?></option>
+								<option value=""><?php esc_html_e( 'Not mapped', 'vatright' ); ?></option>
 								<?php foreach ( $options as $option ) : ?>
 									<option value="<?php echo esc_attr( (string) $option['rate'] ); ?>" <?php selected( isset( $current[ $country ] ) && abs( (float) $current[ $country ] - $option['rate'] ) < 0.0001 ); ?>><?php echo esc_html( $option['label'] ); ?></option>
 								<?php endforeach; ?>
@@ -153,7 +153,7 @@ class RateMappingEditor {
 				array_slice( $reduced['categories'], 0, 3 )
 			);
 			$label     = $reduced['rate'] . '%';
-			$label    .= 'super_reduced' === $reduced['type'] ? ' ' . __( '(super reduced)', 'vatline' ) : '';
+			$label    .= 'super_reduced' === $reduced['type'] ? ' ' . __( '(super reduced)', 'vatright' ) : '';
 			$options[] = array(
 				'rate'  => $reduced['rate'],
 				'label' => $names ? $label . ' - ' . implode( ', ', $names ) : $label,

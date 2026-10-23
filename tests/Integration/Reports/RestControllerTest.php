@@ -1,13 +1,13 @@
 <?php
 
-namespace Vatline\Tests\Integration\Reports;
+namespace Vatright\Tests\Integration\Reports;
 
-use Vatline\Domain\Scheme;
-use Vatline\Ledger\Fx;
-use Vatline\Ledger\Schema;
-use Vatline\Reports\EcSalesList;
-use Vatline\Reports\OssReport;
-use Vatline\Reports\RestController;
+use Vatright\Domain\Scheme;
+use Vatright\Ledger\Fx;
+use Vatright\Ledger\Schema;
+use Vatright\Reports\EcSalesList;
+use Vatright\Reports\OssReport;
+use Vatright\Reports\RestController;
 use WP_REST_Request;
 
 require_once __DIR__ . '/ReportsTestCase.php';
@@ -34,7 +34,7 @@ class RestControllerTest extends ReportsTestCase {
 	 * @param array<string,mixed> $params
 	 */
 	private function get( string $route, array $params = array() ) {
-		$request = new WP_REST_Request( 'GET', '/vatline/v1' . $route );
+		$request = new WP_REST_Request( 'GET', '/vatright/v1' . $route );
 		$request->set_query_params( $params );
 		return rest_do_request( $request );
 	}
@@ -78,7 +78,7 @@ class RestControllerTest extends ReportsTestCase {
 		$this->reverse_charge( 'digital', 40, 'DE123456789' );
 		$fallback = $this->sell_at_store_rate( 'IT', 50 );
 		$order->add_meta_data(
-			'_vatline_log',
+			'_vatright_log',
 			wp_json_encode(
 				array(
 					'trigger' => 'checkout',
@@ -87,7 +87,7 @@ class RestControllerTest extends ReportsTestCase {
 			)
 		);
 		$order->add_meta_data(
-			'_vatline_log',
+			'_vatright_log',
 			wp_json_encode(
 				array(
 					'trigger' => 'admin',

@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Reports;
+namespace Vatright\Reports;
 
 use RuntimeException;
 

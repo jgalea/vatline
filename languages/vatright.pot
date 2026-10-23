@@ -2,8 +2,8 @@
 # This file is distributed under the GPL-3.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Vatline – EU VAT & OSS for WooCommerce 0.1.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/vatline\n"
+"Project-Id-Version: VAT Right – EU VAT & OSS for WooCommerce 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/vatright\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -12,20 +12,20 @@ msgstr ""
 "POT-Creation-Date: 2026-10-18T21:19:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: vatline\n"
+"X-Domain: vatright\n"
 
 #. Plugin Name of the plugin
-#: vatline.php
-msgid "Vatline – EU VAT & OSS for WooCommerce"
+#: vatright.php
+msgid "VAT Right – EU VAT & OSS for WooCommerce"
 msgstr ""
 
 #. Description of the plugin
-#: vatline.php
+#: vatright.php
 msgid "Decides, applies and records EU VAT treatment on every WooCommerce order."
 msgstr ""
 
 #. Author of the plugin
-#: vatline.php
+#: vatright.php
 msgid "Jean Galea"
 msgstr ""
 
@@ -75,7 +75,7 @@ msgid "(super reduced)"
 msgstr ""
 
 #: src/Admin/SettingsSection.php:77
-msgid "Vatline"
+msgid "VAT Right"
 msgstr ""
 
 #: src/Admin/SettingsSection.php:101
@@ -231,7 +231,7 @@ msgid "Turn on \"Enable tax rates and calculations\""
 msgstr ""
 
 #: src/Admin/SettingsSection.php:354
-msgid "Open the Vatline setup check"
+msgid "Open the VAT Right setup check"
 msgstr ""
 
 #: src/Admin/SettingsSection.php:414
@@ -692,7 +692,7 @@ msgid "VAT was not charged on this order, but the registry reports the VAT numbe
 msgstr ""
 
 #: src/Plugin.php:85
-msgid "Vatline requires WooCommerce to be active."
+msgid "VAT Right requires WooCommerce to be active."
 msgstr ""
 
 #: src/Privacy/Privacy.php:44
@@ -1025,23 +1025,23 @@ msgid "Refunds booked in this period against earlier periods are listed in the C
 msgstr ""
 
 #. translators: 1: order number, 2: VAT number
-#: templates/emails/plain/vatline-revalidated.php:26
-#: templates/emails/vatline-revalidated.php:28
+#: templates/emails/plain/vatright-revalidated.php:26
+#: templates/emails/vatright-revalidated.php:28
 #, php-format
 msgid "VAT was not charged on order %1$s, but the VAT registry now reports the VAT number %2$s as invalid. Check the order and decide whether VAT is due."
 msgstr ""
 
 #. translators: 1: order number, 2: VAT number
-#: templates/emails/plain/vatline-revalidated.php:29
-#: templates/emails/vatline-revalidated.php:35
+#: templates/emails/plain/vatright-revalidated.php:29
+#: templates/emails/vatright-revalidated.php:35
 #, php-format
 msgid "VAT was charged on order %1$s because the VAT registry was unavailable when it was placed. The registry now confirms the VAT number %2$s is valid, so the customer may be due a refund of the VAT."
 msgstr ""
 
-#: templates/emails/vatline-revalidated.php:41
+#: templates/emails/vatright-revalidated.php:41
 msgid "Open the order"
 msgstr ""
 
-#: vatline.php:27
-msgid "Vatline is missing its autoloader. Run \"composer install\" in the plugin folder."
+#: vatright.php:27
+msgid "VAT Right is missing its autoloader. Run \"composer install\" in the plugin folder."
 msgstr ""

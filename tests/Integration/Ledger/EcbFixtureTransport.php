@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Tests\Integration\Ledger;
+namespace Vatright\Tests\Integration\Ledger;
 
-use Vatline\Registry\HttpTransport;
+use Vatright\Registry\HttpTransport;
 
 /**
  * Serves the recorded USD series, cut to the requested period the way the ECB

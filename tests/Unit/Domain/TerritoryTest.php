@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Tests\Unit\Domain;
+namespace Vatright\Tests\Unit\Domain;
 
-use Vatline\Domain\Territory;
+use Vatright\Domain\Territory;
 use PHPUnit\Framework\TestCase;
 
 class TerritoryTest extends TestCase {

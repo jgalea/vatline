@@ -1,12 +1,12 @@
 <?php
 
-namespace Vatline\Tests\Unit\Rates;
+namespace Vatright\Tests\Unit\Rates;
 
 use DOMDocument;
 use DOMXPath;
-use Vatline\Rates\Snapshot;
-use Vatline\Rates\Tedb;
-use Vatline\Tests\Support\FixtureTransport;
+use Vatright\Rates\Snapshot;
+use Vatright\Rates\Tedb;
+use Vatright\Tests\Support\FixtureTransport;
 use PHPUnit\Framework\TestCase;
 
 require_once dirname( __DIR__, 2 ) . '/Support/FixtureTransport.php';
@@ -17,7 +17,7 @@ class TedbParseTest extends TestCase {
 	private $dir;
 
 	protected function setUp(): void {
-		$this->dir = sys_get_temp_dir() . '/vatline-tedb-' . bin2hex( random_bytes( 4 ) );
+		$this->dir = sys_get_temp_dir() . '/vatright-tedb-' . bin2hex( random_bytes( 4 ) );
 		mkdir( $this->dir ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir
 	}
 

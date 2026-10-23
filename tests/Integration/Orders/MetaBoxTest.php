@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Tests\Integration\Orders;
+namespace Vatright\Tests\Integration\Orders;
 
-use Vatline\Orders\DecisionStore;
-use Vatline\Orders\MetaBox;
-use Vatline\Orders\Revalidation;
+use Vatright\Orders\DecisionStore;
+use Vatright\Orders\MetaBox;
+use Vatright\Orders\Revalidation;
 use RuntimeException;
 
 require_once __DIR__ . '/LifecycleTestCase.php';
@@ -106,7 +106,7 @@ class MetaBoxTest extends LifecycleTestCase {
 		$this->metabox()->add();
 
 		$screen = wc_get_page_screen_id( 'shop-order' );
-		$this->assertArrayHasKey( 'vatline-decision', $GLOBALS['wp_meta_boxes'][ $screen ]['normal']['default'] );
+		$this->assertArrayHasKey( 'vatright-decision', $GLOBALS['wp_meta_boxes'][ $screen ]['normal']['default'] );
 	}
 
 	private function recheck_request( int $order_id, bool $nonce ): void {
@@ -191,7 +191,7 @@ class MetaBoxTest extends LifecycleTestCase {
 	}
 
 	public function test_every_rule_and_flag_has_words() {
-		foreach ( ( new \ReflectionClass( \Vatline\Domain\Rule::class ) )->getConstants() as $rule ) {
+		foreach ( ( new \ReflectionClass( \Vatright\Domain\Rule::class ) )->getConstants() as $rule ) {
 			$this->assertNotSame( $rule, MetaBox::rule_text( $rule ), "$rule has no wording" );
 		}
 		foreach ( array( 'validation_pending', 'validated_after_outage', 'invalid_after_exemption', 'evidence_conflict_self_certified', 'single_evidence', 'name_mismatch', 'prefix_mismatch', 'backfilled', 'rate_missing' ) as $flag ) {

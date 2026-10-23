@@ -1,33 +1,48 @@
-.vatline-notice {
+.vatright-notice {
 	margin-block: 1em;
 }
 
-.vatline-notice__message {
+.vatright-notice__message {
 	margin: 0;
 	padding-inline-start: 0.75em;
 	border-inline-start: 3px solid color-mix(in oklch, currentColor 35%, transparent);
 }
 
+.vatright-notice__disclosure {
+	margin: 0 0 0.5em;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	opacity: 0.8;
+}
+
 /* Block checkout sizes its labels and help text in rem; the theme's body size, which the notice would inherit, is fluid and larger. */
-.wc-block-checkout .vatline-notice__message {
+.wc-block-checkout .vatright-notice__message {
 	font-size: 0.875rem;
 	line-height: 1.5;
 }
 
-.vatline-notice__message--verified {
+.vatright-notice__message--verified {
 	border-inline-start-color: oklch(0.55 0.13 150);
 }
 
-.vatline-notice__message--invalid {
+.vatright-notice__message--invalid {
 	border-inline-start-color: oklch(0.55 0.2 27);
 }
 
-.vatline-notice .wc-block-components-checkbox label {
+.vatright-notice .wc-block-components-checkbox label {
 	display: flex;
 	align-items: center;
 	min-block-size: 2.75rem;
 }
 
-.woocommerce-checkout-review-order-table .vatline-notice td {
+.woocommerce-checkout-review-order-table .vatright-notice td {
 	padding-block: 1em;
+}
+
+.vatright-disclosure {
+	display: block;
+	margin-block-start: 0.5em;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	opacity: 0.8;
 }

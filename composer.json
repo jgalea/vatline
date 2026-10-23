@@ -1,5 +1,5 @@
 {
-    "name": "jgalea/vatline",
+    "name": "jgalea/vatright",
     "description": "Decides, applies and records EU VAT treatment on every WooCommerce order.",
     "type": "wordpress-plugin",
     "license": "GPL-3.0-or-later",
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Vatline\\": "src/"
+            "Vatright\\": "src/"
         }
     },
     "scripts": {

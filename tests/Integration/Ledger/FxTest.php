@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Tests\Integration\Ledger;
+namespace Vatright\Tests\Integration\Ledger;
 
-use Vatline\Ledger\Fx;
-use Vatline\Ledger\Schema;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Ledger\Fx;
+use Vatright\Ledger\Schema;
+use Vatright\Tests\Support\IntegrationTestCase;
 
 require_once __DIR__ . '/EcbFixtureTransport.php';
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Registry;
+namespace Vatright\Registry;
 
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
 use Throwable;
 
 class Vies implements Registry {

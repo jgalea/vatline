@@ -1,18 +1,18 @@
 <?php
 
-namespace Vatline\Orders;
+namespace Vatright\Orders;
 
-use Vatline\Domain\Decision;
+use Vatright\Domain\Decision;
 use WC_Meta_Data;
 use WC_Order;
 
 final class DecisionStore {
 
-	const META = '_vatline_decision';
+	const META = '_vatright_decision';
 
-	const LOG_META = '_vatline_log';
+	const LOG_META = '_vatright_log';
 
-	const NUMBER_META = '_vatline_number';
+	const NUMBER_META = '_vatright_number';
 
 	public static function get( WC_Order $order ): ?Decision {
 		$data = json_decode( (string) $order->get_meta( self::META ), true );

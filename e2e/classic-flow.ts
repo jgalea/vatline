@@ -2,7 +2,7 @@ import { expect, type Page } from '@playwright/test';
 import { TEST_CUSTOMER, addToCart, type Customer } from './helpers';
 
 export const taxRow = ( page: Page ) => page.locator( '.woocommerce-checkout-review-order-table tr.tax-rate, .woocommerce-checkout-review-order-table tr.tax-total' );
-export const notice = ( page: Page ) => page.locator( '.vatline-notice__message' );
+export const notice = ( page: Page ) => page.locator( '.vatright-notice__message' );
 
 export async function updated( page: Page, action: () => Promise< unknown > ) {
 	const response = page.waitForResponse( ( r ) => r.url().includes( 'wc-ajax=update_order_review' ) && r.status() === 200 );
@@ -41,7 +41,7 @@ export async function changePostcode( page: Page, postcode: string ) {
 }
 
 export async function enterVat( page: Page, vat: string ) {
-	await updated( page, () => page.locator( '#billing_vatline_number' ).fill( vat ) );
+	await updated( page, () => page.locator( '#billing_vatright_number' ).fill( vat ) );
 }
 
 export async function placeOrder( page: Page ) {

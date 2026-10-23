@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Tests\Integration\Checkout;
+namespace Vatright\Tests\Integration\Checkout;
 
-use Vatline\Admin\SetupCheck;
-use Vatline\Checkout\TaxLocation;
-use Vatline\Domain\LineDecision;
-use Vatline\Domain\Rule;
+use Vatright\Admin\SetupCheck;
+use Vatright\Checkout\TaxLocation;
+use Vatright\Domain\LineDecision;
+use Vatright\Domain\Rule;
 
 require_once __DIR__ . '/CheckoutTestCase.php';
 

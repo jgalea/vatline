@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Tests\Integration\Orders;
+namespace Vatright\Tests\Integration\Orders;
 
-use Vatline\Orders\AdminRecalc;
-use Vatline\Orders\DecisionStore;
+use Vatright\Orders\AdminRecalc;
+use Vatright\Orders\DecisionStore;
 
 require_once __DIR__ . '/LifecycleTestCase.php';
 

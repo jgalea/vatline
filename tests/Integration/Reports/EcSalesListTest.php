@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Tests\Integration\Reports;
+namespace Vatright\Tests\Integration\Reports;
 
-use Vatline\Domain\Scheme;
-use Vatline\Ledger\Schema;
-use Vatline\Reports\EcSalesList;
-use Vatline\Reports\IncompleteReport;
+use Vatright\Domain\Scheme;
+use Vatright\Ledger\Schema;
+use Vatright\Reports\EcSalesList;
+use Vatright\Reports\IncompleteReport;
 
 require_once __DIR__ . '/ReportsTestCase.php';
 

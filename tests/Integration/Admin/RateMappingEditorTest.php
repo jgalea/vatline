@@ -1,12 +1,12 @@
 <?php
 
-namespace Vatline\Tests\Integration\Admin;
+namespace Vatright\Tests\Integration\Admin;
 
-use Vatline\Admin\RateMappingEditor;
-use Vatline\Rates\RateMapping;
-use Vatline\Rates\RateSet;
-use Vatline\Rates\RateSync;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Admin\RateMappingEditor;
+use Vatright\Rates\RateMapping;
+use Vatright\Rates\RateSet;
+use Vatright\Rates\RateSync;
+use Vatright\Tests\Support\IntegrationTestCase;
 
 class RateMappingEditorTest extends IntegrationTestCase {
 
@@ -94,9 +94,9 @@ class RateMappingEditorTest extends IntegrationTestCase {
 		);
 		$html    = $this->html();
 		$classes = count( wc_get_product_tax_class_options() );
-		$this->assertSame( $classes, substr_count( $html, 'vatline-countries' ) );
-		$this->assertSame( $classes - 1, substr_count( $html, 'vatline-countries" hidden' ) );
-		$this->assertStringContainsString( 'vatline_mapping[0][rates][DE]', $html );
+		$this->assertSame( $classes, substr_count( $html, 'vatright-countries' ) );
+		$this->assertSame( $classes - 1, substr_count( $html, 'vatright-countries" hidden' ) );
+		$this->assertStringContainsString( 'vatright_mapping[0][rates][DE]', $html );
 		$this->assertStringContainsString( '5.5% - Foodstuffs', $html );
 		$this->assertStringContainsString( '2.1% (super reduced)', $html );
 	}

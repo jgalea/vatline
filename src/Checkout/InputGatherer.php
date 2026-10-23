@@ -1,16 +1,16 @@
 <?php
 
-namespace Vatline\Checkout;
+namespace Vatright\Checkout;
 
-use Vatline\Domain\DecisionInput;
-use Vatline\Domain\Evidence;
-use Vatline\Domain\Line;
-use Vatline\Domain\VatNumber;
-use Vatline\Ledger\Fx;
-use Vatline\Ledger\ThresholdTracker;
-use Vatline\Orders\DecisionStore;
-use Vatline\Registry\Validator;
-use Vatline\Settings;
+use Vatright\Domain\DecisionInput;
+use Vatright\Domain\Evidence;
+use Vatright\Domain\Line;
+use Vatright\Domain\VatNumber;
+use Vatright\Ledger\Fx;
+use Vatright\Ledger\ThresholdTracker;
+use Vatright\Orders\DecisionStore;
+use Vatright\Registry\Validator;
+use Vatright\Settings;
 use WC_Cart;
 use WC_Customer;
 use WC_Geolocation;
@@ -21,19 +21,19 @@ use WC_Product;
 
 class InputGatherer {
 
-	const NUMBER_META = '_vatline_number';
+	const NUMBER_META = '_vatright_number';
 
 	/**
 	 * Session key holding the billing country the customer self-certified.
 	 * Ignored once the billing country no longer matches it.
 	 */
-	const SELF_CERTIFIED_SESSION = 'vatline_self_certified';
+	const SELF_CERTIFIED_SESSION = 'vatright_self_certified';
 
 	/**
 	 * Order item meta tying an order line to the cart line the checkout
 	 * decision was made for.
 	 */
-	const LINE_KEY_META = '_vatline_line_key';
+	const LINE_KEY_META = '_vatright_line_key';
 
 	const PICKUP_METHODS = array( 'local_pickup', 'pickup_location', 'legacy_local_pickup' );
 

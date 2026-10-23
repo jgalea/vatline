@@ -6,7 +6,7 @@ parameters:
 	paths:
 		- src
 		- templates
-		- vatline.php
+		- vatright.php
 		- uninstall.php
 	bootstrapFiles:
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php

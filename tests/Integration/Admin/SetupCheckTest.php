@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Tests\Integration\Admin;
+namespace Vatright\Tests\Integration\Admin;
 
-use Vatline\Admin\SetupCheck;
-use Vatline\Domain\Territory;
-use Vatline\Settings;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Admin\SetupCheck;
+use Vatright\Domain\Territory;
+use Vatright\Settings;
+use Vatright\Tests\Support\IntegrationTestCase;
 use WC_Tax;
 
 class SetupCheckTest extends IntegrationTestCase {

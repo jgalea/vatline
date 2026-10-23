@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Tests\Support;
+namespace Vatright\Tests\Support;
 
-use Vatline\Registry\HttpTransport;
+use Vatright\Registry\HttpTransport;
 use RuntimeException;
 
 class FixtureTransport implements HttpTransport {

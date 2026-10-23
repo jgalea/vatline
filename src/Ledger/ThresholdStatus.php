@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Ledger;
+namespace Vatright\Ledger;
 
 final class ThresholdStatus {
 

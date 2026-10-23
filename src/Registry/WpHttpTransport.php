@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Registry;
+namespace Vatright\Registry;
 
 class WpHttpTransport implements HttpTransport {
 
 	public function request( string $method, string $url, string $body = '', array $headers = array(), int $timeout = 5 ): array {
-		$timeout = (int) ceil( min( 5.0, max( 1.0, (float) apply_filters( 'vatline_registry_timeout', (float) $timeout ) ) ) );
+		$timeout = (int) ceil( min( 5.0, max( 1.0, (float) apply_filters( 'vatright_registry_timeout', (float) $timeout ) ) ) );
 
 		$args = array(
 			'method'  => $method,

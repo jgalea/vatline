@@ -1,15 +1,15 @@
 <?php
 
-namespace Vatline\Ledger;
+namespace Vatright\Ledger;
 
 use DateTimeImmutable;
-use Vatline\Domain\Decision;
-use Vatline\Domain\Line;
-use Vatline\Domain\LineDecision;
-use Vatline\Domain\Rule;
-use Vatline\Domain\Scheme;
-use Vatline\Domain\Territory;
-use Vatline\Settings;
+use Vatright\Domain\Decision;
+use Vatright\Domain\Line;
+use Vatright\Domain\LineDecision;
+use Vatright\Domain\Rule;
+use Vatright\Domain\Scheme;
+use Vatright\Domain\Territory;
+use Vatright\Settings;
 use WC_Order;
 use WC_Order_Item_Product;
 use WC_Product;
@@ -17,9 +17,9 @@ use WC_Tax;
 
 class Backfill {
 
-	const HOOK     = 'vatline_backfill_batch';
+	const HOOK     = 'vatright_backfill_batch';
 	const BATCH    = 50;
-	const AS_GROUP = 'vatline';
+	const AS_GROUP = 'vatright';
 
 	/** @var LedgerWriter */
 	private $writer;

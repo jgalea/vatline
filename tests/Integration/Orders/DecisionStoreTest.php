@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Tests\Integration\Orders;
+namespace Vatright\Tests\Integration\Orders;
 
-use Vatline\Domain\Rule;
-use Vatline\Orders\DecisionStore;
+use Vatright\Domain\Rule;
+use Vatright\Orders\DecisionStore;
 
 require_once __DIR__ . '/OrderTestCase.php';
 
@@ -19,7 +19,7 @@ class DecisionStoreTest extends OrderTestCase {
 
 		$this->assertSame( $decision->to_array(), DecisionStore::get( $order )->to_array() );
 		$this->assertSame( 'yes', $order->get_meta( 'is_vat_exempt' ) );
-		$this->assertSame( 'DE114103379', $order->get_meta( '_vatline_number' ) );
+		$this->assertSame( 'DE114103379', $order->get_meta( '_vatright_number' ) );
 		$log = DecisionStore::log( $order );
 		$this->assertCount( 1, $log );
 		$this->assertSame(

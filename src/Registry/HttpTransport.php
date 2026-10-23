@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Registry;
+namespace Vatright\Registry;
 
 interface HttpTransport {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Domain;
+namespace Vatright\Domain;
 
 final class Decision {
 

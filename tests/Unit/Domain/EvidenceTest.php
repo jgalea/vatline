@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Tests\Unit\Domain;
+namespace Vatright\Tests\Unit\Domain;
 
-use Vatline\Domain\Evidence;
+use Vatright\Domain\Evidence;
 use PHPUnit\Framework\TestCase;
 
 class EvidenceTest extends TestCase {

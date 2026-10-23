@@ -5,7 +5,7 @@
  * (recorded in tests/fixtures/vies); XI980780684 is made valid here, the
  * recorded fixture says invalid.
  */
-function vatline_e2e_vies_answer( $digits ) {
+function vatright_e2e_vies_answer( $digits ) {
 	$valid = array( '114103379', '980780684' );
 	if ( in_array( $digits, $valid, true ) ) {
 		return array(
@@ -41,10 +41,10 @@ add_filter(
 		}
 		if ( false !== strpos( $url, '/check-vat-number' ) ) {
 			$body   = json_decode( (string) ( $args['body'] ?? '' ), true );
-			$answer = is_array( $body ) ? vatline_e2e_vies_answer( (string) ( $body['vatNumber'] ?? '' ) ) : null;
+			$answer = is_array( $body ) ? vatright_e2e_vies_answer( (string) ( $body['vatNumber'] ?? '' ) ) : null;
 			if ( null !== $answer ) {
-				$count = (int) get_option( 'vatline_e2e_vies_calls', 0 );
-				update_option( 'vatline_e2e_vies_calls', $count + 1, false );
+				$count = (int) get_option( 'vatright_e2e_vies_calls', 0 );
+				update_option( 'vatright_e2e_vies_calls', $count + 1, false );
 				return array(
 					'headers'  => array(),
 					'body'     => wp_json_encode( $answer ),
@@ -57,7 +57,7 @@ add_filter(
 				);
 			}
 		}
-		return new WP_Error( 'vatline_e2e_unstubbed', 'No e2e stub for ' . $url );
+		return new WP_Error( 'vatright_e2e_unstubbed', 'No e2e stub for ' . $url );
 	},
 	10,
 	3
@@ -66,7 +66,7 @@ add_filter(
 add_filter(
 	'woocommerce_geolocate_ip',
 	static function ( $country ) {
-		$cookie = isset( $_COOKIE['vatline_e2e_ip_country'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_COOKIE['vatline_e2e_ip_country'] ) ) ) : '';
+		$cookie = isset( $_COOKIE['vatright_e2e_ip_country'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_COOKIE['vatright_e2e_ip_country'] ) ) ) : '';
 		return preg_match( '/^[A-Z]{2}$/', $cookie ) ? $cookie : $country;
 	}
 );

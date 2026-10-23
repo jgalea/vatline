@@ -2,10 +2,10 @@
 
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- a WP-CLI script, its variables are not globals of the plugin.
 
-use Vatline\Rates\RateMapping;
-use Vatline\Rates\RateSync;
-use Vatline\Rates\Tedb;
-use Vatline\Registry\WpHttpTransport;
+use Vatright\Rates\RateMapping;
+use Vatright\Rates\RateSync;
+use Vatright\Rates\Tedb;
+use Vatright\Registry\WpHttpTransport;
 
 $sync = new RateSync( new Tedb( new WpHttpTransport() ) );
 $diff = $sync->plan( $sync->latest(), RateMapping::load() );
@@ -24,11 +24,11 @@ if ( ! $zone->get_shipping_methods() ) {
 	);
 }
 
-if ( ! get_user_by( 'login', 'vatline-customer' ) ) {
+if ( ! get_user_by( 'login', 'vatright-customer' ) ) {
 	wp_insert_user(
 		array(
-			'user_login'   => 'vatline-customer',
-			'user_pass'    => 'vatline-pass',
+			'user_login'   => 'vatright-customer',
+			'user_pass'    => 'vatright-pass',
 			'user_email'   => 'customer@example.com',
 			'first_name'   => 'Ada',
 			'last_name'    => 'Lovelace',

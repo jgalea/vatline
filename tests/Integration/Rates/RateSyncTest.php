@@ -1,15 +1,15 @@
 <?php
 
-namespace Vatline\Tests\Integration\Rates;
+namespace Vatright\Tests\Integration\Rates;
 
-use Vatline\Rates\RateDiff;
-use Vatline\Rates\RateMapping;
-use Vatline\Rates\RateSet;
-use Vatline\Rates\RatesScreen;
-use Vatline\Rates\RateSync;
-use Vatline\Rates\Tedb;
-use Vatline\Tests\Support\FixtureTransport;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Rates\RateDiff;
+use Vatright\Rates\RateMapping;
+use Vatright\Rates\RateSet;
+use Vatright\Rates\RatesScreen;
+use Vatright\Rates\RateSync;
+use Vatright\Rates\Tedb;
+use Vatright\Tests\Support\FixtureTransport;
+use Vatright\Tests\Support\IntegrationTestCase;
 use WC_Tax;
 
 require_once dirname( __DIR__, 2 ) . '/Support/FixtureTransport.php';
@@ -25,14 +25,14 @@ class RateSyncTest extends IntegrationTestCase {
 	public function set_up() {
 		parent::set_up();
 		global $wpdb;
-		$wpdb->query( "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}vatline_rate_rows ( woo_rate_id BIGINT UNSIGNED NOT NULL, country CHAR(2) NOT NULL, tax_class VARCHAR(200) NOT NULL, imported_rate DECIMAL(7,4) NOT NULL, source VARCHAR(20) NOT NULL, source_date VARCHAR(10) NOT NULL, PRIMARY KEY (woo_rate_id) )" ); // phpcs:ignore WordPress.DB
-		$wpdb->query( "DELETE FROM {$wpdb->prefix}vatline_rate_rows" ); // phpcs:ignore WordPress.DB
+		$wpdb->query( "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}vatright_rate_rows ( woo_rate_id BIGINT UNSIGNED NOT NULL, country CHAR(2) NOT NULL, tax_class VARCHAR(200) NOT NULL, imported_rate DECIMAL(7,4) NOT NULL, source VARCHAR(20) NOT NULL, source_date VARCHAR(10) NOT NULL, PRIMARY KEY (woo_rate_id) )" ); // phpcs:ignore WordPress.DB
+		$wpdb->query( "DELETE FROM {$wpdb->prefix}vatright_rate_rows" ); // phpcs:ignore WordPress.DB
 		$wpdb->query( "DELETE FROM {$wpdb->prefix}woocommerce_tax_rates" ); // phpcs:ignore WordPress.DB
 		delete_option( RateSync::OPTION_LATEST );
 		delete_option( RateSync::OPTION_PENDING );
 		delete_option( RateMapping::OPTION );
 
-		$this->fixture_dir = sys_get_temp_dir() . '/vatline-sync-' . bin2hex( random_bytes( 4 ) );
+		$this->fixture_dir = sys_get_temp_dir() . '/vatright-sync-' . bin2hex( random_bytes( 4 ) );
 		mkdir( $this->fixture_dir ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir
 		$this->sync = new RateSync( new Tedb( new FixtureTransport( $this->fixture_dir ) ) );
 	}
@@ -102,7 +102,7 @@ class RateSyncTest extends IntegrationTestCase {
 		$this->assertSame( '7.0000', $reduced['DE']->tax_rate );
 		$this->assertSame( '0', $reduced['DE']->tax_rate_shipping );
 
-		$rows = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}vatline_rate_rows ORDER BY country, tax_class" ); // phpcs:ignore WordPress.DB
+		$rows = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}vatright_rate_rows ORDER BY country, tax_class" ); // phpcs:ignore WordPress.DB
 		$this->assertCount( 4, $rows );
 		$this->assertSame( (string) $standard['DE']->tax_rate_id, $rows[0]->woo_rate_id );
 		$this->assertSame( '19.0000', $rows[0]->imported_rate );
@@ -280,6 +280,7 @@ class RateSyncTest extends IntegrationTestCase {
 	public function test_pending_notice_shows_only_to_shop_managers(): void {
 		update_option( RateSync::OPTION_PENDING, 3 );
 		$screen = new RatesScreen( $this->sync );
+		set_current_screen( 'woocommerce_page_wc-settings' );
 
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
 		ob_start();
@@ -290,5 +291,15 @@ class RateSyncTest extends IntegrationTestCase {
 		ob_start();
 		$screen->pending_notice();
 		$this->assertStringContainsString( '3 VAT rate changes available.', (string) ob_get_clean() );
+	}
+
+	public function test_pending_notice_stays_off_other_admin_screens(): void {
+		update_option( RateSync::OPTION_PENDING, 3 );
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		set_current_screen( 'dashboard' );
+
+		ob_start();
+		( new RatesScreen( $this->sync ) )->pending_notice();
+		$this->assertSame( '', ob_get_clean() );
 	}
 }

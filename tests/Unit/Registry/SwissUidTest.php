@@ -1,13 +1,13 @@
 <?php
 
-namespace Vatline\Tests\Unit\Registry;
+namespace Vatright\Tests\Unit\Registry;
 
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
-use Vatline\Registry\HttpTransport;
-use Vatline\Registry\SoapEnvelope;
-use Vatline\Registry\SwissUid;
-use Vatline\Tests\Support\FixtureTransport;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
+use Vatright\Registry\HttpTransport;
+use Vatright\Registry\SoapEnvelope;
+use Vatright\Registry\SwissUid;
+use Vatright\Tests\Support\FixtureTransport;
 use PHPUnit\Framework\TestCase;
 
 require_once dirname( __DIR__, 2 ) . '/Support/FixtureTransport.php';

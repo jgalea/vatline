@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Tests\Integration;
+namespace Vatright\Tests\Integration;
 
-use Vatline\Settings;
-use Vatline\Tests\Support\IntegrationTestCase;
+use Vatright\Settings;
+use Vatright\Tests\Support\IntegrationTestCase;
 
 class SettingsTest extends IntegrationTestCase {
 

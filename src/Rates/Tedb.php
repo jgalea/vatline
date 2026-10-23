@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Rates;
+namespace Vatright\Rates;
 
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use Vatline\Registry\HttpTransport;
+use Vatright\Registry\HttpTransport;
 use Throwable;
 
 class Tedb {

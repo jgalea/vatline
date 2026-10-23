@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Tests\Integration\Reports;
+namespace Vatright\Tests\Integration\Reports;
 
-use Vatline\Reports\Csv;
+use Vatright\Reports\Csv;
 use WP_UnitTestCase;
 
 class CsvTest extends WP_UnitTestCase {

@@ -5,10 +5,10 @@ import { createPortal, useEffect, useRef, useState } from '@wordpress/element';
 
 const { CheckboxControl } = window.wc.blocksCheckout;
 
-const NAMESPACE = 'vatline';
-const FIELD = 'vatline/vat-number';
+const NAMESPACE = 'vatright';
+const FIELD = 'vatright/vat-number';
 const DEBOUNCE_MS = 600;
-const FIELD_WRAPPER = '.wc-block-components-address-form__vatline-vat-number';
+const FIELD_WRAPPER = '.wc-block-components-address-form__vatright-vat-number';
 
 /**
  * extensionCartUpdate() puts the server's copy of the address back in the
@@ -55,13 +55,16 @@ const useVatState = () =>
  */
 const useNoticeHost = () => {
 	const [ host, setHost ] = useState( null );
+	const [ hasField, setHasField ] = useState( false );
 
 	useEffect( () => {
 		const element = document.createElement( 'div' );
-		element.className = 'vatline-notice-host';
+		element.className = 'vatright-notice-host';
 
 		const place = () => {
-			const anchor = document.querySelector( FIELD_WRAPPER ) || document.getElementById( 'contact' );
+			const field = document.querySelector( FIELD_WRAPPER );
+			setHasField( !! field );
+			const anchor = field || document.getElementById( 'contact' );
 			if ( ! anchor ) {
 				element.remove();
 			} else if ( anchor.nextElementSibling !== element ) {
@@ -80,12 +83,12 @@ const useNoticeHost = () => {
 		};
 	}, [] );
 
-	return host;
+	return { host, hasField };
 };
 
-const VatlineNotice = () => {
+const VatrightNotice = () => {
 	const { vatNumber, country, postcode, saving, extension } = useVatState();
-	const host = useNoticeHost();
+	const { host, hasField } = useNoticeHost();
 	const lastKey = useRef( null );
 	const sentNumber = useRef( '' );
 
@@ -110,11 +113,14 @@ const VatlineNotice = () => {
 	}
 
 	return createPortal(
-		<div className="vatline-notice">
+		<div className="vatright-notice">
+			{ hasField && window.vatrightCheckout?.disclosure ? (
+				<p className="vatright-notice__disclosure" id="vatright-disclosure">{ window.vatrightCheckout.disclosure }</p>
+			) : null }
 			<div aria-live="polite">
 				{ extension.message ? (
 					<p
-						className={ `vatline-notice__message vatline-notice__message--${ extension.status }` }
+						className={ `vatright-notice__message vatright-notice__message--${ extension.status }` }
 					>
 						{ extension.message }
 					</p>
@@ -132,7 +138,7 @@ const VatlineNotice = () => {
 	);
 };
 
-registerPlugin( 'vatline', {
+registerPlugin( 'vatright', {
 	scope: 'woocommerce-checkout',
-	render: VatlineNotice,
+	render: VatrightNotice,
 } );

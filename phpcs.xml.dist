@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Vatline">
-	<file>vatline.php</file>
+<ruleset name="Vatright">
+	<file>vatright.php</file>
 	<file>uninstall.php</file>
 	<file>src</file>
 	<file>templates</file>
@@ -20,7 +20,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="vatline"/>
+				<element value="vatright"/>
 			</property>
 		</properties>
 	</rule>
@@ -31,9 +31,9 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="vatline"/>
-				<element value="Vatline"/>
-				<element value="VATLINE"/>
+				<element value="vatright"/>
+				<element value="Vatright"/>
+				<element value="VATRIGHT"/>
 			</property>
 		</properties>
 	</rule>

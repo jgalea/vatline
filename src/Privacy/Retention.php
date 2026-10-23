@@ -1,19 +1,19 @@
 <?php
 
-namespace Vatline\Privacy;
+namespace Vatright\Privacy;
 
 use DateTimeImmutable;
-use Vatline\Ledger\Schema;
-use Vatline\Orders\DecisionStore;
-use Vatline\Settings;
+use Vatright\Ledger\Schema;
+use Vatright\Orders\DecisionStore;
+use Vatright\Settings;
 use WC_Order;
 
 class Retention {
 
-	const HOOK          = 'vatline_retention';
-	const AS_GROUP      = 'vatline';
+	const HOOK          = 'vatright_retention';
+	const AS_GROUP      = 'vatright';
 	const BATCH         = 100;
-	const SCRUBBED_META = '_vatline_scrubbed';
+	const SCRUBBED_META = '_vatright_scrubbed';
 
 	public function register(): void {
 		add_action( self::HOOK, array( $this, 'run_batch' ) );

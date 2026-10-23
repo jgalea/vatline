@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Ledger;
+namespace Vatright\Ledger;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Vatline\Registry\HttpTransport;
+use Vatright\Registry\HttpTransport;
 
 /**
  * Rates are the ECB reference quote: units of the currency per 1 EUR.
@@ -129,7 +129,7 @@ class Fx {
 			)
 		);
 
-		$throttle = 'vatline_fx_' . md5( $url );
+		$throttle = 'vatright_fx_' . md5( $url );
 		if ( false !== get_transient( $throttle ) ) {
 			return;
 		}

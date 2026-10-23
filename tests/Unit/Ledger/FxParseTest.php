@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Tests\Unit\Ledger;
+namespace Vatright\Tests\Unit\Ledger;
 
-use Vatline\Ledger\Fx;
+use Vatright\Ledger\Fx;
 use PHPUnit\Framework\TestCase;
 
 class FxParseTest extends TestCase {

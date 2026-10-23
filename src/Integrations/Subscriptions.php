@@ -1,16 +1,16 @@
 <?php
 
-namespace Vatline\Integrations;
+namespace Vatright\Integrations;
 
-use Vatline\Checkout\InputGatherer;
-use Vatline\Checkout\TaxLocation;
-use Vatline\Domain\Decision;
-use Vatline\Domain\DecisionInput;
-use Vatline\Domain\Rules;
-use Vatline\Domain\Territory;
-use Vatline\Domain\ValidationResult;
-use Vatline\Orders\DecisionStore;
-use Vatline\Settings;
+use Vatright\Checkout\InputGatherer;
+use Vatright\Checkout\TaxLocation;
+use Vatright\Domain\Decision;
+use Vatright\Domain\DecisionInput;
+use Vatright\Domain\Rules;
+use Vatright\Domain\Territory;
+use Vatright\Domain\ValidationResult;
+use Vatright\Orders\DecisionStore;
+use Vatright\Settings;
 use Throwable;
 use WC_Order;
 use WC_Tax;
@@ -58,7 +58,7 @@ class Subscriptions {
 		try {
 			$this->renew( $renewal, $subscription );
 		} catch ( Throwable $e ) {
-			wc_get_logger()->error( 'Renewal VAT decision failed, charging VAT: ' . $e->getMessage(), array( 'source' => 'vatline' ) );
+			wc_get_logger()->error( 'Renewal VAT decision failed, charging VAT: ' . $e->getMessage(), array( 'source' => 'vatright' ) );
 			$renewal->delete_meta_data( DecisionStore::META );
 			$renewal->update_meta_data( 'is_vat_exempt', 'no' );
 			add_filter( 'woocommerce_order_get_tax_location', array( self::class, 'origin_when_rate_missing' ), 20 );

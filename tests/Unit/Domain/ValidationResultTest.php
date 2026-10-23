@@ -1,8 +1,8 @@
 <?php
 
-namespace Vatline\Tests\Unit\Domain;
+namespace Vatright\Tests\Unit\Domain;
 
-use Vatline\Domain\ValidationResult;
+use Vatright\Domain\ValidationResult;
 use PHPUnit\Framework\TestCase;
 
 class ValidationResultTest extends TestCase {

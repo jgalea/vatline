@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Tests\Integration\Ledger;
+namespace Vatright\Tests\Integration\Ledger;
 
 require_once __DIR__ . '/LedgerWriterTest.php';
 

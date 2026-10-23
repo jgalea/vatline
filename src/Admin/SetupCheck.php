@@ -1,11 +1,11 @@
 <?php
 
-namespace Vatline\Admin;
+namespace Vatright\Admin;
 
-use Vatline\Checkout\TaxLocation;
-use Vatline\Domain\Territory;
-use Vatline\Domain\VatNumber;
-use Vatline\Settings;
+use Vatright\Checkout\TaxLocation;
+use Vatright\Domain\Territory;
+use Vatright\Domain\VatNumber;
+use Vatright\Settings;
 use WC_Tax;
 
 class SetupCheck {
@@ -16,7 +16,7 @@ class SetupCheck {
 
 	const INFO = 'info';
 
-	const VIES_TRANSIENT = 'vatline_vies_status';
+	const VIES_TRANSIENT = 'vatright_vies_status';
 
 	/** @var callable|null */
 	private $vies_status;
@@ -36,15 +36,15 @@ class SetupCheck {
 		$tax    = admin_url( 'admin.php?page=wc-settings&tab=tax' );
 
 		if ( ! wc_tax_enabled() ) {
-			$issues[] = $this->issue( 'taxes_disabled', self::ERROR, __( 'Taxes are turned off in WooCommerce, so no VAT is calculated.', 'vatline' ), admin_url( 'admin.php?page=wc-settings&tab=general#woocommerce_calc_taxes' ) );
+			$issues[] = $this->issue( 'taxes_disabled', self::ERROR, __( 'Taxes are turned off in WooCommerce, so no VAT is calculated.', 'vatright' ), admin_url( 'admin.php?page=wc-settings&tab=general#woocommerce_calc_taxes' ) );
 		}
 
 		if ( 'base' === get_option( 'woocommerce_tax_based_on' ) ) {
-			$issues[] = $this->issue( 'tax_based_on_shop_base', self::ERROR, __( 'Tax is calculated on the shop base address. Cross-border VAT needs "Customer shipping address" or "Customer billing address".', 'vatline' ), $tax );
+			$issues[] = $this->issue( 'tax_based_on_shop_base', self::ERROR, __( 'Tax is calculated on the shop base address. Cross-border VAT needs "Customer shipping address" or "Customer billing address".', 'vatright' ), $tax );
 		}
 
 		if ( ! Territory::is_eu_member( WC()->countries->get_base_country() ) ) {
-			$issues[] = $this->issue( 'base_country_outside_eu', self::WARNING, __( 'The store base country is outside the EU. This version is built for EU-established stores.', 'vatline' ), admin_url( 'admin.php?page=wc-settings&tab=general' ) );
+			$issues[] = $this->issue( 'base_country_outside_eu', self::WARNING, __( 'The store base country is outside the EU. This version is built for EU-established stores.', 'vatright' ), admin_url( 'admin.php?page=wc-settings&tab=general' ) );
 		}
 
 		$elsewhere = $this->store_number_country_elsewhere();
@@ -54,7 +54,7 @@ class SetupCheck {
 				self::WARNING,
 				sprintf(
 					/* translators: 1: country code of the store VAT number, 2: store base country code. */
-					__( 'Your store VAT number is from %1$s but the store is based in %2$s. If your business is established in more than one member state, or ships goods from one other than %2$s, the EUR 10,000 threshold does not apply to you (VAT Directive Art. 59c) and every cross-border sale to consumers is taxed where the customer is. Turn on the OSS setting.', 'vatline' ),
+					__( 'Your store VAT number is from %1$s but the store is based in %2$s. If your business is established in more than one member state, or ships goods from one other than %2$s, the EUR 10,000 threshold does not apply to you (VAT Directive Art. 59c) and every cross-border sale to consumers is taxed where the customer is. Turn on the OSS setting.', 'vatright' ),
 					$elsewhere,
 					WC()->countries->get_base_country()
 				),
@@ -63,7 +63,7 @@ class SetupCheck {
 		}
 
 		if ( wc_prices_include_tax() && ! $this->fixed_prices_chosen() ) {
-			$issues[] = $this->issue( 'fixed_prices_undecided', self::WARNING, __( 'Prices are entered with tax, but you have not chosen whether customers pay the same price in every EU country.', 'vatline' ), SettingsSection::url() );
+			$issues[] = $this->issue( 'fixed_prices_undecided', self::WARNING, __( 'Prices are entered with tax, but you have not chosen whether customers pay the same price in every EU country.', 'vatright' ), SettingsSection::url() );
 		}
 
 		$missing = $this->countries_without_standard_rate();
@@ -73,7 +73,7 @@ class SetupCheck {
 				self::WARNING,
 				sprintf(
 					/* translators: %s: comma-separated country codes. */
-					__( 'No standard-rate tax row for: %s.', 'vatline' ),
+					__( 'No standard-rate tax row for: %s.', 'vatright' ),
 					implode( ', ', $missing )
 				),
 				SettingsSection::url()
@@ -87,7 +87,7 @@ class SetupCheck {
 				self::ERROR,
 				sprintf(
 					/* translators: %s: comma-separated country codes, with the tax class in brackets when not standard. */
-					__( 'Orders needed a VAT rate your tax tables do not have, so your own country\'s rate was charged instead: %s. Add the missing rates.', 'vatline' ),
+					__( 'Orders needed a VAT rate your tax tables do not have, so your own country\'s rate was charged instead: %s. Add the missing rates.', 'vatright' ),
 					implode( ', ', $fallen_back )
 				),
 				admin_url( 'admin.php?page=wc-settings&tab=tax' )
@@ -95,15 +95,15 @@ class SetupCheck {
 		}
 
 		if ( $this->has_wildcard_rate() ) {
-			$issues[] = $this->issue( 'wildcard_rate_taxes_exports', self::ERROR, __( 'A tax rate applies to every country (*). It would charge VAT on sales outside the EU.', 'vatline' ), admin_url( 'admin.php?page=wc-settings&tab=tax&section=standard' ) );
+			$issues[] = $this->issue( 'wildcard_rate_taxes_exports', self::ERROR, __( 'A tax rate applies to every country (*). It would charge VAT on sales outside the EU.', 'vatright' ), admin_url( 'admin.php?page=wc-settings&tab=tax&section=standard' ) );
 		}
 
 		if ( '' === Settings::get()->store_vat_number() ) {
-			$issues[] = $this->issue( 'store_vat_number_missing', self::WARNING, __( 'Your store VAT number is not set, so VIES cannot give you consultation numbers as proof of validation.', 'vatline' ), SettingsSection::url() );
+			$issues[] = $this->issue( 'store_vat_number_missing', self::WARNING, __( 'Your store VAT number is not set, so VIES cannot give you consultation numbers as proof of validation.', 'vatright' ), SettingsSection::url() );
 		}
 
 		if ( ! in_array( get_option( 'woocommerce_default_customer_address' ), array( 'geolocation', 'geolocation_ajax' ), true ) ) {
-			$issues[] = $this->issue( 'geolocation_disabled', self::WARNING, __( 'Geolocation is off, so digital sales have one piece of location evidence fewer.', 'vatline' ), admin_url( 'admin.php?page=wc-settings&tab=general' ) );
+			$issues[] = $this->issue( 'geolocation_disabled', self::WARNING, __( 'Geolocation is off, so digital sales have one piece of location evidence fewer.', 'vatright' ), admin_url( 'admin.php?page=wc-settings&tab=general' ) );
 		}
 
 		$down = $include_registry_status ? $this->vies_unavailable_countries() : array();
@@ -113,7 +113,7 @@ class SetupCheck {
 				self::WARNING,
 				sprintf(
 					/* translators: %s: comma-separated country codes. */
-					__( 'VIES reports these member states as unavailable right now: %s.', 'vatline' ),
+					__( 'VIES reports these member states as unavailable right now: %s.', 'vatright' ),
 					implode( ', ', $down )
 				),
 				SettingsSection::url()
@@ -121,7 +121,7 @@ class SetupCheck {
 		}
 
 		if ( '' === Settings::get()->hmrc_client_id() || '' === Settings::get()->hmrc_client_secret() ) {
-			$issues[] = $this->issue( 'hmrc_credentials_missing', self::INFO, __( 'No HMRC credentials, so GB VAT numbers are format-checked only. This never changes the VAT charged.', 'vatline' ), SettingsSection::url() );
+			$issues[] = $this->issue( 'hmrc_credentials_missing', self::INFO, __( 'No HMRC credentials, so GB VAT numbers are format-checked only. This never changes the VAT charged.', 'vatright' ), SettingsSection::url() );
 		}
 
 		return $issues;

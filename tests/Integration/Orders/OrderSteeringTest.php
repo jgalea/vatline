@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Tests\Integration\Orders;
+namespace Vatright\Tests\Integration\Orders;
 
-use Vatline\Checkout\InputGatherer;
-use Vatline\Checkout\TaxLocation;
-use Vatline\Orders\DecisionStore;
+use Vatright\Checkout\InputGatherer;
+use Vatright\Checkout\TaxLocation;
+use Vatright\Orders\DecisionStore;
 
 require_once __DIR__ . '/OrderTestCase.php';
 

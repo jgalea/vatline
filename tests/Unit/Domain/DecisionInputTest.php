@@ -1,12 +1,12 @@
 <?php
 
-namespace Vatline\Tests\Unit\Domain;
+namespace Vatright\Tests\Unit\Domain;
 
-use Vatline\Domain\DecisionInput;
-use Vatline\Domain\Evidence;
-use Vatline\Domain\Line;
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
+use Vatright\Domain\DecisionInput;
+use Vatright\Domain\Evidence;
+use Vatright\Domain\Line;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
 use PHPUnit\Framework\TestCase;
 
 class DecisionInputTest extends TestCase {

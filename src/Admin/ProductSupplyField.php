@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Admin;
+namespace Vatright\Admin;
 
-use Vatline\Checkout\SupplyType;
-use Vatline\Domain\Line;
+use Vatright\Checkout\SupplyType;
+use Vatright\Domain\Line;
 
 class ProductSupplyField {
 
@@ -16,14 +16,14 @@ class ProductSupplyField {
 		woocommerce_wp_select(
 			array(
 				'id'          => SupplyType::META,
-				'label'       => __( 'EU VAT supply type', 'vatline' ),
-				'description' => __( 'How VAT place of supply is decided. Physical products default to goods, virtual products to digital service.', 'vatline' ),
+				'label'       => __( 'EU VAT supply type', 'vatright' ),
+				'description' => __( 'How VAT place of supply is decided. Physical products default to goods, virtual products to digital service.', 'vatright' ),
 				'desc_tip'    => true,
 				'options'     => array(
-					''            => __( 'Automatic', 'vatline' ),
-					Line::GOODS   => __( 'Goods', 'vatline' ),
-					Line::DIGITAL => __( 'Digital service', 'vatline' ),
-					Line::SERVICE => __( 'Other service', 'vatline' ),
+					''            => __( 'Automatic', 'vatright' ),
+					Line::GOODS   => __( 'Goods', 'vatright' ),
+					Line::DIGITAL => __( 'Digital service', 'vatright' ),
+					Line::SERVICE => __( 'Other service', 'vatright' ),
 				),
 			)
 		);

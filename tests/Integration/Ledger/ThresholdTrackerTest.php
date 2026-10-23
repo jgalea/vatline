@@ -1,12 +1,12 @@
 <?php
 
-namespace Vatline\Tests\Integration\Ledger;
+namespace Vatright\Tests\Integration\Ledger;
 
-use Vatline\Domain\Rule;
-use Vatline\Domain\Scheme;
-use Vatline\Ledger\Schema;
-use Vatline\Ledger\ThresholdTracker;
-use Vatline\Settings;
+use Vatright\Domain\Rule;
+use Vatright\Domain\Scheme;
+use Vatright\Ledger\Schema;
+use Vatright\Ledger\ThresholdTracker;
+use Vatright\Settings;
 
 require_once __DIR__ . '/LedgerTestCase.php';
 
@@ -113,7 +113,7 @@ class ThresholdTrackerTest extends LedgerTestCase {
 	public function test_filter_overrides_the_threshold(): void {
 		$this->row( 6000 );
 		add_filter(
-			'vatline_threshold_eur',
+			'vatright_threshold_eur',
 			static function () {
 				return 5000.0;
 			}

@@ -61,7 +61,7 @@ test( 'valid business number removes VAT and shows the reverse charge wording', 
 	await expect( page.getByText( NUMBERS.validDe, { exact: true } ) ).toHaveCount( 1 );
 	const id = orderIdFromUrl( page.url() );
 	const mails: string[] = wpEval(
-		`echo "@@" . wp_json_encode( array_values( array_filter( array_column( get_option( "vatline_e2e_mail_log", array() ), "message" ), function ( $m ) { return false !== strpos( $m, "#${ id }" ); } ) ) ) . "@@";`
+		`echo "@@" . wp_json_encode( array_values( array_filter( array_column( get_option( "vatright_e2e_mail_log", array() ), "message" ), function ( $m ) { return false !== strpos( $m, "#${ id }" ); } ) ) ) . "@@";`
 	);
 	expect( mails.length ).toBeGreaterThan( 0 );
 	for ( const mail of mails ) {

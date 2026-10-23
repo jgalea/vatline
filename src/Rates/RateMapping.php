@@ -1,10 +1,10 @@
 <?php
 
-namespace Vatline\Rates;
+namespace Vatright\Rates;
 
 class RateMapping {
 
-	const OPTION = 'vatline_rate_mapping';
+	const OPTION = 'vatright_rate_mapping';
 
 	/**
 	 * Goods to Northern Ireland follow EU VAT rules but carry UK VAT

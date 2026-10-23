@@ -1,9 +1,9 @@
 <?php
 
-namespace Vatline\Orders;
+namespace Vatright\Orders;
 
-use Vatline\Domain\Rule;
-use Vatline\Domain\ValidationResult;
+use Vatright\Domain\Rule;
+use Vatright\Domain\ValidationResult;
 use WP_Post;
 use WC_Order;
 
@@ -13,7 +13,7 @@ use WC_Order;
  */
 class MetaBox {
 
-	const ACTION = 'vatline_recheck';
+	const ACTION = 'vatright_recheck';
 
 	/** @var Revalidation */
 	private $revalidation;
@@ -28,7 +28,7 @@ class MetaBox {
 	}
 
 	public function add(): void {
-		add_meta_box( 'vatline-decision', __( 'EU VAT', 'vatline' ), array( $this, 'render' ), wc_get_page_screen_id( 'shop-order' ), 'normal', 'default' );
+		add_meta_box( 'vatright-decision', __( 'EU VAT', 'vatright' ), array( $this, 'render' ), wc_get_page_screen_id( 'shop-order' ), 'normal', 'default' );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class MetaBox {
 		}
 		$decision = DecisionStore::get( $order );
 		if ( null === $decision ) {
-			echo '<p>' . esc_html__( 'No VAT decision is recorded for this order.', 'vatline' ) . '</p>';
+			echo '<p>' . esc_html__( 'No VAT decision is recorded for this order.', 'vatright' ) . '</p>';
 			return;
 		}
 		$record = $decision->to_array();
@@ -62,7 +62,7 @@ class MetaBox {
 				),
 				self::ACTION . $order->get_id()
 			);
-			echo '<p><a class="button" href="' . esc_url( $url ) . '">' . esc_html__( 'Re-check VAT number now', 'vatline' ) . '</a></p>';
+			echo '<p><a class="button" href="' . esc_url( $url ) . '">' . esc_html__( 'Re-check VAT number now', 'vatright' ) . '</a></p>';
 		}
 	}
 
@@ -70,12 +70,12 @@ class MetaBox {
 		$order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
 		check_admin_referer( self::ACTION . $order_id );
 		if ( ! current_user_can( 'edit_shop_orders' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown
-			wp_die( esc_html__( 'You are not allowed to do this.', 'vatline' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You are not allowed to do this.', 'vatright' ), '', array( 'response' => 403 ) );
 		}
 
 		$order = wc_get_order( $order_id );
 		if ( ! $order instanceof WC_Order ) {
-			wp_die( esc_html__( 'Order not found.', 'vatline' ), '', array( 'response' => 404 ) );
+			wp_die( esc_html__( 'Order not found.', 'vatright' ), '', array( 'response' => 404 ) );
 		}
 		$this->revalidation->recheck( $order, 'admin', get_current_user_id() );
 
@@ -93,7 +93,7 @@ class MetaBox {
 		$current  = (string) $order->get_meta( DecisionStore::NUMBER_META );
 		$billing  = strtoupper( $order->get_billing_country() );
 		if ( $recorded !== $current || ( '' !== $billing && $billing !== (string) $record['customer']['billing']['country'] ) ) {
-			echo '<p class="notice notice-warning inline"><span>' . esc_html__( 'The VAT number or billing country changed since this decision was recorded. Recalculate taxes to update it.', 'vatline' ) . '</span></p>';
+			echo '<p class="notice notice-warning inline"><span>' . esc_html__( 'The VAT number or billing country changed since this decision was recorded. Recalculate taxes to update it.', 'vatright' ) . '</span></p>';
 		}
 	}
 
@@ -121,19 +121,19 @@ class MetaBox {
 		$customer   = (array) $record['customer'];
 
 		$rows = array(
-			__( 'Billing country', 'vatline' )        => trim( $customer['billing']['country'] . ' ' . $customer['billing']['postcode'] ),
-			__( 'Shipping country', 'vatline' )       => trim( $customer['shipping']['country'] . ' ' . $customer['shipping']['postcode'] ),
-			__( 'Local pickup', 'vatline' )           => $customer['local_pickup'] ? __( 'Yes', 'vatline' ) : __( 'No', 'vatline' ),
-			__( 'Billing company', 'vatline' )        => $order->get_billing_company(),
-			__( 'VAT number as typed', 'vatline' )    => (string) ( $record['vat_number']['raw'] ?? '' ),
-			__( 'VAT number', 'vatline' )             => (string) ( $record['vat_number']['canonical'] ?? '' ),
-			__( 'Registry answer', 'vatline' )        => (string) ( $validation['status'] ?? '' ),
-			__( 'Registry', 'vatline' )               => (string) ( $validation['registry'] ?? '' ),
-			__( 'Registered name', 'vatline' )        => (string) ( $validation['name'] ?? '' ),
-			__( 'Registered address', 'vatline' )     => (string) ( $validation['address'] ?? '' ),
-			__( 'Consultation reference', 'vatline' ) => (string) ( $validation['consultation'] ?? '' ),
-			__( 'Checked at', 'vatline' )             => (string) ( $validation['checked_at'] ?? '' ),
-			__( 'Location evidence', 'vatline' )      => implode(
+			__( 'Billing country', 'vatright' )        => trim( $customer['billing']['country'] . ' ' . $customer['billing']['postcode'] ),
+			__( 'Shipping country', 'vatright' )       => trim( $customer['shipping']['country'] . ' ' . $customer['shipping']['postcode'] ),
+			__( 'Local pickup', 'vatright' )           => $customer['local_pickup'] ? __( 'Yes', 'vatright' ) : __( 'No', 'vatright' ),
+			__( 'Billing company', 'vatright' )        => $order->get_billing_company(),
+			__( 'VAT number as typed', 'vatright' )    => (string) ( $record['vat_number']['raw'] ?? '' ),
+			__( 'VAT number', 'vatright' )             => (string) ( $record['vat_number']['canonical'] ?? '' ),
+			__( 'Registry answer', 'vatright' )        => (string) ( $validation['status'] ?? '' ),
+			__( 'Registry', 'vatright' )               => (string) ( $validation['registry'] ?? '' ),
+			__( 'Registered name', 'vatright' )        => (string) ( $validation['name'] ?? '' ),
+			__( 'Registered address', 'vatright' )     => (string) ( $validation['address'] ?? '' ),
+			__( 'Consultation reference', 'vatright' ) => (string) ( $validation['consultation'] ?? '' ),
+			__( 'Checked at', 'vatright' )             => (string) ( $validation['checked_at'] ?? '' ),
+			__( 'Location evidence', 'vatright' )      => implode(
 				', ',
 				array_filter(
 					array(
@@ -144,7 +144,7 @@ class MetaBox {
 					)
 				)
 			),
-			__( 'Decided at', 'vatline' )             => (string) $record['at'],
+			__( 'Decided at', 'vatright' )             => (string) $record['at'],
 		);
 
 		echo '<table class="widefat striped"><tbody>';
@@ -154,10 +154,10 @@ class MetaBox {
 			}
 		}
 		foreach ( (array) $record['lines'] as $line ) {
-			echo '<tr><th scope="row">' . esc_html__( 'Line', 'vatline' ) . '</th><td>' . esc_html(
+			echo '<tr><th scope="row">' . esc_html__( 'Line', 'vatright' ) . '</th><td>' . esc_html(
 				sprintf(
 					/* translators: 1: supply type, 2: place of supply country, 3: country whose VAT rate applies, 4: scheme */
-					__( '%1$s, supplied in %2$s, VAT of %3$s, %4$s', 'vatline' ),
+					__( '%1$s, supplied in %2$s, VAT of %3$s, %4$s', 'vatright' ),
 					$line['supply_type'],
 					$line['place_of_supply'],
 					$line['tax_country'],
@@ -175,9 +175,9 @@ class MetaBox {
 		if ( array() === $log ) {
 			return;
 		}
-		echo '<h4>' . esc_html__( 'Decision log', 'vatline' ) . '</h4>';
+		echo '<h4>' . esc_html__( 'Decision log', 'vatright' ) . '</h4>';
 		echo '<table class="widefat striped"><thead><tr>';
-		foreach ( array( __( 'When (UTC)', 'vatline' ), __( 'Trigger', 'vatline' ), __( 'User', 'vatline' ), __( 'Rule', 'vatline' ), __( 'Flags', 'vatline' ) ) as $heading ) {
+		foreach ( array( __( 'When (UTC)', 'vatright' ), __( 'Trigger', 'vatright' ), __( 'User', 'vatright' ), __( 'Rule', 'vatright' ), __( 'Flags', 'vatright' ) ) as $heading ) {
 			echo '<th>' . esc_html( $heading ) . '</th>';
 		}
 		echo '</tr></thead><tbody>';
@@ -191,39 +191,39 @@ class MetaBox {
 	public static function rule_text( string $rule ): string {
 		switch ( $rule ) {
 			case Rule::EXPORT_NON_EU:
-				return __( 'Customer outside the EU: no EU VAT.', 'vatline' );
+				return __( 'Customer outside the EU: no EU VAT.', 'vatright' );
 			case Rule::OUTSIDE_TERRITORY:
-				return __( 'Delivery to a territory outside the EU VAT area: no EU VAT.', 'vatline' );
+				return __( 'Delivery to a territory outside the EU VAT area: no EU VAT.', 'vatright' );
 			case Rule::DOMESTIC:
-				return __( 'Domestic sale: VAT of the store country.', 'vatline' );
+				return __( 'Domestic sale: VAT of the store country.', 'vatright' );
 			case Rule::DOMESTIC_B2B_GUARD:
-				return __( 'Domestic business customer: VAT charged, a number from the store country never exempts.', 'vatline' );
+				return __( 'Domestic business customer: VAT charged, a number from the store country never exempts.', 'vatright' );
 			case Rule::DOMESTIC_B2B_ALLOWED:
-				return __( 'Domestic business customer with a valid VAT number: exempt, as allowed in the settings.', 'vatline' );
+				return __( 'Domestic business customer with a valid VAT number: exempt, as allowed in the settings.', 'vatright' );
 			case Rule::RC_GOODS_ART138:
-				return __( 'Goods to a business in another EU country with a valid VAT number: exempt intra-Community supply (Article 138).', 'vatline' );
+				return __( 'Goods to a business in another EU country with a valid VAT number: exempt intra-Community supply (Article 138).', 'vatright' );
 			case Rule::RC_SERVICES_ART196:
-				return __( 'Services to a business in another EU country with a valid VAT number: reverse charge (Article 196).', 'vatline' );
+				return __( 'Services to a business in another EU country with a valid VAT number: reverse charge (Article 196).', 'vatright' );
 			case Rule::B2C_ORIGIN_BELOW_THRESHOLD:
-				return __( 'Consumer in another EU country, below the distance-selling threshold: VAT of the store country.', 'vatline' );
+				return __( 'Consumer in another EU country, below the distance-selling threshold: VAT of the store country.', 'vatright' );
 			case Rule::B2C_DESTINATION:
-				return __( 'Consumer in another EU country: VAT of the destination country.', 'vatline' );
+				return __( 'Consumer in another EU country: VAT of the destination country.', 'vatright' );
 			case Rule::B2C_SERVICE_ORIGIN:
-				return __( 'Service to a consumer: VAT of the store country.', 'vatline' );
+				return __( 'Service to a consumer: VAT of the store country.', 'vatright' );
 			case Rule::PREFIX_MISMATCH_CHARGED:
-				return __( 'The VAT number belongs to a different country than the billing address: VAT charged.', 'vatline' );
+				return __( 'The VAT number belongs to a different country than the billing address: VAT charged.', 'vatright' );
 			case Rule::LOCAL_PICKUP_DOMESTIC:
-				return __( 'Collected in store: VAT of the store country.', 'vatline' );
+				return __( 'Collected in store: VAT of the store country.', 'vatright' );
 			case Rule::PENDING_CHARGED:
-				return __( 'The VAT number could not be checked: VAT charged until it is.', 'vatline' );
+				return __( 'The VAT number could not be checked: VAT charged until it is.', 'vatright' );
 			case Rule::PENDING_EXEMPT:
-				return __( 'The VAT number could not be checked: exempt until it is.', 'vatline' );
+				return __( 'The VAT number could not be checked: exempt until it is.', 'vatright' );
 			case Rule::PENDING_REJECTED:
-				return __( 'The VAT number could not be checked: the order was refused.', 'vatline' );
+				return __( 'The VAT number could not be checked: the order was refused.', 'vatright' );
 			case Rule::INVALID_NUMBER:
-				return __( 'The VAT number is not valid: VAT charged.', 'vatline' );
+				return __( 'The VAT number is not valid: VAT charged.', 'vatright' );
 			case Rule::NON_EU_NUMBER_RECORDED:
-				return __( 'Non-EU VAT number recorded: no EU VAT.', 'vatline' );
+				return __( 'Non-EU VAT number recorded: no EU VAT.', 'vatright' );
 			default:
 				return $rule;
 		}
@@ -244,13 +244,13 @@ class MetaBox {
 		$charged = Rule::PENDING_CHARGED === $rule;
 		if ( ValidationResult::VALID === $status ) {
 			return $charged
-				? __( 'The VAT number was checked later and is valid. VAT was charged at checkout.', 'vatline' )
-				: __( 'The VAT number was checked later and is valid: exempt.', 'vatline' );
+				? __( 'The VAT number was checked later and is valid. VAT was charged at checkout.', 'vatright' )
+				: __( 'The VAT number was checked later and is valid: exempt.', 'vatright' );
 		}
 		if ( ValidationResult::INVALID === $status || ValidationResult::FORMAT_INVALID === $status ) {
 			return $charged
-				? __( 'The VAT number was checked later and is not valid: VAT charged.', 'vatline' )
-				: __( 'The VAT number was checked later and is not valid, but no VAT was charged.', 'vatline' );
+				? __( 'The VAT number was checked later and is not valid: VAT charged.', 'vatright' )
+				: __( 'The VAT number was checked later and is not valid, but no VAT was charged.', 'vatright' );
 		}
 		return self::rule_text( $rule );
 	}
@@ -258,23 +258,23 @@ class MetaBox {
 	public static function flag_text( string $flag ): string {
 		switch ( $flag ) {
 			case 'validation_pending':
-				return __( 'Validation pending: the VAT number is checked again in the background.', 'vatline' );
+				return __( 'Validation pending: the VAT number is checked again in the background.', 'vatright' );
 			case 'validated_after_outage':
-				return __( 'The number was valid when checked later, but VAT was charged. The customer may be due a VAT refund.', 'vatline' );
+				return __( 'The number was valid when checked later, but VAT was charged. The customer may be due a VAT refund.', 'vatright' );
 			case 'invalid_after_exemption':
-				return __( 'VAT was not charged, but the number turned out to be invalid. VAT may be due.', 'vatline' );
+				return __( 'VAT was not charged, but the number turned out to be invalid. VAT may be due.', 'vatright' );
 			case 'evidence_conflict_self_certified':
-				return __( 'The location evidence conflicted and the customer self-certified their country.', 'vatline' );
+				return __( 'The location evidence conflicted and the customer self-certified their country.', 'vatright' );
 			case 'single_evidence':
-				return __( 'Only one piece of location evidence was available.', 'vatline' );
+				return __( 'Only one piece of location evidence was available.', 'vatright' );
 			case 'name_mismatch':
-				return __( 'The company name does not match the registry.', 'vatline' );
+				return __( 'The company name does not match the registry.', 'vatright' );
 			case 'prefix_mismatch':
-				return __( 'The VAT number prefix does not match the billing country.', 'vatline' );
+				return __( 'The VAT number prefix does not match the billing country.', 'vatright' );
 			case 'backfilled':
-				return __( 'Decided after the fact for an order placed before the plugin was active.', 'vatline' );
+				return __( 'Decided after the fact for an order placed before the plugin was active.', 'vatright' );
 			case 'rate_missing':
-				return __( 'No tax rate was set for the destination, the store rate was charged.', 'vatline' );
+				return __( 'No tax rate was set for the destination, the store rate was charged.', 'vatright' );
 			default:
 				return $flag;
 		}

@@ -1,14 +1,14 @@
 <?php
 
-namespace Vatline\Registry;
+namespace Vatright\Registry;
 
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
-use Vatline\Settings;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
+use Vatright\Settings;
 
 class ValidationCache {
 
-	const PREFIX = 'vatline_v_';
+	const PREFIX = 'vatright_v_';
 
 	/** @var Settings */
 	private $settings;

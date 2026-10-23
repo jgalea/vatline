@@ -1,6 +1,6 @@
 <?php
 
-namespace Vatline\Tests\Unit;
+namespace Vatright\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 

@@ -1,27 +1,27 @@
 <?php
 
-namespace Vatline\Tests\Integration\Orders;
+namespace Vatright\Tests\Integration\Orders;
 
-use Vatline\Domain\Decision;
-use Vatline\Domain\DecisionInput;
-use Vatline\Domain\Evidence;
-use Vatline\Domain\Line;
-use Vatline\Domain\Rules;
-use Vatline\Domain\ValidationResult;
-use Vatline\Domain\VatNumber;
-use Vatline\Ledger\ThresholdTracker;
-use Vatline\Orders\DecisionStore;
-use Vatline\Orders\Revalidation;
-use Vatline\Registry\Brreg;
-use Vatline\Registry\Hmrc;
-use Vatline\Registry\Router;
-use Vatline\Registry\SwissUid;
-use Vatline\Registry\ValidationCache;
-use Vatline\Registry\Validator;
-use Vatline\Registry\Vies;
-use Vatline\Registry\WpHttpTransport;
-use Vatline\Settings;
-use Vatline\Tests\Support\HttpGuard;
+use Vatright\Domain\Decision;
+use Vatright\Domain\DecisionInput;
+use Vatright\Domain\Evidence;
+use Vatright\Domain\Line;
+use Vatright\Domain\Rules;
+use Vatright\Domain\ValidationResult;
+use Vatright\Domain\VatNumber;
+use Vatright\Ledger\ThresholdTracker;
+use Vatright\Orders\DecisionStore;
+use Vatright\Orders\Revalidation;
+use Vatright\Registry\Brreg;
+use Vatright\Registry\Hmrc;
+use Vatright\Registry\Router;
+use Vatright\Registry\SwissUid;
+use Vatright\Registry\ValidationCache;
+use Vatright\Registry\Validator;
+use Vatright\Registry\Vies;
+use Vatright\Registry\WpHttpTransport;
+use Vatright\Settings;
+use Vatright\Tests\Support\HttpGuard;
 use RuntimeException;
 use WC_Order;
 
